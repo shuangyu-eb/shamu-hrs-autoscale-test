@@ -24,9 +24,11 @@ exports.handler = async (event, context) => {
   try {
     const { Metadata } = await s3.getObject(params).promise();
     console.log('Metadata:', Metadata);
-    const { title = null, 'user-id': user_id, 'folder-id': folder_id = null, 'signature-template-id': signature_template_id = null } = Metadata;
-
-    const sql = `INSERT INTO documents(title, url, user_id, folder_id, signature_template_id) VALUES (${title},${key},${user_id},${folder_id},${signature_template_id});`;
+    let { title = null, 'user-id': user_id, 'folder-id': folder_id = null, 'signature-template-id': signature_template_id = null } = Metadata;
+    user_id = parseInt(user_id);
+    folder_id = parseInt(folder_id) || null;
+    signature_template_id = parseInt(signature_template_id) || null;
+    const sql = `INSERT INTO documents(title, url, user_id, folder_id, signature_template_id) VALUES ('${title}','${key}',${user_id},${folder_id},${signature_template_id});`;
     con.query(sql, (err, res) => {
       if (err) {
         throw err;
