@@ -9,6 +9,7 @@ const con = mysql.createConnection({
   user: process.env.RDS_USERNAME,
   password: process.env.RDS_PASSWORD,
   database: process.env.RDS_DATABASE,
+  connectTimeout: 30000,
 });
 
 exports.handler = async (event, context) => {
