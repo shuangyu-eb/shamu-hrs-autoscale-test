@@ -1,0 +1,12 @@
+{
+  "name": "saveToRDS",
+  "version": "1.0.0",
+  "description": "S3 put event to triger Lambda to save metadata to RDS",
+  "main": "index.js",
+  "author": "tardisone",
+  "license": "MIT",
+  "dependencies": {
+    "aws-xray-sdk": "^2.3.3",
+    "mysql": "^2.17.1"
+  }
+}

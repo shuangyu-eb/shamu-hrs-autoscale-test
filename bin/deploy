@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cd saveToRDS/
+
+yarn install
+
+zip -r function.zip .
+
+aws lambda update-function-code --function-name saveToRDS --zip-file fileb://function.zip
