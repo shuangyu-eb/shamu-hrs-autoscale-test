@@ -23,7 +23,7 @@ exports.handler = async (event, context) => {
   };
   try {
     const { Metadata } = await s3.getObject(params).promise();
-    console.log('Metadata:', Metadata);
+    console.log('Metadata:', Meztadata);
     let { title = null, 'user-id': user_id, 'folder-id': folder_id = null, 'signature-template-id': signature_template_id = null } = Metadata;
     user_id = parseInt(user_id);
     folder_id = parseInt(folder_id) || null;

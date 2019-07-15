@@ -1,9 +1,41 @@
 #!/usr/bin/env bash
 
-cd saveToRDS/
+FOLDER="saveToRDS"
+FUNC_NAME="saveToRDS"
+
+while [ -n "$1" ]
+do
+  case "$1" in
+    -s)
+    foilder
+        shift
+        ;;
+    -g)
+        FOLDER="getSignedURL"
+        FUNC_NAME="getSignedURL"
+        shift
+        ;;
+    *)
+        echo "$1 is not an option"
+        echo "---------------------"
+        echo "options : "
+        echo "option | function "
+        echo "  -s   | saveToRDS "
+        echo "  -g   | getSignedURL "
+        echo "---------------------"
+        echo "please input a correct option"
+        exit 0
+        ;;
+  esac
+  shift
+done
+
+echo ${FOLDER}
+
+cd ${FOLDER}/
 
 yarn install
 
 zip -r function.zip .
 
-aws lambda update-function-code --function-name saveToRDS --zip-file fileb://function.zip
+aws lambda update-function-code --function-name ${FUNC_NAME} --zip-file fileb://function.zip
