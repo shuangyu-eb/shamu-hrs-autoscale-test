@@ -7,7 +7,6 @@ while [ -n "$1" ]
 do
   case "$1" in
     -s)
-    foilder
         shift
         ;;
     -g)
@@ -29,8 +28,6 @@ do
   esac
   shift
 done
-
-echo ${FOLDER}
 
 cd ${FOLDER}/
 
