@@ -8,10 +8,9 @@ exports.handler = async (event) => {
 const getUploadURL = async (document) => {
   const { url, ...data } = document;
 
-  const key = url + '.pdf';
   const s3Params = {
     Bucket: 'shamu-hrs-qa-document',
-    Key: key,
+    Key: url,
     Metadata: data,
     ContentType: 'application/pdf',
     ContentDisposition: 'inline',
@@ -21,7 +20,7 @@ const getUploadURL = async (document) => {
     let uploadURL = s3.getSignedUrl('putObject', s3Params);
     resolve({
       uploadUrl: uploadURL,
-      filePath: key,
+      filePath: url,
     });
   });
 };
