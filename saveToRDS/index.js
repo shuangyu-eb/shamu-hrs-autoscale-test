@@ -24,17 +24,27 @@ exports.handler = async (event, context) => {
   try {
     const { Metadata } = await s3.getObject(params).promise();
     console.log('Metadata:', Meztadata);
-    let { title = null, 'user-id': user_id, 'folder-id': folder_id = null, 'signature-template-id': signature_template_id = null } = Metadata;
+    let {
+      title = null,
+      'user-id': user_id,
+      'company-id': company_id,
+      'folder-id': folder_id = null,
+      'signature-template-id': signature_template_id = null,
+    } = Metadata;
+
     user_id = parseInt(user_id);
+    company_id = parseInt(company_id) || null;
     folder_id = parseInt(folder_id) || null;
     signature_template_id = parseInt(signature_template_id) || null;
-    const sql = `INSERT INTO documents(title, url, user_id, folder_id, signature_template_id) VALUES ('${title}','${key}',${user_id},${folder_id},${signature_template_id});`;
+
+    const sql = `INSERT INTO documents(title, url, user_id, company_id ,folder_id, signature_template_id) VALUES ('${title}','${key}',${user_id},${company_id},${folder_id},${signature_template_id});`;
+
     con.query(sql, (err, res) => {
       if (err) {
         throw err;
       }
-      console.log(res);
     });
+
   } catch (err) {
     console.log(err);
     const message = `Error getting object ${key} from bucket ${bucket}. Make sure they exist and your bucket is in the same region as this function.`;
