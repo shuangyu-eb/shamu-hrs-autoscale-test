@@ -1,0 +1,10 @@
+{
+  "name": "getSignedURL",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "tadisone",
+  "license": "MIT",
+  "dependencies": {
+    "aws-xray-sdk": "^2.3.3"
+  }
+}
