@@ -23,7 +23,7 @@ exports.handler = async (event, context) => {
   };
   try {
     const { Metadata } = await s3.getObject(params).promise();
-    console.log('Metadata:', Meztadata);
+    console.log('Metadata:', Metadata);
     let {
       title = null,
       'user-id': user_id,
