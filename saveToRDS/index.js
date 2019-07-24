@@ -4,13 +4,20 @@ const aws = require('aws-sdk');
 const mysql = require('mysql');
 const s3 = new aws.S3();
 
-const con = mysql.createConnection({
-  host: process.env.RDS_HOSTNAME,
-  user: process.env.RDS_USERNAME,
-  password: process.env.RDS_PASSWORD,
-  database: process.env.RDS_DATABASE,
-  connectTimeout: 30000,
-});
+// If 'client' variable doesn't exist
+if (typeof client === 'undefined') {
+  // Connect to the MySQL database
+  console.log('Connect to the MySQL database');
+  var client = mysql.createConnection({
+    host: process.env.RDS_HOSTNAME,
+    user: process.env.RDS_USERNAME,
+    password: process.env.RDS_PASSWORD,
+    database: process.env.RDS_DATABASE,
+    connectTimeout: 30000,
+  });
+
+  client.connect();
+}
 
 exports.handler = async (event, context) => {
 
@@ -37,9 +44,9 @@ exports.handler = async (event, context) => {
     folder_id = parseInt(folder_id) || null;
     signature_template_id = parseInt(signature_template_id) || null;
 
-    const sql = `INSERT INTO documents(title, url, user_id, company_id ,folder_id, signature_template_id) VALUES ('${title}','${key}',${user_id},${company_id},${folder_id},${signature_template_id});`;
+    const sql = `INSERT INTO documents(title, url, user_id, company_id ,folder_id, signature_template_id, created_at) VALUES ('${title}','${key}',${user_id},${company_id},${folder_id},${signature_template_id},now());`;
 
-    con.query(sql, (err, res) => {
+    client.query(sql, (err, res) => {
       if (err) {
         throw err;
       }
