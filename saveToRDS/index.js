@@ -37,14 +37,16 @@ exports.handler = async (event, context) => {
       'company-id': company_id,
       'folder-id': folder_id = null,
       'signature-template-id': signature_template_id = null,
+      'size': size,
     } = Metadata;
 
     user_id = parseInt(user_id);
     company_id = parseInt(company_id) || null;
     folder_id = parseInt(folder_id) || null;
     signature_template_id = parseInt(signature_template_id) || null;
+    size = parseInt(size) || null;
 
-    const sql = `INSERT INTO documents(title, url, user_id, company_id ,folder_id, signature_template_id, created_at) VALUES ('${title}','${key}',${user_id},${company_id},${folder_id},${signature_template_id},now());`;
+    const sql = `INSERT INTO documents(title, url, user_id, company_id ,folder_id, signature_template_id, size, created_at) VALUES ('${title}','${key}',${user_id},${company_id},${folder_id},${signature_template_id},${size},now());`;
 
     client.query(sql, (err, res) => {
       if (err) {
