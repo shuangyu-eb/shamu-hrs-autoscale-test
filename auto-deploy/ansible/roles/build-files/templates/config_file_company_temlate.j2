@@ -1,0 +1,19 @@
+server:
+  port: 9000
+
+spring:
+  thymeleaf:
+    cache: false
+
+application:
+  systemEmailAddress: noreply@interviewed.com
+  frontEndAddress: {{hrs_domain}}
+
+aws:
+  bucketName: {{stack_prefix}}
+  folder: media
+
+cloud:
+  aws:
+    region:
+      auto: true

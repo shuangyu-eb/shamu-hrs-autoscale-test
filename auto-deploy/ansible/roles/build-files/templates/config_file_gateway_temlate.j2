@@ -1,0 +1,16 @@
+server:
+  tomcat:
+    protocol_header: x-forwarded-proto
+    remote_ip_header: x-forwarded-for
+  use-forward-headers: true
+  port: 5000
+
+cloud:
+  aws:
+    region:
+      auto: true
+
+cors:
+  allowedOrigins:
+    - http://{{stack_prefix}}-{{env}}.s3-website-{{region}}.amazonaws.com
+    - {{hrs_domain}}
