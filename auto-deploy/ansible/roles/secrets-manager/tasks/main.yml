@@ -1,0 +1,41 @@
+- name: Create secret file for company service
+  template:
+    src: ../templates/secret_file_company_template.j2
+    dest: roles/secrets-manager/secrets/secret_company.json
+
+- name: Create secret file for document service
+  template:
+    src: ../templates/secret_file_document_template.j2
+    dest: roles/secrets-manager/secrets/secret_document.json
+
+- name: Create secret file for application
+  template:
+    src: ../templates/secret_file_application_template.j2
+    dest: roles/secrets-manager/secrets/secret_application.json
+
+- name: check if company secret exits
+  set_fact:
+    result: "{{ lookup('aws_secret', '/secret/company-service_{{env}}',errors='ignore') }}"
+
+- name: Add company config to AWS Secrets Manager
+  shell:
+    aws secretsmanager create-secret --name /secret/company-service_{{env}} --secret-string file:///home/chenbin/cover-the-sky/auto-deploy/ansible/roles/secrets-manager/secrets/secret_company.json
+  when: result == ""
+
+- name: check if document secret exits
+  set_fact:
+    result: "{{ lookup('aws_secret', '/secret/document-service_{{env}}',errors='ignore') }}"
+
+- name: Add document config to AWS Secrets Manager
+  shell:
+    aws secretsmanager create-secret --name /secret/document-service_{{env}} --secret-string file:///home/chenbin/cover-the-sky/auto-deploy/ansible/roles/secrets-manager/secrets/secret_document.json
+  when: result == ""
+
+- name: check if application secret exits
+  set_fact:
+    result: "{{ lookup('aws_secret', '/secret/application_{{env}}',errors='ignore') }}"
+
+- name: Add application config to AWS Secrets Manager
+  shell:
+    aws secretsmanager create-secret --name /secret/application_{{env}} --secret-string file:///home/chenbin/cover-the-sky/auto-deploy/ansible/roles/secrets-manager/secrets/secret_application.json
+  when: result == ""
