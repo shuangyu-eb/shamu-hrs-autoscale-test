@@ -1,4 +1,3 @@
-
 class Permission:
     def __init__(self, permission_name, permission_description, permission_type):
         self.permission_name = permission_name

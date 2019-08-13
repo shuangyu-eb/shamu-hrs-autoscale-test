@@ -1,5 +1,3 @@
-
-
 class Role:
     def __init__(self, role_name, role_description, permission_type, permissions):
         self.role_name = role_name
