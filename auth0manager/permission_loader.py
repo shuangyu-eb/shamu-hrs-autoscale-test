@@ -31,7 +31,3 @@ class PermissionLoader:
                 current_permission = Permission(row[1], row[2], row[0])
                 permissions.append(current_permission)
         return permissions
-
-
-if __name__ == '__main__':
-    permissionLoader = PermissionLoader()
