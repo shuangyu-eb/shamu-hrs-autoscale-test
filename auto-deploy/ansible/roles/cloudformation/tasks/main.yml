@@ -1,0 +1,219 @@
+- name: create vpc resources stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-vpc-resources"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/vpc-resources.yml"
+    template_parameters:
+      VpcId: "{{ vpc_id }}"
+      PublicSubnet: "{{ public_subnet }}"
+      CidrBlock: "{{ private_subnet_cidr }}"
+  register: vpc_resources_stack
+- debug:
+    msg: "Vpc resources stack outputs: {{ vpc_resources_stack.stack_outputs }}"
+
+- name: create s3 bucket stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-s3-bucket"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/s3-bucket.yml"
+    template_parameters:
+      WebBucketName: "{{ stack_prefix }}-{{ env }}-web-test"
+      DocumentBucketName: "{{ stack_prefix }}-{{ env }}-document-test"
+      CompanyBucketName: "{{ stack_prefix }}-{{ env }}-company-test"
+      HrsDomain: "{{ hrs_domain }}"
+      WebSiteEndPoint: "{{ website_end_point }}"
+      HelloSignApi: "{{ hello_sign_api }}"
+  register: s3_bucket_stack
+- debug:
+    msg: "S3 stack outputs: {{s3_bucket_stack.stack_outputs}}"
+
+- name: create rds cluster stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-rds-cluster"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/rds-cluster.yml"
+    template_parameters:
+      CompanyDBClusterName: "{{ db_cluster_name }}-company"
+      DocumentDBClusterName: "{{ db_cluster_name }}-document"
+      CompanyDBInstanceName: "{{ db_instance_name }}-company"
+      DocumentDBInstanceName: "{{ db_instance_name }}-document"
+      CompanyDatabaseName: "{{ company_db_name }}"
+      DocumentDatabaseName: "{{ document_db_name }}"
+      MasterUsername: "{{ db_user }}"
+      MasterUserPassword: "{{ db_password }}"
+      AvailabilityZone: "{{ rds_availability_zone }}"
+      DBInstanceClass: "{{ db_instance_class }}"
+      RdsSecurityGroupName: "{{ rds_security_group_name }}"
+      VpcId: "{{ vpc_id }}"
+  register: rds_cluster_stack
+- debug:
+    msg: "RDS cluster stack outputs: {{ rds_cluster_stack.stack_outputs }}"
+
+- name: create lambda stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-lambda"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/lambda.yml"
+    template_parameters:
+      RdsDatabase: "{{ document_db_name }}"
+      RdsHostName: "{{ rds_cluster_stack.stack_outputs.DocumentRdsEndpoint }}"
+      RdsPassWord: "{{ db_password }}"
+      RdsUserName: "{{ db_user }}"
+      SourceAccount: "{{ source_account }}"
+      SourceS3Arn: "{{ s3_bucket_stack.stack_outputs.DocumentBucketArn }}"
+  register: lambda_stack
+- debug:
+    msg: "Lambda stack outputs: {{ lambda_stack.stack_outputs}}"
+
+- name: create s3 bucket stack change set
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-s3-bucket"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/s3-bucket-changeset.yml"
+    template_parameters:
+      WebBucketName: "{{ stack_prefix }}-{{ env }}-web-test"
+      DocumentBucketName: "{{ stack_prefix }}-{{ env }}-document-test"
+      CompanyBucketName: "{{ stack_prefix }}-{{ env }}-company-test"
+      HrsDomain: "{{ hrs_domain }}"
+      WebSiteEndPoint: "{{ website_end_point }}"
+      HelloSignApi: "{{ hello_sign_api }}"
+      LambdaFunctionArn: "{{ lambda_stack.stack_outputs.SaveToRDSFunctionArn}}"
+  register: s3_bucket_stack_change_set
+- debug:
+    msg: "S3 stack change set outputs: {{s3_bucket_stack_change_set.stack_outputs}}"
+
+- name: create secrets manager stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-secrets-manager"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/secrets-manager.yml"
+    template_parameters:
+      DeployEnv: "{{ env }}"
+      CompanyRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{{company_db_name}}?zeroDateTimeBehavior=convertToNull"'
+      DocumentRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{{document_db_name}}?zeroDateTimeBehavior=convertToNull"'
+      RdsUserName: '"spring.datasource.username": "{{ db_user }}"'
+      RdsPassword: '"spring.datasource.password": "{{ db_password }}"'
+      SendGridApiKey: '"sendGrid.apiKey": "{{ sendGrid_apiKey }}"'
+      Auth0Jwks: '"auth0.jwks": "{{ auth0_jwks }}"'
+      Auth0Algorithm: '"auth0.algorithm": "{{ auth0_algorithm }}"'
+      Auth0Domain: '"auth0.authDomain": "{{ auth0_domain }}"'
+  register: secrets_manager_stack
+- debug:
+    msg: "Secret manager stack outputs: {{ secrets_manager_stack.stack_outputs }}"
+
+- name: create elastic beanstalk stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-elastic-beanstalk"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/elastic-beanstalk.yml"
+    template_parameters:
+      ApplicationName: "{{ eb_application_name }}"
+      Environment: "{{ eb_environment_name }}"
+      SolutionStackName: "{{ eb_java_platform }}"
+      Ec2KeyPair: "{{ key_pair }}"
+      InstanceType: "{{ eb_instance_class }}"
+  register: elastic_beanstalk_stack
+- debug:
+    msg: "elastic beanstalk stack output: {{ elastic_beanstalk_stack.stack_outputs }}"
+
+- name: create consul cluster stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-consul-cluster"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/consul-cluster.yml"
+    template_parameters:
+      BastionSecurityGroupID: "{{ bastion_security_group_id }}"
+      ConsulInstanceType: "{{ consul_instance_type }}"
+      KeyPair: "{{ key_pair }}"
+      PrivateSubnet1ID: "{{ vpc_resources_stack.stack_outputs.PrivateSubnetId }}"
+      PrivateSubnet2ID: "{{ vpc_resources_stack.stack_outputs.PrivateSubnetId }}"
+      PrivateSubnet3ID: "{{ vpc_resources_stack.stack_outputs.PrivateSubnetId }}"
+      VPCID: "{{ vpc_id }}"
+      VPCCIDR: "{{ vpc_cidr }}"
+      ConsulServerNodes: "{{ consul_server_nodes }}"
+      ConsulClientNodes: "{{ consul_client_nodes }}"
+  register: consul_cluster_stack
+- debug:
+    msg: "Consul cluster stack outputs: {{ consul_cluster_stack.stack_outputs }}"
+
+- name: create ecr stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-ecr"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/ecr.yml"
+    template_parameters:
+      CompanyRepositoryName: "{{ company_repository_name }}"
+      DocumentRepositoryName: "{{ document_repository_name }}"
+  register: ecr_stack
+- debug:
+    msg: "ECR stack outputs: {{ ecr_stack.stack_outputs}}"
+
+- name: create ecs cluster stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-ecs-cluster"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/ecs-cluster.yml"
+    template_parameters:
+      EnvironmentName: "{{ cluster_name }}"
+      InstanceType: "{{ ecs_instance_type }}"
+      ClusterSize: "{{ cluster_size }}"
+      VPC: "{{ vpc_id }}"
+      Subnet: "{{ vpc_resources_stack.stack_outputs.PrivateSubnetId }}"
+      SecurityGroup: "{{ consul_cluster_stack.stack_outputs.ConsulSecurityGroup }}"
+      ECSAMI: "{{ ecs_ami}}"
+      KeyName: "{{ key_pair }}"
+      ConsulClusterName: "{{ stack_prefix }}-{{ env }}-consul-cluster"
+      Region: "{{ region }}"
+      AccessKey: "{{ aws_deploy_access_key }}"
+      SecretKey: "{{ aws_deploy_secret_key }}"
+  register: ecs_cluster_stack
+- debug:
+    msg: "ECS cluster stack outputs: {{ ecs_cluster_stack.stack_outputs }}"
+
+- name: check if company repository image is uploaded
+  shell: aws ecr list-images --repository-name {{ company_repository_name }}
+  register: result
+- set_fact:
+    company_result: "{{ result.stdout | from_json }}"
+- debug:
+    msg: "company service's repository image has been uploaded"
+  when: company_result.imageIds != []
+
+- name: check if document repository image is uploaded
+  shell: aws ecr list-images --repository-name {{ document_repository_name }}
+  register: result
+- set_fact:
+    document_result: "{{ result.stdout | from_json }}"
+- debug:
+    msg: "document service's repository image has been uploaded "
+  when: document_result.imageIds != []
+
+- name: create ecs service stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-ecs-service"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/ecs-service.yml"
+    template_parameters:
+      ClusterName: "{{ cluster_name }}"
+      DesiredCount: "{{ desired_count }}"
+      CompanyImage: "{{ ecr_stack.stack_outputs.CompanyRepositoryArn}}"
+      DocumentImage: "{{ ecr_stack.stack_outputs.DocumentRepositoryArn}}"
+      CompanyServiceName: "{{ company_service_name }}"
+      DocumentServiceName: "{{ document_service_name }}"
+      Command: "{{ command }}"
+  register: ecs_service_stack
+  when: document_result.imageIds != [] and company_result.imageIds != []
+- debug:
+    msg: "ECS service stack outputs: {{ ecs_service_stack.stack_outputs}}"
+  when: document_result.imageIds != [] and company_result.imageIds != []

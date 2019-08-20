@@ -1,0 +1,144 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create S3 bucket with appropriate CORS permissions for SHAMU HRS instance
+Parameters:
+  WebBucketName:
+    Type: String
+  DocumentBucketName:
+    Type: String
+  CompanyBucketName:
+    Type: String
+  HrsDomain:
+    Type: String
+  WebSiteEndPoint:
+    Type: String
+  HelloSignApi:
+    Type: String
+Resources:
+    WebBucket:
+    # creates an Amazon S3 bucket for shamu-hrs-web
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: Private
+        BucketName: !Ref WebBucketName
+        WebsiteConfiguration:
+          ErrorDocument: index.html
+          IndexDocument: index.html
+        CorsConfiguration:
+          CorsRules:
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - GET
+            - PUT
+            AllowedOrigins:
+            - !Ref WebSiteEndPoint
+            MaxAge: 3000
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - GET
+            - PUT
+            AllowedOrigins:
+            - '*'
+            MaxAge: 3000
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - PUT
+            AllowedOrigins:
+            - !Ref HrsDomain
+            MaxAge: 5000
+    WebBucketPolicy:
+    # Applies an Amazon S3 bucket policy(enable public access) to an Amazon S3 bucket
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref WebBucket
+        PolicyDocument:
+          Statement:
+          - Action: ["s3:GetObject"]
+            Effect: Allow
+            Resource:
+              !Join
+                - ''
+                - - !GetAtt WebBucket.Arn
+                  - '/*'
+            Principal: '*'
+    DocumentBucket:
+    # creates an Amazon S3 bucket for shamu-hrs-document
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: Private
+        BucketName: !Ref DocumentBucketName
+        CorsConfiguration:
+          CorsRules:
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - GET
+            - PUT
+            AllowedOrigins:
+            - !Ref WebSiteEndPoint
+            MaxAge: 3000
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - GET
+            - PUT
+            AllowedOrigins:
+            - '*'
+            MaxAge: 3000
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - PUT
+            AllowedOrigins:
+            - !Ref HrsDomain
+            MaxAge: 5000
+          - AllowedHeaders:
+            - '*'
+            AllowedMethods:
+            - GET
+            AllowedOrigins:
+            - !Ref HelloSignApi
+            MaxAge: 5000
+    CompanyBucket:
+      # creates an Amazon S3 bucket for shamu-hrs-company
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: Private
+        BucketName: !Ref CompanyBucketName
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders:
+                - Authorization
+              AllowedMethods:
+                - GET
+                - PUT
+              AllowedOrigins:
+                - !Ref WebSiteEndPoint
+              MaxAge: 3000
+            - AllowedHeaders:
+                - Authorization
+              AllowedMethods:
+                - GET
+                - PUT
+              AllowedOrigins:
+                - '*'
+              MaxAge: 3000
+            - AllowedHeaders:
+                - Authorization
+              AllowedMethods:
+                - PUT
+              AllowedOrigins:
+                - !Ref HrsDomain
+              MaxAge: 5000
+
+Outputs:
+  WebBucketArn:
+    Value: !GetAtt WebBucket.Arn
+  DocumentBucketArn:
+    Value: !GetAtt DocumentBucket.Arn
+  CompanyBucketArn:
+    Value: !GetAtt CompanyBucket.Arn
+
+

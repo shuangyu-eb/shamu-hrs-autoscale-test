@@ -1,0 +1,150 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create S3 bucket change set to add the shamu-hrs-document notification
+Parameters:
+  WebBucketName:
+    Type: String
+  DocumentBucketName:
+    Type: String
+  CompanyBucketName:
+    Type: String
+  HrsDomain:
+    Type: String
+  WebSiteEndPoint:
+    Type: String
+  HelloSignApi:
+    Type: String
+  LambdaFunctionArn:
+    Type: String
+Resources:
+    WebBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: Private
+        BucketName: !Ref WebBucketName
+        WebsiteConfiguration:
+          ErrorDocument: index.html
+          IndexDocument: index.html
+        CorsConfiguration:
+          CorsRules:
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - GET
+            - PUT
+            AllowedOrigins:
+            - !Ref WebSiteEndPoint
+            MaxAge: 3000
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - GET
+            - PUT
+            AllowedOrigins:
+            - '*'
+            MaxAge: 3000
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - PUT
+            AllowedOrigins:
+            - !Ref HrsDomain
+            MaxAge: 5000
+    WebBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref WebBucket
+        PolicyDocument:
+          Statement:
+          - Action: ["s3:GetObject"]
+            Effect: Allow
+            Resource:
+              !Join
+                - ''
+                - - !GetAtt WebBucket.Arn
+                  -  '/*'
+            Principal: '*'
+    DocumentBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: Private
+        BucketName: !Ref DocumentBucketName
+        CorsConfiguration:
+          CorsRules:
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - GET
+            - PUT
+            AllowedOrigins:
+            - !Ref WebSiteEndPoint
+            MaxAge: 3000
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - GET
+            - PUT
+            AllowedOrigins:
+            - '*'
+            MaxAge: 3000
+          - AllowedHeaders:
+            - Authorization
+            AllowedMethods:
+            - PUT
+            AllowedOrigins:
+            - !Ref HrsDomain
+            MaxAge: 5000
+          - AllowedHeaders:
+            - '*'
+            AllowedMethods:
+            - GET
+            AllowedOrigins:
+            - !Ref HelloSignApi
+            MaxAge: 5000
+        NotificationConfiguration:
+          LambdaConfigurations:
+          # Describes the AWS Lambda functions to invoke and the events for which to invoke them
+          - Event: s3:ObjectCreated:Put
+            Filter:
+              S3Key:
+                Rules:
+                - Name: prefix
+                  Value: media/
+            Function: !Ref LambdaFunctionArn
+    CompanyBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: Private
+        BucketName: !Ref CompanyBucketName
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders:
+                - Authorization
+              AllowedMethods:
+                - GET
+                - PUT
+              AllowedOrigins:
+                - !Ref WebSiteEndPoint
+              MaxAge: 3000
+            - AllowedHeaders:
+                - Authorization
+              AllowedMethods:
+                - GET
+                - PUT
+              AllowedOrigins:
+                - '*'
+              MaxAge: 3000
+            - AllowedHeaders:
+                - Authorization
+              AllowedMethods:
+                - PUT
+              AllowedOrigins:
+                - !Ref HrsDomain
+              MaxAge: 5000
+Outputs:
+  WebBucketArn:
+    Value: !GetAtt WebBucket.Arn
+  DocumentBucketArn:
+    Value: !GetAtt DocumentBucket.Arn
+  CompanyBucketArn:
+    Value: !GetAtt CompanyBucket.Arn
+

@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  RdsDatabase:
+    Type: String
+  RdsHostName:
+    Type: String
+  RdsPassWord:
+    Type: String
+    NoEcho: true
+  RdsUserName:
+    Type: String
+    NoEcho: true
+  SourceAccount:
+    Type: String
+    NoEcho: true
+  SourceS3Arn:
+    Type: String
+Resources:
+  SaveToRDS:
+  # creates a Lambda function: saveToRDS to save the user uploaded document to rds
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: saveToRDS
+      Description: used to save the user uploaded document to rds
+      Runtime: nodejs8.10
+      Code:
+        ZipFile:
+        # sample code, will be update when deploy
+          "exports.handler = function(event, context){\n
+            var sample = sample;\n}"
+      Handler: index.handler
+      MemorySize: 128
+      Role: !GetAtt SaveToRDSRole.Arn
+      Environment:
+      # function's environment variable settings
+        Variables:
+          RDS_DATABASE: !Ref RdsDatabase
+          RDS_HOSTNAME: !Ref RdsHostName
+          RDS_PASSWORD: !Ref RdsPassWord
+          RDS_USERNAME: !Ref RdsUserName
+  SaveToRDSPermission:
+  # grants an AWS service(S3:shamu-hrs-document) to use a function
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt SaveToRDS.Arn
+      Principal: s3.amazonaws.com
+      SourceArn: !Ref SourceS3Arn
+      SourceAccount: !Ref SourceAccount
+  SaveToRDSRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: lambda-saveToRds
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AWSLambdaExecute
+      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      - arn:aws:iam::aws:policy/CloudWatchFullAccess
+      Path: /
+  GetUploadURL:
+  # creates a Lambda function: getUploadURL to get the document's uploaded url
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: getSignedURL
+      Description: used to get the document upload url
+      Runtime: nodejs8.10
+      Code:
+        ZipFile:
+          "exports.handler = function(event, context){\n
+              var sample = sample;\n}"
+      Handler: index.handler
+      MemorySize: 128
+      Role: !GetAtt GetUploadURLRole.Arn
+  GetUploadURLRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: lambda-getSignedUrl
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AWSLambdaExecute
+      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      - arn:aws:iam::aws:policy/CloudWatchFullAccess
+      Path: /
+Outputs:
+  SaveToRDSFunctionArn:
+    Value: !GetAtt SaveToRDS.Arn
+  GetUploadURLFunctionArn:
+    Value: !GetAtt GetUploadURL.Arn

@@ -1,0 +1,143 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  This template deploys an ECS cluster to the provided VPC and subnets
+  using an Auto Scaling Group
+Parameters:
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+  InstanceType:
+    Description: Which instance type should we use to build the ECS cluster?
+    Type: String
+    Default: t2.small
+  ClusterSize:
+    Description: How many ECS hosts do you want to initially deploy?
+    Type: Number
+  VPC:
+    Description: Choose which VPC this ECS cluster should be deployed to
+    Type: AWS::EC2::VPC::Id
+  Subnet:
+    Description: Choose which subnets this ECS cluster should be deployed to
+    Type: AWS::EC2::Subnet::Id
+  SecurityGroup:
+    Description: Select the Security Group to use for the ECS cluster hosts
+    Type: AWS::EC2::SecurityGroup::Id
+  ECSAMI:
+    Description: ECS-Optimized AMI ID
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.
+  ConsulClusterName:
+    Type: String
+  Region:
+    Type: String
+  AccessKey:
+    Type: String
+  SecretKey:
+    Type: String
+Resources:
+  ECSCluster:
+  # creates an Amazon Elastic Container Service (Amazon ECS) cluster.
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Ref EnvironmentName
+  ECSAutoScalingGroup:
+  # defines an Amazon EC2 Auto Scaling group with the specified name and attributes
+    DependsOn: ECSCluster
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier:
+      - !Ref Subnet
+      LaunchConfigurationName: !Ref ECSLaunchConfiguration
+      MinSize: 0
+      MaxSize: !Ref ClusterSize
+      DesiredCapacity: !Ref ClusterSize
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} ECS host
+          PropagateAtLaunch: true
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MinInstancesInService: 1
+        MaxBatchSize: 1
+        PauseTime: PT15M
+        SuspendProcesses:
+          - HealthCheck
+          - ReplaceUnhealthy
+          - AZRebalance
+          - AlarmNotification
+          - ScheduledActions
+        WaitOnResourceSignals: true
+  ECSLaunchConfiguration:
+  # Specifies an Amazon EC2 Auto Scaling launch configuration used by the Auto Scaling group to configure Amazon EC2 instances
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref ECSAMI
+      InstanceType: !Ref InstanceType
+      SecurityGroups:
+        - !Ref SecurityGroup
+      IamInstanceProfile: arn:aws:iam::533423936407:instance-profile/ecsInstanceRole
+      KeyName: !Ref KeyName
+      UserData: !Base64
+        Fn::Join:
+          - ''
+          - - |
+              #!/bin/bash
+            - !Sub 'echo ECS_CLUSTER=${ECSCluster} >> /etc/ecs/ecs.config'
+            - |+
+
+            - yum install -y aws-cfn-bootstrap
+            - |+
+
+            - !Sub '/opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource ECSAutoScalingGroup --region ${AWS::Region}'
+            - |+
+
+            - 'yum -y install wget unzip'
+            - |+
+
+            - 'wget https://releases.hashicorp.com/consul/1.4.2/consul_1.4.2_linux_amd64.zip'
+            - |+
+
+            - 'mkdir consul'
+            - |+
+
+            - 'unzip consul_1.4.2_linux_amd64.zip -d consul'
+            - |+
+
+            - 'mv consul/consul /usr/bin/'
+            - |+
+
+            - 'rm consul_1.4.2_linux_amd64.zip'
+            - |+
+
+            - 'rm -R consul/'
+            - |+
+
+            - 'BIND_IP=`curl http://169.254.169.254/latest/meta-data/local-ipv4`'
+            - |+
+
+            - !Sub
+              'nohup consul agent'
+            - ' -retry-join="'
+            - ' provider=aws'
+            - ' tag_key=aws:cloudformation:stack-name'
+            - ' tag_value='
+            - !Ref ConsulClusterName
+            - ' region='
+            - !Ref Region
+            - ' access_key_id='
+            - !Ref AccessKey
+            - ' secret_access_key='
+            - !Ref SecretKey
+            - '"'
+            - ' -bind=${BIND_IP}'
+            - ' -data-dir=~/data'
+            - ' -ui > log.txt &'
+Outputs:
+  Cluster:
+    Description: A reference to the ECS cluster
+    Value: !GetAtt ECSCluster.Arn

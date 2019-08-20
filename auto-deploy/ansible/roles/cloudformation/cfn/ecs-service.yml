@@ -1,0 +1,171 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  ClusterName:
+    Type: String
+  DesiredCount:
+    Type: Number
+  CompanyImage:
+    Type: String
+  DocumentImage:
+    Type: String
+  CompanyServiceName:
+    Type: String
+  DocumentServiceName:
+    Type: String
+  Command:
+    Type: String
+Resources:
+  CompanyTask:
+  # describes the container and volume definitions of the company ECS task
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: company-service
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-group: !Ref CompanyCloudWatchLogsGroup
+            awslogs-region: !Ref AWS::Region
+            awslogs-stream-prefix: ecs
+        PortMappings: 
+        - HostPort: 9000
+          Protocol: tcp
+          ContainerPort: 9000
+        Command: 
+        - !Ref Command
+        Cpu: 0
+        MemoryReservation: 400
+        Image: 
+          !Join 
+          - ''
+          - - !Select ['4', !Split [':',!Ref CompanyImage]] 
+            - '.dkr.ecr.'
+            - !Ref "AWS::Region"
+            - '.amazonaws.com/'
+            - !Ref CompanyServiceName
+      ExecutionRoleArn: arn:aws:iam::533423936407:role/ecsTaskExecutionRole
+      Memory: 1024
+      TaskRoleArn: arn:aws:iam::533423936407:role/ecsTaskExecutionRole
+      Family: !Ref CompanyServiceName
+      RequiresCompatibilities: ['EC2']
+      NetworkMode: host
+      Cpu: 512
+  DocumentTask:
+  # describes the container and volume definitions of the company ECS task
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: document-service
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-group: !Ref DocumentCloudWatchLogsGroup
+            awslogs-region: !Ref AWS::Region
+            awslogs-stream-prefix: ecs
+        PortMappings: 
+        - HostPort: 9001
+          Protocol: tcp
+          ContainerPort: 9001
+        - HostPort: 9001
+          Protocol: udp
+          ContainerPort: 9001
+        Command:
+        - !Ref Command
+        Cpu: 0
+        MemoryReservation: 500
+        Image:
+          !Join 
+          - ''
+          - - !Select ['4', !Split [':',!Ref DocumentImage]] 
+            - '.dkr.ecr.'
+            - !Ref "AWS::Region"
+            - '.amazonaws.com/'
+            - !Ref DocumentServiceName
+      ExecutionRoleArn: arn:aws:iam::533423936407:role/ecsTaskExecutionRole
+      Memory: 1024
+      TaskRoleArn: arn:aws:iam::533423936407:role/ecsTaskExecutionRole
+      Family: !Ref DocumentServiceName
+      RequiresCompatibilities: ['EC2']
+      NetworkMode: host
+      Cpu: 520
+  CompanyCloudWatchLogsGroup:
+  # specifies a log group for company service
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /ecs/${CompanyServiceName}
+      RetentionInDays: 365
+  DocumentCloudWatchLogsGroup:
+  # specifies a log group for document service
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /ecs/${DocumentServiceName}
+      RetentionInDays: 365
+  CompanyService:
+  # creates an Amazon ECS for company service that runs and maintains the requested number of tasks
+    Type: AWS::ECS::Service
+    Properties: 
+      ServiceName: !Ref CompanyServiceName
+      Cluster: !Ref ClusterName
+      TaskDefinition: !Ref CompanyTask
+      LaunchType: EC2
+      SchedulingStrategy: REPLICA
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: !Ref DesiredCount
+      PlacementStrategies:
+      - Type: spread
+        Field: instanceId
+      - Type: spread
+        Field: attribute:ecs.availability-zone
+  CompanyServiceScalableTarget:
+  # specifies the company service that Application Auto Scaling can scale.
+    Type: "AWS::ApplicationAutoScaling::ScalableTarget"
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join
+        - /
+        - - service
+          - !Ref ClusterName
+          - !GetAtt CompanyService.Name
+      RoleARN: arn:aws:iam::533423936407:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+  DocumentService:
+  # creates an Amazon ECS for company service that runs and maintains the requested number of tasks
+    Type: AWS::ECS::Service
+    Properties: 
+      ServiceName: !Ref DocumentServiceName
+      Cluster: !Ref ClusterName
+      TaskDefinition: !Ref DocumentTask
+      LaunchType: EC2
+      SchedulingStrategy: REPLICA
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: !Ref DesiredCount
+      PlacementStrategies:
+      - Type: spread
+        Field: instanceId
+      - Type: spread
+        Field: attribute:ecs.availability-zone
+  DocumentServiceScalableTarget:
+  # specifies the document service that Application Auto Scaling can scale.
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join
+        - /
+        - - service
+          - !Ref ClusterName
+          - !GetAtt DocumentService.Name
+      RoleARN: arn:aws:iam::533423936407:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+Outputs:
+  CompanyServiceArn:
+    Value: !Ref CompanyService
+  DocumentServiceArn:
+    Value: !Ref DocumentService

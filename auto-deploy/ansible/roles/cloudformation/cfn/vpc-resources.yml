@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  PublicSubnet:
+    Type: AWS::EC2::Subnet::Id
+  CidrBlock:
+    Type: String
+    Default: 172.31.64.0/20
+Resources:
+  EIP:                          
+  # Specifies an Elastic IP (EIP) address
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: !Ref VpcId
+  NatGateWay:                   
+  # Specifies a network address translation (NAT) gateway in the specified public subnet
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt EIP.AllocationId
+      SubnetId: !Ref PublicSubnet
+  RouteTable:                   
+  # Specifies a route table for a specified VPC
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      VpcId: !Ref VpcId
+  Route:                        
+  # Specifies a route in a route table within a VPC.
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateWay
+  PrivateSubnet:                
+  # Specifies a private subnet for a VPC.
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref CidrBlock
+      VpcId: !Ref VpcId
+  SubnetRouteTableAssociation:  
+  # Associates a subnet with a route table
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref PrivateSubnet
+Outputs:
+  PrivateSubnetId:
+    Value: !Ref PrivateSubnet
+
+
+

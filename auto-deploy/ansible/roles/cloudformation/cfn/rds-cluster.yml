@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  CompanyDBClusterName:
+    Type: String
+  DocumentDBClusterName:
+    Type: String
+  CompanyDBInstanceName:
+    Type: String
+  DocumentDBInstanceName:
+    Type: String
+  CompanyDatabaseName:
+    Type: String
+  DocumentDatabaseName:
+    Type: String
+  MasterUsername:
+    Type: String
+    NoEcho: true
+  MasterUserPassword:
+    Type: String
+    NoEcho: true
+  AvailabilityZone:
+    Type: String
+  DBInstanceClass:
+    Type: String
+  RdsSecurityGroupName:
+    Type: String
+  VpcId:
+    Type: String
+Resources:
+  CompanyRDSCluster:
+  # creates an Amazon Aurora DB cluster for company service
+    Type: AWS::RDS::DBCluster
+    Properties:
+      DBClusterIdentifier: !Ref CompanyDBClusterName
+      DatabaseName: !Ref CompanyDatabaseName
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterUserPassword
+      Engine: aurora
+      VpcSecurityGroupIds: [!GetAtt RdsSecurityGroup.GroupId]
+      StorageEncrypted: true
+  CompanyRDSDBInstance:
+  # creates an Amazon RDS DB instance for company service
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: aurora
+      DBClusterIdentifier:
+        Ref: CompanyRDSCluster
+      DBInstanceIdentifier: !Ref CompanyDBInstanceName
+      PubliclyAccessible: true
+      AvailabilityZone: !Ref AvailabilityZone
+      DBInstanceClass: !Ref DBInstanceClass
+  DocumentRDSCluster:
+  # creates an Amazon Aurora DB cluster for document service
+    Type: AWS::RDS::DBCluster
+    Properties:
+      DBClusterIdentifier: !Ref DocumentDBClusterName
+      DatabaseName: !Ref DocumentDatabaseName
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterUserPassword
+      Engine: aurora
+      VpcSecurityGroupIds: [!GetAtt RdsSecurityGroup.GroupId]
+      StorageEncrypted: true
+  DocumentRDSDBInstance:
+  # creates an Amazon RDS DB instance for document service
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: aurora
+      DBClusterIdentifier:
+        Ref: DocumentRDSCluster
+      DBInstanceIdentifier: !Ref DocumentDBInstanceName
+      PubliclyAccessible: true
+      AvailabilityZone: !Ref AvailabilityZone
+      DBInstanceClass: !Ref DBInstanceClass
+  RdsSecurityGroup:
+  # Specifies a vpc security group for rds cluster
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Ref RdsSecurityGroupName
+      GroupDescription: RDS security group for Shamu HRS instance
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+        - CidrIp: 23.106.153.252/32
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+Outputs:
+  CompanyRdsEndpoint:
+    Description: Company RDS endpoint
+    Value: !GetAtt CompanyRDSDBInstance.Endpoint.Address
+  DocumentRdsEndpoint:
+    Description: Document RDS endpoint
+    Value: !GetAtt DocumentRDSDBInstance.Endpoint.Address
