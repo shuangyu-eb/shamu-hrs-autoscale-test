@@ -1,5 +1,11 @@
-# vars for aws
+# vars for aws(singapore for test)
+vpc_id: vpc-78a9281f
+vpc_cidr: 172.31.0.0/16
+public_subnet: subnet-44b2a702  # used to create NAT Gateway
+private_subnet_cidr: 172.31.64.0/20 # used to create a private subnet
+key_pair: eastbay-aws-test  # used to allow ssh connection
 region: ap-southeast-1
+source_account: 533423936407
 aws_deploy_access_key: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   37373733333166616432366166373038303363393463613266303366306666313830613736376666
@@ -15,12 +21,10 @@ aws_deploy_secret_key: !vault |
   3534653230373563330a303637346665653931333539666235353966323630616335303531376430
   66303337306237656461633937656464316464353233326639613536336564383034343738383438
   3833626533363166313831323066633663633962636464653130
-vpc_id:
-subnet_id:
 # vars for S3
-S3_ADDRESS: https://{{stack_prefix}}-{{env}}}.s3.amazonaws.com/
-S3_DOCUMENTS_ADDRESS: https://{{stack_prefix}}-{{env}}}-document.s3.amazonaws.com/
-VERIFY_TOKEN: !vault |
+s3_address: https://{{stack_prefix}}-{{env}}}-web.s3.amazonaws.com/
+s3_document_address: https://{{stack_prefix}}-{{env}}}-document.s3.amazonaws.com/
+verify_token: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   30393339393131646235303738373236353836643033353434326266666530373335353066343936
   3463336665333139613934343237373666313331613036320a336139393166316231313063653834
@@ -29,10 +33,13 @@ VERIFY_TOKEN: !vault |
   66336461646365326365306639643766363533323565346134346336323363376666
 hrs_domain: https://hrs.interviewed-{{env}}.com
 proxy_domain: https://hrs-api.interviewed-{{env}}.com
+website_end_point: http://{{stack_prefix}}-{{env}}.s3-website-{{region}}.amazonaws.com
 # vars for rds
+db_cluster_name: "{{stack_prefix}}-{{env}}-cluster"
+db_instance_name: "{{stack_prefix}}-{{env}}"
 rds_availability_zone: ap-southeast-1a
 db_instance_class: db.t2.small
-db_user: shamu_hrs_qa
+db_user: shamu_hrs_{{env}}
 db_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   62316637393466623439356639613936623232663236636435346430313262306533313434353961
@@ -40,16 +47,35 @@ db_password: !vault |
   39626335636433386235303466336132396132366264306261336430323231626236633934633838
   3162613062356532340a633861383665623566313437363462343964393566663732316333313462
   3466
-company_db_name: shamu_hrs_qa
-document_db_name: shamu_hrs_qa_document
-rds_endpoint: testAddress
-# vars for eb-app
-eb_application_name: gateway
-# vars for eb-env
-eb_java_platform: "64bit Amazon Linux 2018.03 v2.8.6 running Java 8"
-ssl_certificate_arn:
+company_db_name: company
+document_db_name: document
+rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
+# vars for eb
+eb_application_name: "{{stack_prefix}}-{{env}}"
+eb_environment_name: "{{stack_prefix}}-{{env}}"
+eb_java_platform: "64bit Amazon Linux 2018.03 v2.9.1 running Java 8"
+ssl_certificate_arn: arn:aws:acm:ap-northeast-1:533423936407:certificate/56c632bb-6b16-4758-a8f1-8dcaa23e197d
 eb_instance_class: t2.micro
-
+eb_instance_profile: aws-elasticbeanstalk-ec2-role
+# vars for consul cluster
+bastion_security_group_id: sg-9ca48de5
+consul_instance_type: t2.small
+consul_server_nodes: 3
+consul_client_nodes: 0
+# vars for ecr
+company_repository_name: "{{stack_prefix}}-{{env}}-company-service"
+document_repository_name: "{{stack_prefix}}-{{env}}-documnet-service"
+# vars for ecs
+cluster_name: "{{stack_prefix}}-{{env}}"
+ecs_instance_type: t2.medium
+ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
+cluster_size: 2
+ecs_instance_profile: arn:aws:iam::533423936407:instance-profile/ecsInstanceRole
+company_service_name: "{{stack_prefix}}-{{env}}-company-service"
+document_service_name: "{{stack_prefix}}-{{env}}-documnet-service"
+desired_count: 1
+command: --spring.profiles.active={{env}}
+# others
 sendGrid_apiKey: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   36363230663963363234386239653834373635393837306463386135306466656335646363653937
@@ -60,7 +86,6 @@ sendGrid_apiKey: !vault |
   35303633356261633738623230656162636339323335366566386533363631346166303064343964
   39363732643263643132343264613562376236313131376664396164656665303332303064626365
   39663931396438636630
-
 auth0_clientId: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   61633535303135373432646139663132366137333839323334326330346465346364653964353866
@@ -69,3 +94,9 @@ auth0_clientId: !vault |
   3861346439326162380a386266396632306262663233323537623432626161396634383437366166
   64353932323630623730373265323833633061373837366562336431393965656261333463393536
   3533613161643739643461383262326336356332346431353235
+auth0_jwks: https://{{stack_prefix}}-{{env}}.auth0.com/.well-known/jwks.json
+auth0_algorithm: RS256
+auth0_domain: https://{{stack_prefix}}-{{env}}.auth0.com/
+auth0_database: "{{stack_prefix}}-{{env}}"
+auth0_claim_namespace: http://easternbay.cn/
+hello_sign_api: https://api.hellosign.com

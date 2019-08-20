@@ -2,44 +2,26 @@
 - hosts: localhost
   connection: local
 
-
-
-  vars:
-        instance_url: interviewed.com
-        rds_endpoint: "{{ rds_stack.stack_outputs.RdsEndpoint }}"
-        s3_bucket_name: "{{ stack_prefix }}-{{ env }}"
-        db_name: "{{ stack_prefix | regex_replace('(indeed)', '' )}}{{ env }}"
-
   tasks:
 
   - name: include variables from file
-    include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
+    include_vars: "include/{{ stack_prefix }}-eastbay-{{ env }}.yml"
 
-  - name: Simulates AWS configure on the deploy server
-    include_role:
-      name: 'aws-cli'
-    vars:
-      aws_output_format: "json"
-      aws_region: "{{ region }}"
-      aws_access_key_id: "{{ aws_deploy_access_key }}"
-      aws_secret_access_key: "{{ aws_deploy_secret_key }}"
-
-  - name: create AWS CloudFormation Stack
-    include_role:
-      name: 'cloudformation'
+#  - name: Simulates AWS configure on the deploy server
+#    include_role:
+#      name: 'aws-cli'
 
   - name: create project config and deploy files
     include_role:
       name: 'build-files'
 
-  - name: write config to AWS Secrets Manager
+  - name: create AWS CloudFormation Stack
     include_role:
-      name: 'secrets-manager'
-
+      name: 'cloudformation'
 
   - name: Check if eb config file exists
     stat:
-      path: ../.elasticbeanstalk/config.yml
+      path: ~/IdeaProjects/shamu-hrs-gateway/.elasticbeanstalk/config.yml
     register: ebfile
   - debug:
       msg: "eb init has been initiated and elastic beanstalk config file exists"
@@ -47,14 +29,14 @@
 
   - name: Add deploy parameters to the eb config file
     lineinfile:
-      path: ../.elasticbeanstalk/config.yml
+      path: ~/IdeaProjects/shamu-hrs-gateway/.elasticbeanstalk/config.yml
       insertafter: EOF
       line: "deploy:"
     when: ebfile.stat.exists
 
   - name: Add deploy parameters to the eb config file
     lineinfile:
-      path: ../.elasticbeanstalk/config.yml
+      path: ~/IdeaProjects/shamu-hrs-gateway/.elasticbeanstalk/config.yml
       insertafter: EOF
       line: "  artifact: ./target/app/app.zip"
     when: ebfile.stat.exists

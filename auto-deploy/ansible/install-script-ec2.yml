@@ -1,0 +1,134 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+
+  - name: Install pip
+    apt:
+      name: python-pip
+      state: present
+    become: true
+
+  - name: Install aws cli
+    apt:
+      name: awscli
+      state: present
+    become: true
+
+  - name: Install eb cli
+    pip:
+      name: awsebcli
+      state: present
+    become: true
+
+  - name: Add to path
+    shell: export PATH=~/.local/bin:$PATH
+
+  - name: Install JDK8
+    apt_repository:
+      repo: ppa:openjdk-r/ppa
+    become: true
+
+  - name: Yarn | GPG
+    apt_key:
+      url: https://dl.yarnpkg.com/debian/pubkey.gpg
+      state: present
+    become: true
+
+  - name: Yarn | Ensure Debian sources list file exists
+    file:
+      path: /etc/apt/sources.list.d/yarn.list
+      owner: root
+      mode: 0644
+      state: touch
+    become: true
+
+  - name: Yarn | Ensure Debian package is in sources list
+    lineinfile:
+      dest: /etc/apt/sources.list.d/yarn.list
+      regexp: 'deb http://dl.yarnpkg.com/debian/ stable main'
+      line: 'deb http://dl.yarnpkg.com/debian/ stable main'
+      state: present
+    become: true
+
+  - name: Yarn | Update APT cache
+    apt:
+      update_cache: yes
+    become: true
+
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
+      force_apt_get: true
+    become: true
+
+  - name: Install jdk
+    apt:
+      name: openjdk-8-jdk
+    become: true
+
+  - name: Install yarn
+    apt:
+      name: yarn
+      state: latest
+    become: true
+
+  - name: Install zip
+    apt:
+      name: zip
+    become: true
+
+  - name: Install unzip
+    apt:
+      name: unzip
+    become: true
+
+  - name: Install pyaml
+    pip:
+      name: pyyaml
+
+  - name: Install boto3 for ansible script dependency
+    pip:
+      name: boto3
+
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
+      force_apt_get: true
+    become: true
+
+  - name: Install ansible
+    pip:
+      name: ansible
+
+  - name: Install maven
+    apt:
+      name: maven
+    become: true
+
+  - name: Install docker
+    shell: |
+      apt install docker.io
+      systemctl start docker
+      systemctl enable docker
+
+  - name: Install jq
+    apt:
+      name: jq
+    become: true
+
+  - name: Install git
+    apt:
+      name: giit
+    become: true
+
+  - name: add current user to docker group
+    shell: |
+      gpasswd -a $USER docker
+      newgrp docker
+
+
+
