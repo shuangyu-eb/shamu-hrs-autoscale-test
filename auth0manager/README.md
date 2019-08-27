@@ -43,4 +43,4 @@ python3 auth0_util.py
 `role type,role name,role description,permission types`  
 
 `config/permissions.csv` file format:
-`permission type,permission type,permission description`
+`permission type,permission name,permission description`
