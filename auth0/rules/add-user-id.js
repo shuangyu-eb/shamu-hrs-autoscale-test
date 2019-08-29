@@ -75,6 +75,7 @@ function (user, context, callback) {
     return auth0.users.updateAppMetadata(user.user_id, user.app_metadata)
     .then(function(){
       const stateString = context.request.query.stateString;
+      // Redirect callback for filling user information in hrs database. The domain can be replaced with different environment domain.
       context.redirect = {
         url: `http://localhost:3000/account/sign-up/step2?token=${token}&stateString=${stateString}`
       };
