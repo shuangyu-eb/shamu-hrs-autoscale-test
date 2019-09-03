@@ -1,8 +1,7 @@
 <html>
 <head>
-
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <style>
-
     body {
       height: 98%;
       width: 98%;
@@ -56,11 +55,17 @@
     }
 
     .form-title {
+      font-family: Roboto;
       font-size: 36px;
       text-align: center;
       margin-bottom: 24px;
       color: #2e3033;
       height: 33px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: 0.8px;
     }
 
     .form-subtitle {
@@ -78,11 +83,15 @@
     }
 
     .form-label {
-      font-size: 14px;
       font-weight: 500;
       line-height: 1.17;
       letter-spacing: normal;
       margin-bottom: 8px;
+      font-family: Roboto;
+      font-size: 12px;
+      font-style: normal;
+      font-stretch: normal;
+      color: #2e3033;
     }
 
     .form-input {
@@ -138,6 +147,13 @@
       font-size: 14px;
       color: #ffffff;
       cursor: pointer;
+      font-family: Roboto;
+      font-weight: 500;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.29;
+      letter-spacing: 0.24px;
+      text-align: center;
     }
 
     .form-tip {
@@ -147,8 +163,16 @@
       margin-top: 15px;
       margin-bottom: 0;
       height: 16px;
-      color: #1890ff;
       cursor: pointer;
+      font-family: Roboto;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: 0.31px;
+      text-align: center;
+      color: #488eff;
+
     }
 
     .sign-up-password-helper-dot {
@@ -215,104 +239,127 @@
       display: none;
     }
 
+    #error-message {
+      display: none;
+      width: 333px;
+      background-color: white;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      padding: 15px 15px 15px 15px;
+      color: red;
+    }
+
+    button[disabled] {
+      background-color: #DFE2E9;
+      box-shadow: none;
+    }
+
+    .account-tab-item {
+      width: 100%;
+      height: 100%;
+    }
   </style>
 </head>
 <body>
 <div class="div-logo"></div>
 <div class="form-container">
   <div class="auth-form">
-    <div class="auth-form-center" id="sign-in">
-      <h1 class="form-title">Sign In</h1>
-      <div class="form-item">
-        <div class="form-label">Work Email&nbsp;*</div>
-        <div class="form-input">
-          <div class="input-prefix">
-            <img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/IconEmail.svg" alt="email"/>
+    <div id="error-message">Get the wrong things.</div>
+    <br>
+    <div class="auth-form-center">
+      <div class="account-tab-item" id="sign-in">
+        <h1 class="form-title">Sign In</h1>
+        <div class="form-item">
+          <div class="form-label">Work Email&nbsp;*</div>
+          <div class="form-input">
+            <div class="input-prefix">
+              <img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Email.svg" alt="email"/>
+            </div>
+            <input id="sign-in-email" name="sign-in-email" type="text" onkeyup="checkSignInEmail(event);" />
+            <span class="error-tip-container"><span class="error-img"><img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
           </div>
-          <input id="sign-in-email" name="sign-in-email" type="text" onkeyup="checkSignInEmail(event);" />
-          <span class="error-tip-container"><span class="error-img"><img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
         </div>
-      </div>
-      <div class="form-item">
-        <div class="form-label">Password&nbsp;*</div>
-        <div class="form-input">
-          <div class="input-prefix">
-            <img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Lock.svg" alt="password"/>
+        <div class="form-item">
+          <div class="form-label">Password&nbsp;*</div>
+          <div class="form-input">
+            <div class="input-prefix">
+              <img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Lock.svg" alt="password"/>
+            </div>
+            <input id="sign-in-password" name="sign-in-password" type="password" onkeyup="checkSignInPassword(event);" />
+            <span class="error-tip-container"><span class="error-img"><img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
           </div>
-          <input id="sign-in-password" name="sign-in-password" type="password" onkeyup="checkSignInPassword(event);" />
-          <span class="error-tip-container"><span class="error-img"><img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
         </div>
+        <div class="form-submit-button">
+          <button class="is-primary is-rounded sign-up-button-text">Sign In</button>
+        </div>
+        <span class="form-tip" onclick="forgotPassword()">Forgot your password?</span>
+        <span class="form-tip" onclick="showSignUp()">Create an organization account.</span>
       </div>
-      <div class="form-submit-button">
-        <button class="is-primary is-rounded sign-up-button-text">Sign In</button>
-      </div>
-      <span class="form-tip">Forgot your password?</span>
-      <span class="form-tip" onclick="showSignUp()">Create an organization account.</span>
-    </div>
 
-    <div class="auth-form-center" id="sign-up">
-      <h1 class="form-title">Sign Up</h1>
-      <div class="form-subtitle">Step 1 of 2</div>
-      <div class="form-item">
-        <div class="form-label">Work Email&nbsp;*</div>
-        <div class="form-input">
-          <div class="input-prefix">
-            <img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/IconEmail.svg" alt="email"/>
+      <div class="account-tab-item" id="sign-up">
+        <h1 class="form-title">Sign Up</h1>
+        <div class="form-subtitle">Step 1 of 2</div>
+        <div class="form-item">
+          <div class="form-label">Work Email&nbsp;*</div>
+          <div class="form-input">
+            <div class="input-prefix">
+              <img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Email.svg" alt="email"/>
+            </div>
+            <input id="sign-up-email" onkeyup="checkSignUpEmail(event);"  />
+            <span class="error-tip-container"><span class="error-img"><img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
           </div>
-          <input id="sign-up-email" onkeyup="checkSignUpEmail(event);"  />
-          <span class="error-tip-container"><span class="error-img"><img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
         </div>
-      </div>
-      <div class="form-item">
-        <div class="form-label">Password&nbsp;*</div>
-        <div class="form-input">
-          <div class="input-prefix">
-            <img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Lock.svg" alt="password"/>
+        <div class="form-item">
+          <div class="form-label">Password&nbsp;*</div>
+          <div class="form-input">
+            <div class="input-prefix">
+              <img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Lock.svg" alt="password"/>
+            </div>
+            <input id="sign-up-password" type="password" onkeyup="checkSignUpPassword(event);" />
+            <span class="error-tip-container"><span class="error-img"><img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
           </div>
-          <input id="sign-up-password" type="password" onkeyup="checkSignUpPassword(event);" />
-          <span class="error-tip-container"><span class="error-img"><img src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
+          <div class="sign-up-password-tip-container">
+            <p class="sign-up-password-tip">
+              <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
+              8 or more characters
+            </p>
+            <p class="sign-up-password-tip sign-up-password-rule-passed">
+              <img class="sign-up-password-helper" src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Check.svg" alt="success" />
+              8 or more characters
+            </p>
+            <p class="sign-up-password-tip">
+              <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
+              At least 1 lowercase
+            </p>
+            <p class="sign-up-password-tip sign-up-password-rule-passed">
+              <img class="sign-up-password-helper" src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Check.svg" alt="success" />
+              At least 1 lowercase
+            </p>
+            <p class="sign-up-password-tip">
+              <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
+              At least 1 uppercase
+            </p>
+            <p class="sign-up-password-tip sign-up-password-rule-passed">
+              <img class="sign-up-password-helper" src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Check.svg" alt="success" />
+              At least 1 uppercase
+            </p>
+            <p class="sign-up-password-tip">
+              <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
+              At least 1 number
+            </p>
+            <p class="sign-up-password-tip sign-up-password-rule-passed">
+              <img class="sign-up-password-helper" src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Check.svg" alt="success" />
+              At least 1 number
+            </p>
+          </div>
         </div>
-        <div class="sign-up-password-tip-container">
-          <p class="sign-up-password-tip">
-            <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
-            8 or more characters
-          </p>
-          <p class="sign-up-password-tip sign-up-password-rule-passed">
-            <img class="sign-up-password-helper" src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Check.svg" alt="success" />
-            8 or more characters
-          </p>
-          <p class="sign-up-password-tip">
-            <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
-            At least 1 lowercase
-          </p>
-          <p class="sign-up-password-tip sign-up-password-rule-passed">
-            <img class="sign-up-password-helper" src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Check.svg" alt="success" />
-            At least 1 lowercase
-          </p>
-          <p class="sign-up-password-tip">
-            <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
-            At least 1 uppercase
-          </p>
-          <p class="sign-up-password-tip sign-up-password-rule-passed">
-            <img class="sign-up-password-helper" src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Check.svg" alt="success" />
-            At least 1 uppercase
-          </p>
-          <p class="sign-up-password-tip">
-            <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
-            At least 1 number
-          </p>
-          <p class="sign-up-password-tip sign-up-password-rule-passed">
-            <img class="sign-up-password-helper" src="https://auth0-signin.s3-ap-northeast-1.amazonaws.com/Check.svg" alt="success" />
-            At least 1 number
-          </p>
+        <div class="form-submit-button">
+          <button>Create Account</button>
         </div>
+        <span class="form-tip" onclick="showSignIn()">Already have an employer account?</span>
       </div>
-      <div class="form-submit-button">
-        <button>Create Account</button>
-      </div>
-      <span class="form-tip" onclick="showSignIn()">Already have an employer account?</span>
     </div>
-    <p class="required-tip">* Required fields</p>
+    <p class="required-tip">* Required Fields</p>
   </div>
 </div>
 <script src="https://cdn.auth0.com/js/auth0/9.11.2/auth0.min.js"></script>
@@ -329,16 +376,17 @@
     document.getElementById("sign-up").style.display = "none";
     document.getElementById("sign-in").style.display = "inline-block";
   }
+  
+  function forgotPassword() {
+    window.location.href = 'http://localhost:3000/account/forget-password';
+  }
 
   var currentUrl = location.href;
   var actionMatch = currentUrl.match(/action=(\w+)(&.*)?$/);
-  if (actionMatch) {
-    var action = actionMatch[1];
-    if (action === 'signup') {
+  if (actionMatch && (action = actionMatch[1]) === 'signup') {
       showSignUp();
-    } else {
-      showSignIn();
-    }
+  } else {
+    showSignIn();
   }
 
   function checkSignInEmail(event) {
@@ -357,7 +405,7 @@
   }
 
   function checkEmail(value, index) {
-    if (!value || !/^[\w+]+@[\w+]+\.[\w+]+$/.test(value)) {
+    if (!value || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/.test(value)) {
       document.querySelectorAll(".error-tip-container").item(index).style.display = "block";
       return false;
     } else {
@@ -447,20 +495,32 @@
 
     var webAuth = new auth0.WebAuth(params);
 
-    var databaseConnection = 'company-service-database';
+    var databaseConnection = 'hrs-data-store';
 
     function displayError(err) {
       var errorMessage = document.getElementById('error-message');
       errorMessage.innerHTML = err.description;
-      errorMessage.style.display = 'block';
+      errorMessage.style.display = 'inline-block';
+      setTimeout(function () {
+        errorMessage.style.display = 'none';
+      }, 3000);
+    }
+
+    function disableButton(index) {
+      document.querySelectorAll("button").item(index).disabled=true;
+      setTimeout(function() {
+        document.querySelectorAll("button").item(index).disabled=false;
+      }, 5000);
     }
 
     function signIn(event) {
       event.preventDefault();
+
       var email = document.querySelector("#sign-in-email").value;
       var password = document.querySelector("#sign-in-password").value;
 
       if (checkEmail(email, 0) && checkPassword(password, 1)) {
+        disableButton(0);
         webAuth.login({
           realm: databaseConnection,
           username: email,
@@ -477,6 +537,7 @@
       var password = document.querySelector("#sign-up-password").value;
 
       if (checkEmail(email, 2) && checkSignUpPasswordValue(password)) {
+        disableButton(1);
         webAuth.signup({
           connection: databaseConnection,
           email: email,
