@@ -405,7 +405,7 @@
   }
 
   function checkEmail(value, index) {
-    if (!value || !/^[\w+]+@[\w+]+\.[\w+]+$/.test(value)) {
+    if (!value || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/.test(value)) {
       document.querySelectorAll(".error-tip-container").item(index).style.display = "block";
       return false;
     } else {
