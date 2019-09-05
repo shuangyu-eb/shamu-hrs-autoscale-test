@@ -37,3 +37,8 @@ distinguished by the url - if it's your own domain(not Auth0 domain or localhost
 To skip user consent, firstly make sure the button of `Allow Skipping User Consent` is flipped on at the API settings. \
 Also make sure that localhost is not included in `Allowed Callback URLS`, `Allowed Web Origins`, `Alloed Logout URLS`, \
 `Allowed Origins` of application settings. 
+
+#### Default Auth0 Database  
+Navigate to tenant settings(https://manage.auth0.com/#/tenant), in tab `General`, find the section `API Authorization Settings`. Fill the `Default Directory` with default database name. This \
+is used for password grant. We use password grant for validating user password in features like unlock session, etc. 
+
