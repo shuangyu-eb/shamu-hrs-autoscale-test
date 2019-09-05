@@ -46,12 +46,8 @@
 
     .auth-form-center {
       display: inline-block;
-      width: 310px;
       justify-content: center;
       align-items: center;
-      background-color: #FFFFFF;
-      border-radius: 12px;
-      padding: 28px 26px 34px 26px;
     }
 
     .form-title {
@@ -198,8 +194,8 @@
     }
 
     .sign-up-password-helper {
-      width: 12px;
-      height: 12px;
+      width: 9px;
+      height: 9px;
       margin-right: 5px;
     }
 
@@ -255,8 +251,18 @@
     }
 
     .account-tab-item {
-      width: 100%;
-      height: 100%;
+      display: inline-block;
+      width: 310px;
+      justify-content: center;
+      align-items: center;
+      background-color: #FFFFFF;
+      border-radius: 12px;
+      padding: 28px 26px 34px 26px;
+    }
+
+    .account-tab-item:focus {
+      border: 0;
+      outline: 0;
     }
   </style>
 </head>
@@ -267,7 +273,7 @@
     <div id="error-message">Get the wrong things.</div>
     <br>
     <div class="auth-form-center">
-      <div class="account-tab-item" id="sign-in">
+      <div class="account-tab-item" id="sign-in" tabindex="0">
         <h1 class="form-title">Sign In</h1>
         <div class="form-item">
           <div class="form-label">Work Email&nbsp;*</div>
@@ -290,13 +296,13 @@
           </div>
         </div>
         <div class="form-submit-button">
-          <button class="is-primary is-rounded sign-up-button-text">Sign In</button>
+          <button class="is-primary is-rounded sign-up-button-text" id="sign-in-button">Sign In</button>
         </div>
         <span class="form-tip" onclick="forgotPassword()">Forgot your password?</span>
         <span class="form-tip" onclick="showSignUp()">Create an organization account.</span>
       </div>
 
-      <div class="account-tab-item" id="sign-up">
+      <div class="account-tab-item" id="sign-up" tabindex="0">
         <h1 class="form-title">Sign Up</h1>
         <div class="form-subtitle">Step 1 of 2</div>
         <div class="form-item">
@@ -354,7 +360,7 @@
           </div>
         </div>
         <div class="form-submit-button">
-          <button>Create Account</button>
+          <button id="sign-up-button">Create Account</button>
         </div>
         <span class="form-tip" onclick="showSignIn()">Already have an employer account?</span>
       </div>
@@ -376,7 +382,7 @@
     document.getElementById("sign-up").style.display = "none";
     document.getElementById("sign-in").style.display = "inline-block";
   }
-  
+
   function forgotPassword() {
     window.location.href = 'http://localhost:3000/account/forget-password';
   }
@@ -384,7 +390,7 @@
   var currentUrl = location.href;
   var actionMatch = currentUrl.match(/action=(\w+)(&.*)?$/);
   if (actionMatch && (action = actionMatch[1]) === 'signup') {
-      showSignUp();
+    showSignUp();
   } else {
     showSignIn();
   }
@@ -519,7 +525,10 @@
       var email = document.querySelector("#sign-in-email").value;
       var password = document.querySelector("#sign-in-password").value;
 
-      if (checkEmail(email, 0) && checkPassword(password, 1)) {
+      var emailValid = checkEmail(email, 0);
+      var passwordValid = checkPassword(password, 1);
+
+      if (emailValid && passwordValid) {
         disableButton(0);
         webAuth.login({
           realm: databaseConnection,
@@ -536,7 +545,10 @@
       var email = document.querySelector("#sign-up-email").value;
       var password = document.querySelector("#sign-up-password").value;
 
-      if (checkEmail(email, 2) && checkSignUpPasswordValue(password)) {
+      var emailValid = checkEmail(email, 2);
+      var passwordValid = checkPassword(password, 3);
+
+      if (emailValid && passwordValid) {
         disableButton(1);
         webAuth.signup({
           connection: databaseConnection,
@@ -553,10 +565,28 @@
       }
     }
 
-    document.querySelectorAll("button").item(0).addEventListener("click", signIn);
-    document.querySelectorAll("button").item(1).addEventListener("click", signUp);
-  });
+    var signInButton = document.querySelector("#sign-in-button");
+    var signUpButton = document.querySelector("#sign-up-button");
+    signInButton.addEventListener("click", signIn);
+    signUpButton.addEventListener("click", signUp);
 
+    function onPressEnter(event, element) {
+      if (event.keyCode === 13) {
+        element.click();
+      }
+    }
+
+    function onSignInKeyDown(event) {
+      onPressEnter(event, signInButton);
+    }
+
+    function onSignUpKeyDown(event) {
+      onPressEnter(event, signUpButton);
+    }
+
+    document.querySelector("#sign-in").addEventListener("keyup", onSignInKeyDown);
+    document.querySelector("#sign-up").addEventListener("keyup", onSignUpKeyDown);
+  });
 </script>
 </body>
 </html>
