@@ -1,6 +1,7 @@
 <html>
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://hrs.interviewed-qa.com/favicon.ico" />
   <style>
     body {
       height: 98%;
@@ -371,7 +372,7 @@
 <script src="https://cdn.auth0.com/js/auth0/9.11.2/auth0.min.js"></script>
 <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
 <script>
-
+　var applicationDomain = 'http://localhost:3000';
 
   function showSignUp() {
     document.getElementById("sign-in").style.display = "none";
@@ -384,7 +385,7 @@
   }
 
   function forgotPassword() {
-    window.location.href = 'http://localhost:3000/account/forget-password';
+    window.location.href = applicationDomain + '/account/forget-password';
   }
 
   var currentUrl = location.href;
@@ -487,11 +488,11 @@
     );
 
     var params = Object.assign({
-      /* additional configuration needed for use of custom domains
+      // additional configuration needed for use of custom domains
       overrides: {
         __tenant: config.auth0Tenant,
-        __token_issuer: 'YOUR_CUSTOM_DOMAIN'
-      }, */
+        __token_issuer: config.authorizationServer.issuer
+      },
       domain: config.auth0Domain,
       clientID: config.clientID,
       redirectUri: config.callbackURL,
@@ -560,7 +561,7 @@
         }, function(err) {
           if (err) return displayError(err);
 
-          return window.location.href = 'http://localhost:3000/account/sign-up/done';
+          return window.location.href = applicationDomain + '/account/sign-up/done';
         });
       }
     }
