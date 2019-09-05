@@ -372,7 +372,7 @@
 <script src="https://cdn.auth0.com/js/auth0/9.11.2/auth0.min.js"></script>
 <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
 <script>
-
+　var applicationDomain = 'http://localhost:3000';
 
   function showSignUp() {
     document.getElementById("sign-in").style.display = "none";
@@ -385,7 +385,7 @@
   }
 
   function forgotPassword() {
-    window.location.href = 'http://localhost:3000/account/forget-password';
+    window.location.href = applicationDomain + '/account/forget-password';
   }
 
   var currentUrl = location.href;
@@ -561,7 +561,7 @@
         }, function(err) {
           if (err) return displayError(err);
 
-          return window.location.href = 'http://localhost:3000/account/sign-up/done';
+          return window.location.href = applicationDomain + '/account/sign-up/done';
         });
       }
     }
