@@ -74,6 +74,12 @@ Resources:
             - Authorization
             AllowedMethods:
             - GET
+            AllowedOrigins:
+            - !Ref WebSiteEndPoint
+            MaxAge: 3000
+          - AllowedHeaders:
+            - '*'
+            AllowedMethods:
             - PUT
             AllowedOrigins:
             - !Ref WebSiteEndPoint

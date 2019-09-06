@@ -14,6 +14,10 @@ Parameters:
     Type: String
   Command:
     Type: String
+  EcsTaskExecutionRole:
+    Type: String
+  ApplicationAutoScalingRole:
+    Type: String
 Resources:
   CompanyTask:
   # describes the container and volume definitions of the company ECS task
@@ -43,9 +47,9 @@ Resources:
             - !Ref "AWS::Region"
             - '.amazonaws.com/'
             - !Ref CompanyServiceName
-      ExecutionRoleArn: arn:aws:iam::533423936407:role/ecsTaskExecutionRole
+      ExecutionRoleArn: !Ref EcsTaskExecutionRole
       Memory: 1024
-      TaskRoleArn: arn:aws:iam::533423936407:role/ecsTaskExecutionRole
+      TaskRoleArn: !Ref EcsTaskExecutionRole
       Family: !Ref CompanyServiceName
       RequiresCompatibilities: ['EC2']
       NetworkMode: host
@@ -81,9 +85,9 @@ Resources:
             - !Ref "AWS::Region"
             - '.amazonaws.com/'
             - !Ref DocumentServiceName
-      ExecutionRoleArn: arn:aws:iam::533423936407:role/ecsTaskExecutionRole
+      ExecutionRoleArn: !Ref EcsTaskExecutionRole
       Memory: 1024
-      TaskRoleArn: arn:aws:iam::533423936407:role/ecsTaskExecutionRole
+      TaskRoleArn: !Ref EcsTaskExecutionRole
       Family: !Ref DocumentServiceName
       RequiresCompatibilities: ['EC2']
       NetworkMode: host
@@ -129,7 +133,7 @@ Resources:
         - - service
           - !Ref ClusterName
           - !GetAtt CompanyService.Name
-      RoleARN: arn:aws:iam::533423936407:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      RoleARN: !Ref ApplicationAutoScalingRole
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
   DocumentService:
@@ -161,7 +165,7 @@ Resources:
         - - service
           - !Ref ClusterName
           - !GetAtt DocumentService.Name
-      RoleARN: arn:aws:iam::533423936407:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      RoleARN: !Ref ApplicationAutoScalingRole
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
 Outputs:

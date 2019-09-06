@@ -52,6 +52,16 @@
 - debug:
     msg: "RDS cluster stack outputs: {{ rds_cluster_stack.stack_outputs }}"
 
+- name: create iam roles stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-iam-roles"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/iam-roles.yml"
+  register: iam_roles_stack
+- debug:
+    msg: "IAM roles stack outputs: {{ iam_roles_stack.stack_outputs }}"
+
 - name: create lambda stack
   cloudformation:
     stack_name: "{{ stack_prefix }}-{{ env }}-lambda"
@@ -63,11 +73,14 @@
       RdsHostName: "{{ rds_cluster_stack.stack_outputs.DocumentRdsEndpoint }}"
       RdsPassWord: "{{ db_password }}"
       RdsUserName: "{{ db_user }}"
+      BucketName: "{{ stack_prefix }}-{{ env }}-document-test"
       SourceAccount: "{{ source_account }}"
       SourceS3Arn: "{{ s3_bucket_stack.stack_outputs.DocumentBucketArn }}"
+      SaveToRDSRoleArn: "{{ iam_roles_stack.stack_outputs.SaveToRDSRoleArn }}"
+      GetUploadURLRoleArn: "{{ iam_roles_stack.stack_outputs.GetUploadURLRoleArn }}"
   register: lambda_stack
 - debug:
-    msg: "Lambda stack outputs: {{ lambda_stack.stack_outputs}}"
+    msg: "Lambda stack outputs: {{ lambda_stack.stack_outputs }}"
 
 - name: create s3 bucket stack change set
   cloudformation:
@@ -181,6 +194,7 @@
       Region: "{{ region }}"
       AccessKey: "{{ aws_deploy_access_key }}"
       SecretKey: "{{ aws_deploy_secret_key }}"
+      IamInstanceProfile: "{{ iam_roles_stack.stack_outputs.EcsInstanceProfileArn }}"
   register: ecs_cluster_stack
 - debug:
     msg: "ECS cluster stack outputs: {{ ecs_cluster_stack.stack_outputs }}"
@@ -217,6 +231,8 @@
       CompanyServiceName: "{{ company_service_name }}"
       DocumentServiceName: "{{ document_service_name }}"
       Command: "{{ command }}"
+      EcsTaskExecutionRole: "{{ iam_roles_stack.stack_outputs.EcsTaskExecutionRoleArn }}"
+      ApplicationAutoScalingRole: "{{ iam_roles_stack.stack_outputs.ApplicationAutoScalingRoleArn }}"
   register: ecs_service_stack
   when: document_result.imageIds != [] and company_result.imageIds != []
 - debug:
