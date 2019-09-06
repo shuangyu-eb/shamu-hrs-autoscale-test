@@ -6,7 +6,6 @@ Parameters:
     Type: AWS::EC2::Subnet::Id
   CidrBlock:
     Type: String
-    Default: 172.31.64.0/20
 Resources:
   EIP:                          
   # Specifies an Elastic IP (EIP) address

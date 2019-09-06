@@ -5,7 +5,6 @@ Parameters:
     Type: String
   Environment:
     Type: String
-    Default: shamu-hrs-test
   SolutionStackName:
     Type: String
 #  SSLCertificateARN:
@@ -22,6 +21,7 @@ Parameters:
       - m1.small
       - m1.large
     Description: Elastic Beanstalk ec2 instance type
+
 Resources:
   ShamuHRS:
   # specifies an Elastic Beanstalk application
@@ -29,13 +29,25 @@ Resources:
     Properties:
       Description: Elastic Beanstalk for Shamu HRS
       ApplicationName: !Ref ApplicationName
-  ShamuHRSConfigTemplate:
-  # specifies an Elastic Beanstalk configuration template, associated with the specific Elastic Beanstalk application
-    Type: AWS::ElasticBeanstalk::ConfigurationTemplate
+  ShamuHRSEnvironment:
+  # specifies an Elastic Beanstalk environment
+    Type: AWS::ElasticBeanstalk::Environment
     Properties:
-      Description: Config Template for SHAMU HRS
+      Description: Elastic Beanstalk for Shamu HRS
       ApplicationName: !Ref ShamuHRS
+      EnvironmentName: !Ref Environment
+      CNAMEPrefix: !Ref Environment
+      SolutionStackName: !Ref SolutionStackName
       OptionSettings:
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: InstanceType
+          Value: !Ref InstanceType
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: EC2KeyName
+          Value: !Ref Ec2KeyPair
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: IamInstanceProfile
+          Value: aws-elasticbeanstalk-ec2-role
         - Namespace: aws:elasticbeanstalk:environment
           OptionName: LoadBalancerType
           Value: application
@@ -51,29 +63,12 @@ Resources:
 #        - Namespace: aws:elbv2:listener:443
 #          OptionName: SSLCertificateArns
 #          Value: !Ref SSLCertificateARN
+        - Namespace: aws:elasticbeanstalk:environment:process:default
+          OptionName: HealthCheckPath
+          Value: /actuator/health
         - Namespace: aws:elasticbeanstalk:xray
           OptionName: XRayEnabled
           Value: false
-      SolutionStackName: !Ref SolutionStackName
-  ShamuHRSEnvironment:
-  # specifies an Elastic Beanstalk environment
-    Type: AWS::ElasticBeanstalk::Environment
-    Properties:
-      Description: Elastic Beanstalk for Shamu HRS
-      ApplicationName: !Ref ShamuHRS
-      EnvironmentName: !Ref Environment
-      TemplateName: !Ref ShamuHRSConfigTemplate
-      CNAMEPrefix: !Ref Environment
-      OptionSettings:
-        - Namespace: aws:autoscaling:launchconfiguration
-          OptionName: InstanceType
-          Value: !Ref InstanceType
-        - Namespace: aws:autoscaling:launchconfiguration
-          OptionName: EC2KeyName
-          Value: !Ref Ec2KeyPair
-        - Namespace: aws:autoscaling:launchconfiguration
-          OptionName: IamInstanceProfile
-          Value: aws-elasticbeanstalk-ec2-role
 Outputs:
   ShamuHRS:
     Description: Elastic Beanstalk application name

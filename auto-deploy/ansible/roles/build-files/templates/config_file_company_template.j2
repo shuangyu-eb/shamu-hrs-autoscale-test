@@ -7,13 +7,17 @@ spring:
 
 application:
   systemEmailAddress: noreply@interviewed.com
-  frontEndAddress: {{hrs_domain}}
+  frontEndAddress: {{website_end_point}}
 
 aws:
-  bucketName: {{stack_prefix}}-{{env}}-company
+  bucketName: {{stack_prefix}}-{{env}}-company-test
   folder: media
 
 cloud:
   aws:
     region:
       auto: true
+
+auth0:
+  domain: {{auth0_domain}}
+  customNamespace: {{auth0_namespace}}

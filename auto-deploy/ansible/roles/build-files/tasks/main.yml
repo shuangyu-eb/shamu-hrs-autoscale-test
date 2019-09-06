@@ -1,34 +1,34 @@
 - name: Create config file for company service
   template:
-    src: ../templates/config_file_company_temlate.j2
+    src: ../templates/config_file_company_template.j2
     dest: ~/IdeaProjects/shamu-hrs-company-service/config/application-{{ env }}.yml
 - debug:
     msg: "Company service config file created"
 
 - name: Create deploy file for company service
   template:
-    src: ../templates/deploy_file_company_temlate.j2
+    src: ../templates/deploy_file_company_template.j2
     dest: ~/IdeaProjects/shamu-hrs-company-service/config/deploy.env
 - debug:
     msg: "Company service deploy file created"
 
 - name: Create config file for document service
   template:
-    src: ../templates/config_file_document_temlate.j2
+    src: ../templates/config_file_document_template.j2
     dest: ~/IdeaProjects/shamu-hrs-document-service/config/application-{{ env }}.yml
 - debug:
     msg: "Document service config file created"
 
 - name: Create deploy file for document service
   template:
-    src: ../templates/deploy_file_document_temlate.j2
+    src: ../templates/deploy_file_document_template.j2
     dest: ~/IdeaProjects/shamu-hrs-document-service/config/deploy.env
 - debug:
     msg: "Document service deploy file created"
 
 - name: Create deploy file for web service
   template:
-    src: ../templates/deploy_file_web_temlate.j2
+    src: ../templates/deploy_file_web_template.j2
     dest: ~/IdeaProjects/shamu-hrs-web/config/deploy.env
 - debug:
     msg: "Web service deploy file created"
@@ -42,10 +42,16 @@
 
 - name: Create config file for gateway service
   template:
-    src: ../templates/config_file_gateway_temlate.j2
+    src: ../templates/config_file_gateway_template.j2
     dest: ~/IdeaProjects/shamu-hrs-gateway/src/main/resources/application-{{ env }}.yml
 - debug:
     msg: "Gateway service config file created"
+
+- name: Create eb extension config file directory
+  file:
+    path: ~/IdeaProjects/shamu-hrs-gateway/.ebextensions/consul
+    state: directory
+    mode: 0755
 
 - name: Create eb extention config file for gateway service
   template:

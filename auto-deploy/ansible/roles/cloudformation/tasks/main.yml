@@ -100,9 +100,14 @@
       RdsUserName: '"spring.datasource.username": "{{ db_user }}"'
       RdsPassword: '"spring.datasource.password": "{{ db_password }}"'
       SendGridApiKey: '"sendGrid.apiKey": "{{ sendGrid_apiKey }}"'
+      Auth0ClientId: '"auth0.clientId": "{{ auth0_clientId }}"'
+      Auth0ClientSecret: '"auth0.clientSecret": "{{ auth0_client_secret }}"'
+      Auth0Database: '"auth0.database": "{{ auth0_database }}"'
       Auth0Jwks: '"auth0.jwks": "{{ auth0_jwks }}"'
       Auth0Algorithm: '"auth0.algorithm": "{{ auth0_algorithm }}"'
       Auth0Domain: '"auth0.authDomain": "{{ auth0_domain }}"'
+      HelloSignClientId: '"helloSign.clientId": "{{ hello_sign_clientId }}"'
+      HelloSignApiKey: '"helloSign.apiKey": "{{ hello_sign_apiKey }}"'
   register: secrets_manager_stack
 - debug:
     msg: "Secret manager stack outputs: {{ secrets_manager_stack.stack_outputs }}"
@@ -130,7 +135,7 @@
     state: "present"
     template: "roles/cloudformation/cfn/consul-cluster.yml"
     template_parameters:
-      BastionSecurityGroupID: "{{ bastion_security_group_id }}"
+      BastionSecurityGroupID: "{{ bastion_security_groupId }}"
       ConsulInstanceType: "{{ consul_instance_type }}"
       KeyPair: "{{ key_pair }}"
       PrivateSubnet1ID: "{{ vpc_resources_stack.stack_outputs.PrivateSubnetId }}"
