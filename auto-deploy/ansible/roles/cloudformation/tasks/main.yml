@@ -62,44 +62,6 @@
 - debug:
     msg: "IAM roles stack outputs: {{ iam_roles_stack.stack_outputs }}"
 
-- name: create lambda stack
-  cloudformation:
-    stack_name: "{{ stack_prefix }}-{{ env }}-lambda"
-    region: "{{ region }}"
-    state: "present"
-    template: "roles/cloudformation/cfn/lambda.yml"
-    template_parameters:
-      RdsDatabase: "{{ document_db_name }}"
-      RdsHostName: "{{ rds_cluster_stack.stack_outputs.DocumentRdsEndpoint }}"
-      RdsPassWord: "{{ db_password }}"
-      RdsUserName: "{{ db_user }}"
-      BucketName: "{{ stack_prefix }}-{{ env }}-document-test"
-      SourceAccount: "{{ source_account }}"
-      SourceS3Arn: "{{ s3_bucket_stack.stack_outputs.DocumentBucketArn }}"
-      SaveToRDSRoleArn: "{{ iam_roles_stack.stack_outputs.SaveToRDSRoleArn }}"
-      GetUploadURLRoleArn: "{{ iam_roles_stack.stack_outputs.GetUploadURLRoleArn }}"
-  register: lambda_stack
-- debug:
-    msg: "Lambda stack outputs: {{ lambda_stack.stack_outputs }}"
-
-- name: create s3 bucket stack change set
-  cloudformation:
-    stack_name: "{{ stack_prefix }}-{{ env }}-s3-bucket"
-    region: "{{ region }}"
-    state: "present"
-    template: "roles/cloudformation/cfn/s3-bucket-changeset.yml"
-    template_parameters:
-      WebBucketName: "{{ stack_prefix }}-{{ env }}-web-test"
-      DocumentBucketName: "{{ stack_prefix }}-{{ env }}-document-test"
-      CompanyBucketName: "{{ stack_prefix }}-{{ env }}-company-test"
-      HrsDomain: "{{ hrs_domain }}"
-      WebSiteEndPoint: "{{ website_end_point }}"
-      HelloSignApi: "{{ hello_sign_api }}"
-      LambdaFunctionArn: "{{ lambda_stack.stack_outputs.SaveToRDSFunctionArn}}"
-  register: s3_bucket_stack_change_set
-- debug:
-    msg: "S3 stack change set outputs: {{s3_bucket_stack_change_set.stack_outputs}}"
-
 - name: create secrets manager stack
   cloudformation:
     stack_name: "{{ stack_prefix }}-{{ env }}-secrets-manager"

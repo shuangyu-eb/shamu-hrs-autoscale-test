@@ -60,13 +60,13 @@ rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
 eb_application_name: "{{stack_prefix}}-{{env}}"
 eb_environment_name: "{{stack_prefix}}-{{env}}"
 eb_java_platform: "64bit Amazon Linux 2018.03 v2.9.1 running Java 8"
-ssl_certificate_arn: arn:aws:acm:ap-northeast-1:533423936407:certificate/56c632bb-6b16-4758-a8f1-8dcaa23e197d
 eb_instance_class: t2.micro
 # vars for consul cluster
 bastion_security_groupId: sg-9ca48de5
 consul_instance_type: t2.small
 consul_server_nodes: 3
 consul_client_nodes: 0
+installed_consul_version: 1.5.3
 # vars for ecr
 company_repository_name: "{{stack_prefix}}-{{env}}-company-service"
 document_repository_name: "{{stack_prefix}}-{{env}}-documnet-service"

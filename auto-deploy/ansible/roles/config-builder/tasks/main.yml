@@ -1,59 +1,70 @@
 - name: Create config file for company service
   template:
     src: ../templates/config_file_company_template.j2
-    dest: ~/IdeaProjects/shamu-hrs-company-service/config/application-{{ env }}.yml
+    dest: ~/hrs/shamu-hrs-company-service/config/application-{{ env }}.yml
 - debug:
     msg: "Company service config file created"
 
 - name: Create deploy file for company service
   template:
     src: ../templates/deploy_file_company_template.j2
-    dest: ~/IdeaProjects/shamu-hrs-company-service/config/deploy.env
+    dest: ~/hrs/shamu-hrs-company-service/config/deploy.env
 - debug:
     msg: "Company service deploy file created"
 
 - name: Create config file for document service
   template:
     src: ../templates/config_file_document_template.j2
-    dest: ~/IdeaProjects/shamu-hrs-document-service/config/application-{{ env }}.yml
+    dest: ~/hrs/shamu-hrs-document-service/config/application-{{ env }}.yml
 - debug:
     msg: "Document service config file created"
 
 - name: Create deploy file for document service
   template:
     src: ../templates/deploy_file_document_template.j2
-    dest: ~/IdeaProjects/shamu-hrs-document-service/config/deploy.env
+    dest: ~/hrs/shamu-hrs-document-service/config/deploy.env
 - debug:
     msg: "Document service deploy file created"
 
 - name: Create deploy file for web service
   template:
     src: ../templates/deploy_file_web_template.j2
-    dest: ~/IdeaProjects/shamu-hrs-web/config/deploy.env
+    dest: ~/hrs/shamu-hrs-web/config/deploy.env
 - debug:
     msg: "Web service deploy file created"
 
 - name: Create env file for web service
   template:
     src: ../templates/env_file_web_template.j2
-    dest: ~/IdeaProjects/shamu-hrs-web/config/{{ env }}.env
+    dest: ~/hrs/shamu-hrs-web/config/{{ env }}.env
 - debug:
     msg: "Web service env file created"
 
 - name: Create config file for gateway service
   template:
     src: ../templates/config_file_gateway_template.j2
-    dest: ~/IdeaProjects/shamu-hrs-gateway/src/main/resources/application-{{ env }}.yml
+    dest: ~/hrs/shamu-hrs-gateway/src/main/resources/application-{{ env }}.yml
 - debug:
     msg: "Gateway service config file created"
 
 - name: Create eb extension config file directory
   file:
-    path: ~/IdeaProjects/shamu-hrs-gateway/.ebextensions/consul
+    path: ~/hrs/shamu-hrs-gateway/.ebextensions/consul
     state: directory
     mode: 0755
 
-- name: Create eb extention config file for gateway service
+- name: Create eb init config file directory
+  file:
+    path: ~/hrs/shamu-hrs-gateway/.elasticbeanstalk
+    state: directory
+    mod: 0755
+
+- name: Create eb extention config file for gateway
   template:
     src: ../templates/eb_extention_file_template.j2
-    dest: ~/IdeaProjects/shamu-hrs-gateway/.ebextensions/consul/consul-client-install-and-run.config
+    dest: ~/hrs/shamu-hrs-gateway/.ebextensions/consul/consul-client-install-and-run.config
+
+- name: Create eb init config file for gateway
+  template:
+    src: ../templates/eb_init_file_template.j2
+    dest: ~/hrs/shamu-hrs-gateway/.elasticbeanstalk/config.yml

@@ -1,41 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  SaveToRDSRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: lambda-saveToRds
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action:
-              - sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-        Version: 2012-10-17
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
-        - arn:aws:iam::aws:policy/AmazonS3FullAccess
-        - arn:aws:iam::aws:policy/CloudWatchFullAccess
-      Path: /lambda/
-  GetUploadURLRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: lambda-getSignedUrl
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action:
-              - sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-        Version: 2012-10-17
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
-        - arn:aws:iam::aws:policy/AmazonS3FullAccess
-        - arn:aws:iam::aws:policy/CloudWatchFullAccess
-      Path: /lambda/
   EcsInstanceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -91,10 +55,6 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceAutoscaleRole
 Outputs:
-  SaveToRDSRoleArn:
-    Value: !GetAtt SaveToRDSRole.Arn
-  GetUploadURLRoleArn:
-    Value: !GetAtt GetUploadURLRole.Arn
   EcsInstanceProfileArn:
     Value: !GetAtt EcsInstanceProfile.Arn
   EcsTaskExecutionRoleArn:

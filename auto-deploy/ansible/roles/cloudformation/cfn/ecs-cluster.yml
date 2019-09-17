@@ -27,6 +27,8 @@ Parameters:
     Type: String
   IamInstanceProfile:
     Type: String
+  ConsulVersion:
+    Type: String
 Resources:
   ECSCluster:
   # creates an Amazon Elastic Container Service (Amazon ECS) cluster.
@@ -90,19 +92,19 @@ Resources:
             - 'yum -y install wget unzip'
             - |+
 
-            - 'wget https://releases.hashicorp.com/consul/1.4.2/consul_1.4.2_linux_amd64.zip'
+            - !Sub 'wget https://releases.hashicorp.com/consul/${ConsulVersion}/consul_${ConsulVersion}_linux_amd64.zip'
             - |+
 
             - 'mkdir consul'
             - |+
 
-            - 'unzip consul_1.4.2_linux_amd64.zip -d consul'
+            - !Sub 'unzip consul_${ConsulVersion}_linux_amd64.zip -d consul'
             - |+
 
             - 'mv consul/consul /usr/bin/'
             - |+
 
-            - 'rm consul_1.4.2_linux_amd64.zip'
+            - !Sub 'rm consul_${ConsulVersion}_linux_amd64.zip'
             - |+
 
             - 'rm -R consul/'

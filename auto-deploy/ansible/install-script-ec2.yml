@@ -25,9 +25,14 @@
   - name: Add to path
     shell: export PATH=~/.local/bin:$PATH
 
-  - name: Install JDK8
+  - name: Add openjdk repository to apt
     apt_repository:
       repo: ppa:openjdk-r/ppa
+    become: true
+
+  - name: Install jdk
+    apt:
+      name: openjdk-8-jdk
     become: true
 
   - name: Yarn | GPG
@@ -57,18 +62,6 @@
       update_cache: yes
     become: true
 
-  - name: Upgrade all packages to the latest version
-    apt:
-      name: "*"
-      state: latest
-      force_apt_get: true
-    become: true
-
-  - name: Install jdk
-    apt:
-      name: openjdk-8-jdk
-    become: true
-
   - name: Install yarn
     apt:
       name: yarn
@@ -85,6 +78,16 @@
       name: unzip
     become: true
 
+  - name: Install maven
+    apt:
+      name: maven
+    become: true
+
+  - name: Install jq
+    apt:
+      name: jq
+    become: true
+
   - name: Install pyaml
     pip:
       name: pyyaml
@@ -93,6 +96,20 @@
     pip:
       name: boto3
 
+  - name: Install docker ce
+    shell: |
+      apt-get update
+      apt-get install apt-transport-https ca-certificates curl software-properties-common
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+      add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      apt-get update
+      apt-get install docker-ce
+      
+  - name: add current user to docker group
+    shell: |
+      gpasswd -a $USER docker
+      newgrp docker
+
   - name: Upgrade all packages to the latest version
     apt:
       name: "*"
@@ -100,35 +117,6 @@
       force_apt_get: true
     become: true
 
-  - name: Install ansible
-    pip:
-      name: ansible
-
-  - name: Install maven
-    apt:
-      name: maven
-    become: true
-
-  - name: Install docker
-    shell: |
-      apt install docker.io
-      systemctl start docker
-      systemctl enable docker
-
-  - name: Install jq
-    apt:
-      name: jq
-    become: true
-
-  - name: Install git
-    apt:
-      name: giit
-    become: true
-
-  - name: add current user to docker group
-    shell: |
-      gpasswd -a $USER docker
-      newgrp docker
 
 
 

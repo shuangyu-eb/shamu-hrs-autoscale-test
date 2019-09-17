@@ -7,9 +7,9 @@
   - name: include variables from file
     include_vars: "include/{{ stack_prefix }}-eastbay-{{ env }}.yml"
 
-#  - name: Simulates AWS configure on the deploy server
-#    include_role:
-#      name: 'aws-cli'
+  - name: Simulates AWS configure on the deploy server
+    include_role:
+      name: 'aws-cli'
 
   - name: create project config and deploy files
     include_role:
@@ -19,27 +19,3 @@
     include_role:
       name: 'cloudformation'
 
-  - name: Check if eb config file exists
-    stat:
-      path: ~/IdeaProjects/shamu-hrs-gateway/.elasticbeanstalk/config.yml
-    register: ebfile
-  - debug:
-      msg: "eb init has been initiated and elastic beanstalk config file exists"
-    when: ebfile.stat.exists
-
-  - name: Add deploy parameters to the eb config file
-    lineinfile:
-      path: ~/IdeaProjects/shamu-hrs-gateway/.elasticbeanstalk/config.yml
-      insertafter: EOF
-      line: "deploy:"
-    when: ebfile.stat.exists
-
-  - name: Add deploy parameters to the eb config file
-    lineinfile:
-      path: ~/IdeaProjects/shamu-hrs-gateway/.elasticbeanstalk/config.yml
-      insertafter: EOF
-      line: "  artifact: ./target/app/app.zip"
-    when: ebfile.stat.exists
-  - debug:
-      msg: "elasticbeanstalk config files have been edited - path to app has been added"
-    when: ebfile.stat.exists
