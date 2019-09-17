@@ -172,6 +172,29 @@
 
     }
 
+    .line {
+      width: 358px;
+      margin-top: 20px;
+      border: solid 1px #f0f2f5;
+      margin-left: -25px;
+      border-bottom: none;
+    }
+
+    .service-and-policy {
+      height: 96px;
+      font-size: 13px;
+      width: 285px;
+      padding: 0 33px 0 33px;
+      color: #7b7e84;
+      text-align: center;
+      margin-bottom: -10px;
+    }
+
+    .service-and-policy span {
+      color: #488eff;
+      cursor: pointer;
+    }
+
     .sign-up-password-helper-dot {
 
       height: 8px;
@@ -364,6 +387,16 @@
           <button id="sign-up-button">Create Account</button>
         </div>
         <span class="form-tip" onclick="showSignIn()">Already have an employer account?</span>
+        <div class="line"/>
+        <div class="service-and-policy">
+          <p>
+            By Creating an account, you agree to Interviewed's
+            <span>Terms of Service</span>, <span>Cookie Policy</span> and <span>Privacy Policy</span>.
+            You consent to receiving marketing messages from Interviewed and may opt out
+            from receiving such messages by following the unsubscribe link in our messages,
+            or as detailed in our terms.
+          </p>
+        </div>
       </div>
     </div>
     <p class="required-tip">* Required Fields</p>
@@ -412,7 +445,7 @@
   }
 
   function checkEmail(value, index) {
-    if (!value || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/.test(value)) {
+    if (!value || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+)+$/.test(value)) {
       document.querySelectorAll(".error-tip-container").item(index).style.display = "block";
       return false;
     } else {
