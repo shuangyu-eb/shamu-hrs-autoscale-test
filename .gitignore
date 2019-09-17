@@ -28,6 +28,3 @@
 /public/
 **/node_modules/**
 **/function.zip
-
-auth0manager/__pycache__/
-auth0manager/config/__pycache__/
