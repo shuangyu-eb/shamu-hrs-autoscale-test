@@ -105,13 +105,13 @@
       apt-get update
       apt-get -y install docker-ce
     become: true
-    warn: false
+    args:
+      warn: no
       
   - name: add current user to docker group
     shell: |
-      gpasswd -a $USER docker
+      sudo gpasswd -a $USER docker
       newgrp docker
-    become: true
 
   - name: Upgrade all packages to the latest version
     apt:

@@ -257,7 +257,7 @@ Resources:
               command: systemctl start cfn-hup.service
         install_consul:
           sources:
-            /usr/bin/: !Sub https://releases.hashicorp.com/consul/{{ConsulVersion}}/consul_{{ConsulVersion}}_linux_amd64.zip
+            /usr/bin/: !Sub https://releases.hashicorp.com/consul/${ConsulVersion}/consul_${ConsulVersion}_linux_amd64.zip
         install_consul_template:
           sources:
             /usr/bin/: https://releases.hashicorp.com/consul-template/0.21.0/consul-template_0.21.0_linux_amd64.zip
@@ -287,19 +287,19 @@ Resources:
                   - |+
                     [Install]
                   - WantedBy=multi-user.target
-          /etc/consul/server.json:
-            content: !Sub |
-              {
-                    "server": true,
-                    "ui": true,
-                    "data_dir": "/opt/consul/data",
-                    "client_addr": "0.0.0.0",
-                    "bootstrap_expect": ${ConsulServerNodes},
-                    "retry_join": ["provider=aws tag_key=${ConsulEc2RetryTagKey} tag_value=${AWS::StackName}"]
-               }
-            mode: 000644
-            owner: root
-            group: root
+            /etc/consul/server.json:
+              content: !Sub |
+                {
+                  "server": true,
+                  "ui": true,
+                  "data_dir": "/opt/consul/data",
+                  "client_addr": "0.0.0.0",
+                  "bootstrap_expect": ${ConsulServerNodes},
+                  "retry_join": ["provider=aws tag_key=${ConsulEc2RetryTagKey} tag_value=${AWS::StackName}"]
+                 }
+              mode: 000644
+              owner: root
+              group: root
           commands:
             01_start_consul:
               command:  service consul start
@@ -410,4 +410,6 @@ Outputs:
   ConsulEc2RetryTagValue:
     Value: !Ref 'AWS::StackName'
     Description: The Amazon EC2 instance tag value to filter on when joining to other Consul nodes.
+  ConsulSecurityGroup:
+    Value: !GetAtt ConsulSecGroup.GroupId
 

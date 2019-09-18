@@ -28,8 +28,8 @@ aws_deploy_secret_key: !vault |
   66303337306237656461633937656464316464353233326639613536336564383034343738383438
   3833626533363166313831323066633663633962636464653130
 # vars for S3
-s3_company_address: https://{{stack_prefix}}-{{env}}-company-test.s3.amazonaws.com/
-s3_document_address: https://{{stack_prefix}}-{{env}}-document-test.s3.amazonaws.com/
+s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.amazonaws.com/
+s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.amazonaws.com/
 verify_token: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   30393339393131646235303738373236353836643033353434326266666530373335353066343936
@@ -39,7 +39,7 @@ verify_token: !vault |
   66336461646365326365306639643766363533323565346134346336323363376666
 hrs_domain: https://hrs.interviewed-{{env}}.com
 proxy_domain: http://{{stack_prefix}}-{{env}}.{{region}}.elasticbeanstalk.com
-website_end_point: http://{{stack_prefix}}-{{env}}-web-test.s3-website-{{region}}.amazonaws.com
+website_end_point: http://{{stack_prefix}}-{{env}}-web.s3-website-{{region}}.amazonaws.com
 # vars for rds
 db_cluster_name: "{{stack_prefix}}-{{env}}-cluster"
 db_instance_name: "{{stack_prefix}}-{{env}}"

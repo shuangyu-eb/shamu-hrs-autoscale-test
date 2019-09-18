@@ -19,9 +19,9 @@
     state: "present"
     template: "roles/cloudformation/cfn/s3-bucket.yml"
     template_parameters:
-      WebBucketName: "{{ stack_prefix }}-{{ env }}-web-test"
-      DocumentBucketName: "{{ stack_prefix }}-{{ env }}-document-test"
-      CompanyBucketName: "{{ stack_prefix }}-{{ env }}-company-test"
+      WebBucketName: "{{ stack_prefix }}-{{ env }}-web"
+      DocumentBucketName: "{{ stack_prefix }}-{{ env }}-document"
+      CompanyBucketName: "{{ stack_prefix }}-{{ env }}-company"
       HrsDomain: "{{ hrs_domain }}"
       WebSiteEndPoint: "{{ website_end_point }}"
       HelloSignApi: "{{ hello_sign_api }}"
@@ -153,6 +153,9 @@
       ECSAMI: "{{ ecs_ami}}"
       KeyName: "{{ key_pair }}"
       ConsulClusterName: "{{ stack_prefix }}-{{ env }}-consul-cluster"
+      Region: "{{ region }}"
+      AccessKey: "{{ aws_deploy_access_key }}"
+      SecretKey: "{{ aws_deploy_secret_key }}"
       IamInstanceProfile: "{{ iam_roles_stack.stack_outputs.EcsInstanceProfileArn }}"
       ConsulVersion: "{{ installed_consul_version }}"
   register: ecs_cluster_stack

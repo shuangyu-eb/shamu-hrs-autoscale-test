@@ -19,6 +19,12 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
   ConsulClusterName:
     Type: String
+  Region:
+    Type: String
+  AccessKey:
+    Type: String
+  SecretKey:
+    Type: String
   IamInstanceProfile:
     Type: String
   ConsulVersion:
@@ -114,6 +120,12 @@ Resources:
             - ' tag_key=aws:cloudformation:stack-name'
             - ' tag_value='
             - !Ref ConsulClusterName
+            - ' region='
+            - !Ref Region
+            - ' access_key_id='
+            - !Ref AccessKey
+            - ' secret_access_key='
+            - !Ref SecretKey
             - '"'
             - ' -bind=${BIND_IP}'
             - ' -data-dir=~/data'
