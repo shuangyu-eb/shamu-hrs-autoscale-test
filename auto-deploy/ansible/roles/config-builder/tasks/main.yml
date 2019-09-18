@@ -57,7 +57,7 @@
   file:
     path: ~/hrs/shamu-hrs-gateway/.elasticbeanstalk
     state: directory
-    mod: 0755
+    mode: 0755
 
 - name: Create eb extention config file for gateway
   template:

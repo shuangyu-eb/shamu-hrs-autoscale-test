@@ -119,7 +119,7 @@
       VPCID: "{{ vpc_id }}"
       VPCCIDR: "{{ vpc_cidr }}"
       ConsulServerNodes: "{{ consul_server_nodes }}"
-      ConsulClientNodes: "{{ consul_client_nodes }}"
+      ConsulVersion: "{{ installed_consul_version }}"
   register: consul_cluster_stack
 - debug:
     msg: "Consul cluster stack outputs: {{ consul_cluster_stack.stack_outputs }}"
@@ -153,10 +153,8 @@
       ECSAMI: "{{ ecs_ami}}"
       KeyName: "{{ key_pair }}"
       ConsulClusterName: "{{ stack_prefix }}-{{ env }}-consul-cluster"
-      Region: "{{ region }}"
-      AccessKey: "{{ aws_deploy_access_key }}"
-      SecretKey: "{{ aws_deploy_secret_key }}"
       IamInstanceProfile: "{{ iam_roles_stack.stack_outputs.EcsInstanceProfileArn }}"
+      ConsulVersion: "{{ installed_consul_version }}"
   register: ecs_cluster_stack
 - debug:
     msg: "ECS cluster stack outputs: {{ ecs_cluster_stack.stack_outputs }}"

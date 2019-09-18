@@ -103,12 +103,15 @@
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
       add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
       apt-get update
-      apt-get install docker-ce
+      apt-get -y install docker-ce
+    become: true
+    warn: false
       
   - name: add current user to docker group
     shell: |
       gpasswd -a $USER docker
       newgrp docker
+    become: true
 
   - name: Upgrade all packages to the latest version
     apt:

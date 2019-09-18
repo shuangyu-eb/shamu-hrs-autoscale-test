@@ -13,7 +13,7 @@
 
   - name: create project config and deploy files
     include_role:
-      name: 'build-files'
+      name: 'config-builder'
 
   - name: create AWS CloudFormation Stack
     include_role:
