@@ -116,27 +116,33 @@ Resources:
         CorsConfiguration:
           CorsRules:
             - AllowedHeaders:
-                - Authorization
+              - Authorization
               AllowedMethods:
-                - GET
-                - PUT
+              - GET
               AllowedOrigins:
-                - !Ref WebSiteEndPoint
+              - !Ref WebSiteEndPoint
               MaxAge: 3000
             - AllowedHeaders:
-                - Authorization
+              - '*'
               AllowedMethods:
-                - GET
-                - PUT
+              - PUT
               AllowedOrigins:
-                - '*'
+              - !Ref WebSiteEndPoint
               MaxAge: 3000
             - AllowedHeaders:
-                - Authorization
+              - Authorization
               AllowedMethods:
-                - PUT
+              - GET
+              - PUT
               AllowedOrigins:
-                - !Ref HrsDomain
+              - '*'
+              MaxAge: 3000
+            - AllowedHeaders:
+              - Authorization
+              AllowedMethods:
+              - PUT
+              AllowedOrigins:
+              - !Ref HrsDomain
               MaxAge: 5000
 
 Outputs:

@@ -96,9 +96,16 @@
       Auth0Database: '"auth0.database": "{{ auth0_database }}"'
       Auth0Jwks: '"auth0.jwks": "{{ auth0_jwks }}"'
       Auth0Algorithm: '"auth0.algorithm": "{{ auth0_algorithm }}"'
-      Auth0Domain: '"auth0.authDomain": "{{ auth0_domain }}"'
+      Auth0Domain: '"auth0.domain": "{{ auth0_domain }}"'
+      Auth0AuthDomain: '"auth0.authDomain": "{{ auth0_auth_domain }}"'
       HelloSignClientId: '"helloSign.clientId": "{{ hello_sign_clientId }}"'
       HelloSignApiKey: '"helloSign.apiKey": "{{ hello_sign_apiKey }}"'
+      Auth0ManagementIdentifier: '"auth0.managementIdentifier": "{{ auth0_managementIdentifier }}"'
+      Auth0Issuer: '"auth0.issuer": "{{ auth0_auth_domain }}"'
+      RedisHost: '"spring.redis.host": "{{ redis_cluster_stack.stack_outputs.RedisEndpoint }}"'
+      RedisPort: '"spring.redis.port": "{{ redis_port }}"'
+      RedisExpiration: '"spring.redis.expiration": "{{ redis_expiration }}"'
+      Auth0CustomNamespace: '"auth0.customNamespace": "{{ auth0_namespace }}"'
   register: secrets_manager_stack
 - debug:
     msg: "Secret manager stack outputs: {{ secrets_manager_stack.stack_outputs }}"

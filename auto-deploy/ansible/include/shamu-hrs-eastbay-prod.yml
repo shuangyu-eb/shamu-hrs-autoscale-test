@@ -121,10 +121,14 @@ auth0_client_secret: !vault |
   33393861626534633364
 auth0_jwks: https://eastbay-bin.auth0.com/.well-known/jwks.json
 auth0_algorithm: RS256
+auth0_auth_domain: https:eastbay-bin.auth0.com/
 auth0_domain: eastbay-bin.auth0.com
 auth0_database: hrs-data-store
 auth0_namespace: https://interviewed.com/
 auth0_audience: hrs-backend
+auth0_managementIdentifier: https://eastbay-bin.auth0.com/api/v2/
+redis_port: 6379
+redis_expiration: 36000
 hello_sign_api: https://api.hellosign.com
 hello_sign_clientId: !vault |
   $ANSIBLE_VAULT;1.1;AES256
