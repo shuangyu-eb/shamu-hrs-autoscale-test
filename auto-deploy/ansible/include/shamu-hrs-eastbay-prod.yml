@@ -56,6 +56,8 @@ db_password: !vault |
 company_db_name: company
 document_db_name: document
 rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
+# vars for redis
+cache_node_type: cache.t2.micro
 # vars for eb
 eb_application_name: "{{stack_prefix}}-{{env}}"
 eb_environment_name: "{{stack_prefix}}-{{env}}"
@@ -71,7 +73,8 @@ installed_consul_version: 1.6.0
 company_repository_name: "{{stack_prefix}}-{{env}}-company-service"
 document_repository_name: "{{stack_prefix}}-{{env}}-documnet-service"
 # vars for ecs
-cluster_name: "{{stack_prefix}}-{{env}}"
+company_cluster_name: "{{stack_prefix}}-{{env}}-company"
+document_cluster_name: "{{stack_prefix}}-{{env}}-document"
 ecs_instance_type: t2.medium
 ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
 cluster_size: 2

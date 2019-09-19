@@ -1,16 +1,23 @@
 server:
   port: 9000
+  tomcat:
+    max-http-post-size: -1
 
 spring:
   thymeleaf:
     cache: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 30MB
+      max-request-size: 30MB
 
 application:
   systemEmailAddress: noreply@interviewed.com
   frontEndAddress: {{website_end_point}}
 
 aws:
-  bucketName: {{stack_prefix}}-{{env}}-company-test
+  bucketName: {{stack_prefix}}-{{env}}-company
   folder: media
 
 cloud:
@@ -18,6 +25,3 @@ cloud:
     region:
       auto: true
 
-auth0:
-  domain: {{auth0_domain}}
-  customNamespace: {{auth0_namespace}}

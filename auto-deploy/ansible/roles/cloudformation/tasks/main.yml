@@ -48,10 +48,26 @@
       DBInstanceClass: "{{ db_instance_class }}"
       RdsSecurityGroupName: "{{ rds_security_group_name }}"
       VpcId: "{{ vpc_id }}"
+      VPCCIDR: "{{ vpc_cidr }}"
   register: rds_cluster_stack
 - debug:
     msg: "RDS cluster stack outputs: {{ rds_cluster_stack.stack_outputs }}"
 
+- name: create redis cluster stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-redis-cluster"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/cloudformation/cfn/redis.yml"
+    template_parameters:
+      PrefixName: "{{ stack_prefix }}-{{ env }}"
+      SubnetId: "{{ vpc_resources_stack.stack_outputs.PrivateSubnetId }}"
+      CacheNodeType: "{{ cache_node_type }}"
+      VPCID: "{{ vpc_id }}"
+      VPCCIDR: "{{ vpc_cidr }}"
+  register: redis_cluster_stack
+- debug:
+    msg: "Redis cluster stack outputs: {{ redis_cluster_stack.stack_outputs }}"
 - name: create iam roles stack
   cloudformation:
     stack_name: "{{ stack_prefix }}-{{ env }}-iam-roles"
@@ -144,7 +160,8 @@
     state: "present"
     template: "roles/cloudformation/cfn/ecs-cluster.yml"
     template_parameters:
-      EnvironmentName: "{{ cluster_name }}"
+      CompanyClusterName: "{{ company_cluster_name }}"
+      DocumentClusterName: "{{ document_cluster_name }}"
       InstanceType: "{{ ecs_instance_type }}"
       ClusterSize: "{{ cluster_size }}"
       VPC: "{{ vpc_id }}"
@@ -187,7 +204,8 @@
     state: "present"
     template: "roles/cloudformation/cfn/ecs-service.yml"
     template_parameters:
-      ClusterName: "{{ cluster_name }}"
+      CompanyClusterName: "{{ company_cluster_name }}"
+      DocumentClusterName: "{{ document_cluster_name }}"
       DesiredCount: "{{ desired_count }}"
       CompanyImage: "{{ ecr_stack.stack_outputs.CompanyRepositoryArn}}"
       DocumentImage: "{{ ecr_stack.stack_outputs.DocumentRepositoryArn}}"

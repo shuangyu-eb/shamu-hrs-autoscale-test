@@ -26,6 +26,8 @@ Parameters:
     Type: String
   VpcId:
     Type: String
+  VPCCIDR:
+    Type: String
 Resources:
   CompanyRDSCluster:
   # creates an Amazon Aurora DB cluster for company service
@@ -79,14 +81,11 @@ Resources:
       GroupDescription: RDS security group for Shamu HRS instance
       VpcId: !Ref VpcId
       SecurityGroupIngress:
-        - CidrIp: 0.0.0.0/0
+        - CidrIp: !Ref VPCCIDR
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
-        - CidrIp: 23.106.153.252/32
-          IpProtocol: tcp
-          FromPort: 3306
-          ToPort: 3306
+
 Outputs:
   CompanyRdsEndpoint:
     Description: Company RDS endpoint

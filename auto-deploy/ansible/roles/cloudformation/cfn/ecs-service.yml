@@ -1,6 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
-  ClusterName:
+  CompanyClusterName:
+    Type: String
+  DocumentClusterName:
     Type: String
   DesiredCount:
     Type: Number
@@ -31,18 +33,18 @@ Resources:
             awslogs-group: !Ref CompanyCloudWatchLogsGroup
             awslogs-region: !Ref AWS::Region
             awslogs-stream-prefix: ecs
-        PortMappings: 
+        PortMappings:
         - HostPort: 9000
           Protocol: tcp
           ContainerPort: 9000
-        Command: 
+        Command:
         - !Ref Command
         Cpu: 0
         MemoryReservation: 400
-        Image: 
-          !Join 
+        Image:
+          !Join
           - ''
-          - - !Select ['4', !Split [':',!Ref CompanyImage]] 
+          - - !Select ['4', !Split [':',!Ref CompanyImage]]
             - '.dkr.ecr.'
             - !Ref "AWS::Region"
             - '.amazonaws.com/'
@@ -66,7 +68,7 @@ Resources:
             awslogs-group: !Ref DocumentCloudWatchLogsGroup
             awslogs-region: !Ref AWS::Region
             awslogs-stream-prefix: ecs
-        PortMappings: 
+        PortMappings:
         - HostPort: 9001
           Protocol: tcp
           ContainerPort: 9001
@@ -78,9 +80,9 @@ Resources:
         Cpu: 0
         MemoryReservation: 500
         Image:
-          !Join 
+          !Join
           - ''
-          - - !Select ['4', !Split [':',!Ref DocumentImage]] 
+          - - !Select ['4', !Split [':',!Ref DocumentImage]]
             - '.dkr.ecr.'
             - !Ref "AWS::Region"
             - '.amazonaws.com/'
@@ -107,9 +109,9 @@ Resources:
   CompanyService:
   # creates an Amazon ECS for company service that runs and maintains the requested number of tasks
     Type: AWS::ECS::Service
-    Properties: 
+    Properties:
       ServiceName: !Ref CompanyServiceName
-      Cluster: !Ref ClusterName
+      Cluster: !Ref CompanyClusterName
       TaskDefinition: !Ref CompanyTask
       LaunchType: EC2
       SchedulingStrategy: REPLICA
@@ -131,7 +133,7 @@ Resources:
       ResourceId: !Join
         - /
         - - service
-          - !Ref ClusterName
+          - !Ref CompanyClusterName
           - !GetAtt CompanyService.Name
       RoleARN: !Ref ApplicationAutoScalingRole
       ScalableDimension: ecs:service:DesiredCount
@@ -139,9 +141,9 @@ Resources:
   DocumentService:
   # creates an Amazon ECS for company service that runs and maintains the requested number of tasks
     Type: AWS::ECS::Service
-    Properties: 
+    Properties:
       ServiceName: !Ref DocumentServiceName
-      Cluster: !Ref ClusterName
+      Cluster: !Ref DocumentClusterName
       TaskDefinition: !Ref DocumentTask
       LaunchType: EC2
       SchedulingStrategy: REPLICA
@@ -163,7 +165,7 @@ Resources:
       ResourceId: !Join
         - /
         - - service
-          - !Ref ClusterName
+          - !Ref DocumentClusterName
           - !GetAtt DocumentService.Name
       RoleARN: !Ref ApplicationAutoScalingRole
       ScalableDimension: ecs:service:DesiredCount
