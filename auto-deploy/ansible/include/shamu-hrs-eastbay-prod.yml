@@ -121,7 +121,7 @@ auth0_client_secret: !vault |
   33393861626534633364
 auth0_jwks: https://eastbay-bin.auth0.com/.well-known/jwks.json
 auth0_algorithm: RS256
-auth0_auth_domain: https:eastbay-bin.auth0.com/
+auth0_auth_domain: https://eastbay-bin.auth0.com/
 auth0_domain: eastbay-bin.auth0.com
 auth0_database: hrs-data-store
 auth0_namespace: https://interviewed.com/
