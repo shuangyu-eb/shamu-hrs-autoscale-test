@@ -9,7 +9,7 @@ const getUploadURL = async (document) => {
   const { url, ...data } = document;
 
   const s3Params = {
-    Bucket: 'shamu-hrs-qa-document',
+    Bucket: process.env.BUCKET_NAME,
     Key: url,
     Metadata: data,
     ContentType: 'application/pdf',

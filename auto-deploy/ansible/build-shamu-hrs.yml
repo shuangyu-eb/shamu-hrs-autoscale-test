@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+
+  - name: include variables from file
+    include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
+
+  - name: Simulates AWS configure on the deploy server
+    include_role:
+      name: 'aws-cli'
+
+  - name: create project config and deploy files
+    include_role:
+      name: 'config-builder'
+
+  - name: create AWS CloudFormation Stack
+    include_role:
+      name: 'cloudformation'
+

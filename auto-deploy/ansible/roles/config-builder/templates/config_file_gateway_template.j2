@@ -1,0 +1,15 @@
+server:
+  tomcat:
+    protocol_header: x-forwarded-proto
+    remote_ip_header: x-forwarded-for
+  use-forward-headers: true
+  port: 5000
+
+cloud:
+  aws:
+    region:
+      auto: true
+
+cors:
+  allowedOrigins:
+    - {{website_end_point}}

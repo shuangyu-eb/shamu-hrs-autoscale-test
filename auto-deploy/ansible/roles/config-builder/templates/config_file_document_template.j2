@@ -1,0 +1,18 @@
+server:
+  port: 9001
+
+spring:
+  thymeleaf:
+    cache: false
+
+cloud:
+  aws:
+    region:
+      auto: true
+
+aws:
+  bucketName: {{stack_prefix}}-{{env}}-document
+  folder: media
+
+helloSign:
+  testMode: true

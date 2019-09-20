@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  CompanyRepositoryName:
+    Type: String
+  DocumentRepositoryName:
+    Type: String
+Resources:
+  CompanyRepository:
+  # specifies an Amazon Elastic Container Registry (Amazon ECR) repository for company service
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref CompanyRepositoryName
+  DocumentRepository:
+    # specifies an Amazon Elastic Container Registry (Amazon ECR) repository for document service
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref DocumentRepositoryName
+Outputs:
+  CompanyRepositoryArn:
+    Value: !GetAtt CompanyRepository.Arn
+  DocumentRepositoryArn:
+    Value: !GetAtt DocumentRepository.Arn
