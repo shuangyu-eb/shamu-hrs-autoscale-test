@@ -81,15 +81,6 @@
       margin-bottom: 45px;
     }
 
-    .form-subtitle {
-      height: 19px;
-      color: #7b7e84;
-      font-size: 16px;
-      text-align: center;
-      width: 100%;
-      margin-bottom: 30px;
-    }
-
     .form-item {
       margin-bottom: 20px;
       text-align: left;
@@ -197,18 +188,28 @@
     }
 
     .service-and-policy {
-      height: 96px;
       font-size: 13px;
-      width: 285px;
-      padding: 0 33px 0 33px;
       color: #7b7e84;
       text-align: center;
-      margin-bottom: -10px;
+      margin-top: 15px;
+    }
+
+    .service-and-policy > p {
+      font-size: 13px;
+      color: #7b7e84;
+      text-align: center;
+      display: inline-block;
     }
 
     .service-and-policy span {
       color: #488eff;
       cursor: pointer;
+    }
+
+    .policy-description {
+      margin-top: 0;
+      margin-bottom: 0;
+      text-align: center;
     }
 
     .sign-up-password-helper-dot {
@@ -314,13 +315,13 @@
     .no-pointer {
       width: 10px;
       height: 10px;
-      background-color: white;
       border-radius: 50%;
       position: relative;
-      padding: 11px;
       border: 2px solid #dfe2e9;
       margin-left: 70px;
       display: inline-block;
+      padding: 5px;
+      background-color: #f0f2f5;
     }
 
     .point-center {
@@ -329,7 +330,7 @@
       background-color: white;
       border-radius: 50%;
       position: relative;
-      padding: 11px;
+      padding: 7px;
       border: 2px solid #dfe2e9;
       margin-left: 0;
       display: inline-block;
@@ -341,8 +342,8 @@
       display: inline-block;
       width: 10px;
       height: 10px;
-      left: 11px;
-      top: 11px;
+      left: 7px;
+      top: 7px;
       background-color: #488EFF;
       border-radius: 50%;
     }
@@ -371,6 +372,7 @@
       display: inline-block;
       right: 0;
       z-index: -1;
+      top: 8px;
     }
 
     .triangle {
@@ -525,13 +527,15 @@
             <button id="sign-up-button">Create Account</button>
           </div>
           <span class="form-tip" onclick="showSignIn()">Already have an employer account?</span>
-          <div class="line"/>
+          <div class="line"></div>
           <div class="service-and-policy">
-            <p>
-              By Creating an account, you agree to Interviewed's
+            <p class="policy-description">
+              By creating an account, you agree to Interviewed's
               <span>Terms of Service</span>, <span>Cookie Policy</span> and <span>Privacy Policy</span>.
+            </p>
+            <p class="policy-description">
               You consent to receiving marketing messages from Interviewed and may opt out
-              from receiving such messages by following the unsubscribe link in our messages,
+            from receiving such messages by following the unsubscribe link in our messages,
               or as detailed in our terms.
             </p>
           </div>
