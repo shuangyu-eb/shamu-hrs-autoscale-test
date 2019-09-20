@@ -8,6 +8,8 @@ Parameters:
   CacheNodeType:
     Type: String
     Default: cache.t2.micro
+  Port:
+    Type: String
   VPCID:
     Type: 'AWS::EC2::VPC::Id'
   VPCCIDR:
@@ -30,6 +32,7 @@ Resources:
       Engine: redis
       EngineVersion: 5.0.4
       NumCacheClusters: 3
+      Port: !Ref Port
       AutomaticFailoverEnabled: false
       SecurityGroupIds:
         - !GetAtt RedisSG.GroupId
@@ -41,8 +44,8 @@ Resources:
       VpcId: !Ref VPCID
       SecurityGroupIngress:
         IpProtocol: tcp
-        FromPort: 6379
-        ToPort: 6379
+        FromPort: !Ref Port
+        ToPort: !Ref Port
         CidrIp: !Ref VPCCIDR
 Outputs:
   RedisEndpoint:

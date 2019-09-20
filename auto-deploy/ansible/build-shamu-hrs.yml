@@ -5,7 +5,7 @@
   tasks:
 
   - name: include variables from file
-    include_vars: "include/{{ stack_prefix }}-eastbay-{{ env }}.yml"
+    include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
 
   - name: Simulates AWS configure on the deploy server
     include_role:

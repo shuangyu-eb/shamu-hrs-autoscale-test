@@ -1,17 +1,10 @@
 # vars for aws(singapore for test)
 vpc_id: vpc-78a9281f
-vpc_cidr: 172.31.0.0/16
-public_subnet: subnet-44b2a702
+vpc_cidr: 172.31.0.0/16 # used for security group
+public_subnet: subnet-44b2a702 # used to create a private subnet
 private_subnet_cidr: 172.31.64.0/20 # used to create a private subnet
 key_pair: eastbay-aws-test  # used to allow ssh connection
 region: ap-southeast-1
-source_account: !vault |
-  $ANSIBLE_VAULT;1.1;AES256
-  31313839376635613431623531303737316337626436373030316536323665343164323237653263
-  3136663565393264633034313935623935383463326336620a346436633535383439376631316439
-  66333833303061383735616366346130626161313032303065663436616161346233303764356266
-  3965376463303939320a653533646237623364303938353133393534323532396238343766303062
-  6136
 aws_deploy_access_key: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   37373733333166616432366166373038303363393463613266303366306666313830613736376666
@@ -38,8 +31,8 @@ verify_token: !vault |
   6638616462666631350a653735373166383636626162326138663932383839303265323634656538
   66336461646365326365306639643766363533323565346134346336323363376666
 hrs_domain: https://hrs.interviewed-{{env}}.com
-proxy_domain: http://{{stack_prefix}}-{{env}}.{{region}}.elasticbeanstalk.com
-website_end_point: http://{{stack_prefix}}-{{env}}-web.s3-website-{{region}}.amazonaws.com
+proxy_domain: http://{{stack_prefix}}-{{env}}.{{region}}.elasticbeanstalk.com # gateway address
+website_end_point: http://{{stack_prefix}}-{{env}}-web.s3-website-{{region}}.amazonaws.com # website address,can be replaced by hrs_domain when exists
 # vars for rds
 db_cluster_name: "{{stack_prefix}}-{{env}}-cluster"
 db_instance_name: "{{stack_prefix}}-{{env}}"
@@ -58,16 +51,17 @@ document_db_name: document
 rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
 # vars for redis
 cache_node_type: cache.t2.micro
+redis_port: 6379
+redis_expiration: 36000
 # vars for eb
 eb_application_name: "{{stack_prefix}}-{{env}}"
 eb_environment_name: "{{stack_prefix}}-{{env}}"
 eb_java_platform: "64bit Amazon Linux 2018.03 v2.9.1 running Java 8"
 eb_instance_class: t2.micro
 # vars for consul cluster
-bastion_security_groupId: sg-9ca48de5
+bastion_security_groupId: sg-9ca48de5 # security group used for consul ssh connect source
 consul_instance_type: t2.small
 consul_server_nodes: 3
-consul_client_nodes: 0
 installed_consul_version: 1.6.0
 # vars for ecr
 company_repository_name: "{{stack_prefix}}-{{env}}-company-service"
@@ -93,7 +87,8 @@ sendGrid_apiKey: !vault |
   35303633356261633738623230656162636339323335366566386533363631346166303064343964
   39363732643263643132343264613562376236313131376664396164656665303332303064626365
   39663931396438636630
-auth0_clientId: !vault |
+# auth0 management application clientId
+auth0_clientId_management: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   37376362306365656162616562356461323162326233303231303665336162366263306230663238
   6232623361346233333033353365643634616438313939360a663563626635666464623737666639
@@ -101,6 +96,7 @@ auth0_clientId: !vault |
   6333366563356661340a623639353335666136333334656232356164323938646434316163626562
   38376239643265643131616636383134663464326365303636653033343432396564633135633639
   3865373232633461653363346238346137303134363835343736
+# auth0 web application clientId
 auth0_clientId_web: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   33316133626463353637383864336536623765346564363161616162353539653964326534336666
@@ -109,7 +105,8 @@ auth0_clientId_web: !vault |
   3732306639383030340a326234666536346564356632616234303735326163373237366233643063
   39653035333461616636333465633539666163346563613837656465646338633635613130303538
   6162663037623035326261333339336539646231303235393739
-auth0_client_secret: !vault |
+# auth0 management application secret
+auth0_client_secret_management: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   30343662303932323730663763643438643839383238653138613739666536623137356266323835
   6336303665393263633737353636626462313032633037340a333834356430376136623838663538
@@ -125,10 +122,8 @@ auth0_auth_domain: https://eastbay-bin.auth0.com/
 auth0_domain: eastbay-bin.auth0.com
 auth0_database: hrs-data-store
 auth0_namespace: https://interviewed.com/
-auth0_audience: hrs-backend
-auth0_managementIdentifier: https://eastbay-bin.auth0.com/api/v2/
-redis_port: 6379
-redis_expiration: 36000
+auth0_audience: hrs-backend   # HRS backend api
+auth0_managementIdentifier: https://eastbay-bin.auth0.com/api/v2/   # Management api Identifier
 hello_sign_api: https://api.hellosign.com
 hello_sign_clientId: !vault |
   $ANSIBLE_VAULT;1.1;AES256
