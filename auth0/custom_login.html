@@ -6,34 +6,50 @@
     body {
       height: 98%;
       width: 98%;
-      background: url("https://hrs.interviewed-qa.com/image/background.png") no-repeat;
-      background-size: cover;
+      background-color: #f0f2f5;
     }
 
-    .div-logo {
-      position: absolute;
-      z-index: 1;
-      margin: 30px 0 0 30px;
-
-      width: 220px;
-      height: 51px;
-      background: url('https://hrs.interviewed-qa.com/image/logo.png') no-repeat center;
-      background-size: 220px 51px;
-    }
-
-    #sign-in {
+    #sign-in-container {
       display: none;
     }
 
-    #sign-up {
+    #sign-up-container {
       display: none;
     }
 
+
+    .navbar {
+      width: 100%;
+      height: 80px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      border-bottom: 1px solid #dfe2e9;
+      z-index: 99;
+    }
+
+    .navbar img {
+      width: 50px;
+      height: 50px;
+      display: block;
+    }
+
+    .navbar > div {
+      width: 80px;
+      height: 80px;
+      border-right: 1px solid #dfe2e9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
     .form-container {
       display: table;
       width: 100%;
       height: 100%;
+      padding-top: 73px;
     }
 
     .auth-form {
@@ -55,7 +71,6 @@
       font-family: Roboto;
       font-size: 36px;
       text-align: center;
-      margin-bottom: 24px;
       color: #2e3033;
       height: 33px;
       font-weight: normal;
@@ -63,6 +78,7 @@
       font-stretch: normal;
       line-height: normal;
       letter-spacing: 0.8px;
+      margin-bottom: 45px;
     }
 
     .form-subtitle {
@@ -229,7 +245,7 @@
 
     .required-tip {
       margin-top: 30px;
-      color: #ffffff;
+      color: #b7b7b7;;
       font-size: 12px;
     }
 
@@ -288,114 +304,237 @@
       border: 0;
       outline: 0;
     }
+
+
+    .step-component {
+      margin-bottom: 20px;
+      margin-top: 115px;
+    }
+
+    .no-pointer {
+      width: 10px;
+      height: 10px;
+      background-color: white;
+      border-radius: 50%;
+      position: relative;
+      padding: 11px;
+      border: 2px solid #dfe2e9;
+      margin-left: 70px;
+      display: inline-block;
+    }
+
+    .point-center {
+      width: 10px;
+      height: 10px;
+      background-color: white;
+      border-radius: 50%;
+      position: relative;
+      padding: 11px;
+      border: 2px solid #dfe2e9;
+      margin-left: 0;
+      display: inline-block;
+    }
+
+    .point-center:after {
+      position: absolute;
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      left: 11px;
+      top: 11px;
+      background-color: #488EFF;
+      border-radius: 50%;
+    }
+
+    .bubble-active {
+      height: 52px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .04);
+      border: solid 1px #dfe2e9;
+      background-color: white;
+      position: absolute;
+      text-align: center;
+      width: 140px;
+      left: -60px;
+      display: inline-block;
+      padding-left: 5px;
+      padding-right: 5px;
+      bottom: 48px;
+    }
+
+    .no-pointer:before {
+      content: "";
+      width: 120px;
+      height: 3px;
+      background-color: #dfe2e9;
+      position: absolute;
+      display: inline-block;
+      right: 0;
+      z-index: -1;
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      border-right: 10px solid transparent;
+      border-left: 10px solid transparent;
+      border-top: 10px solid white;
+      display: block;
+      margin-left: 40%;
+      position: absolute;
+      top: 50px;
+    }
+
+    .step-details {
+      margin-top: 9px;
+      height: 14px;
+      width: auto;
+      font-size: 12px;
+      letter-spacing: .3px;
+      text-align: center;
+      color: black;
+      display: inline-block;
+    }
+
+    .step-count {
+      margin-top: 3px;
+      height: 14px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .3px;
+      text-align: center;
+      color: #7b7e84;
+      position: relative;
+      display: block;
+    }
   </style>
 </head>
 <body>
-<div class="div-logo"></div>
+<div class="navbar">
+  <div>
+    <img src="https://hrs.interviewed-qa.com/image/Logo.svg" alt="logo" />
+  </div>
+</div>
 <div class="form-container">
   <div class="auth-form">
     <div id="error-message">Get the wrong things.</div>
     <br>
     <div class="auth-form-center">
-      <div class="account-tab-item" id="sign-in" tabindex="0">
+      <div id="sign-in-container">
         <h1 class="form-title">Sign In</h1>
-        <div class="form-item">
-          <div class="form-label">Work Email&nbsp;*</div>
-          <div class="form-input">
-            <div class="input-prefix">
-              <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email"/>
+        <div class="account-tab-item" id="sign-in" tabindex="0">
+          <div class="form-item">
+            <div class="form-label">Work Email&nbsp;*</div>
+            <div class="form-input">
+              <div class="input-prefix">
+                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email"/>
+              </div>
+              <input id="sign-in-email" name="sign-in-email" type="text" onkeyup="checkSignInEmail(event);" />
+              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
             </div>
-            <input id="sign-in-email" name="sign-in-email" type="text" onkeyup="checkSignInEmail(event);" />
-            <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
           </div>
-        </div>
-        <div class="form-item">
-          <div class="form-label">Password&nbsp;*</div>
-          <div class="form-input">
-            <div class="input-prefix">
-              <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password"/>
+          <div class="form-item">
+            <div class="form-label">Password&nbsp;*</div>
+            <div class="form-input">
+              <div class="input-prefix">
+                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password"/>
+              </div>
+              <input id="sign-in-password" name="sign-in-password" type="password" onkeyup="checkSignInPassword(event);" />
+              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
             </div>
-            <input id="sign-in-password" name="sign-in-password" type="password" onkeyup="checkSignInPassword(event);" />
-            <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
           </div>
+          <div class="form-submit-button">
+            <button class="is-primary is-rounded sign-up-button-text" id="sign-in-button">Sign In</button>
+          </div>
+          <span class="form-tip" onclick="forgotPassword()">Forgot your password?</span>
+          <span class="form-tip" onclick="showSignUp()">Create an organization account.</span>
         </div>
-        <div class="form-submit-button">
-          <button class="is-primary is-rounded sign-up-button-text" id="sign-in-button">Sign In</button>
-        </div>
-        <span class="form-tip" onclick="forgotPassword()">Forgot your password?</span>
-        <span class="form-tip" onclick="showSignUp()">Create an organization account.</span>
       </div>
 
-      <div class="account-tab-item" id="sign-up" tabindex="0">
+      <div id="sign-up-container">
         <h1 class="form-title">Sign Up</h1>
-        <div class="form-subtitle">Step 1 of 2</div>
-        <div class="form-item">
-          <div class="form-label">Work Email&nbsp;*</div>
-          <div class="form-input">
-            <div class="input-prefix">
-              <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email"/>
+
+        <div class="step-component">
+          <div class="point-center">
+            <div class="bubble-active">
+              <div class="step-count">Step 1</div>
+              <div class="step-details">Create Account</div>
+              <div class="triangle"></div>
             </div>
-            <input id="sign-up-email" onkeyup="checkSignUpEmail(event);"  />
-            <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
           </div>
+          <div class="no-pointer"></div>
         </div>
-        <div class="form-item">
-          <div class="form-label">Password&nbsp;*</div>
-          <div class="form-input">
-            <div class="input-prefix">
-              <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password"/>
+
+
+        <div class="account-tab-item" id="sign-up" tabindex="0">
+          <div class="form-item">
+            <div class="form-label">Work Email&nbsp;*</div>
+            <div class="form-input">
+              <div class="input-prefix">
+                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email"/>
+              </div>
+              <input id="sign-up-email" onkeyup="checkSignUpEmail(event);"  />
+              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
             </div>
-            <input id="sign-up-password" type="password" onkeyup="checkSignUpPassword(event);" />
-            <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
           </div>
-          <div class="sign-up-password-tip-container">
-            <p class="sign-up-password-tip">
-              <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
-              8 or more characters
-            </p>
-            <p class="sign-up-password-tip sign-up-password-rule-passed">
-              <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
-              8 or more characters
-            </p>
-            <p class="sign-up-password-tip">
-              <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
-              At least 1 lowercase
-            </p>
-            <p class="sign-up-password-tip sign-up-password-rule-passed">
-              <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
-              At least 1 lowercase
-            </p>
-            <p class="sign-up-password-tip">
-              <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
-              At least 1 uppercase
-            </p>
-            <p class="sign-up-password-tip sign-up-password-rule-passed">
-              <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
-              At least 1 uppercase
-            </p>
-            <p class="sign-up-password-tip">
-              <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
-              At least 1 number
-            </p>
-            <p class="sign-up-password-tip sign-up-password-rule-passed">
-              <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
-              At least 1 number
+          <div class="form-item">
+            <div class="form-label">Password&nbsp;*</div>
+            <div class="form-input">
+              <div class="input-prefix">
+                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password"/>
+              </div>
+              <input id="sign-up-password" type="password" onkeyup="checkSignUpPassword(event);" />
+              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
+            </div>
+            <div class="sign-up-password-tip-container">
+              <p class="sign-up-password-tip">
+                <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
+                8 or more characters
+              </p>
+              <p class="sign-up-password-tip sign-up-password-rule-passed">
+                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                8 or more characters
+              </p>
+              <p class="sign-up-password-tip">
+                <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
+                At least 1 lowercase
+              </p>
+              <p class="sign-up-password-tip sign-up-password-rule-passed">
+                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                At least 1 lowercase
+              </p>
+              <p class="sign-up-password-tip">
+                <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
+                At least 1 uppercase
+              </p>
+              <p class="sign-up-password-tip sign-up-password-rule-passed">
+                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                At least 1 uppercase
+              </p>
+              <p class="sign-up-password-tip">
+                <span class="sign-up-password-helper sign-up-password-helper-dot"></span>
+                At least 1 number
+              </p>
+              <p class="sign-up-password-tip sign-up-password-rule-passed">
+                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                At least 1 number
+              </p>
+            </div>
+          </div>
+          <div class="form-submit-button">
+            <button id="sign-up-button">Create Account</button>
+          </div>
+          <span class="form-tip" onclick="showSignIn()">Already have an employer account?</span>
+          <div class="line"/>
+          <div class="service-and-policy">
+            <p>
+              By Creating an account, you agree to Interviewed's
+              <span>Terms of Service</span>, <span>Cookie Policy</span> and <span>Privacy Policy</span>.
+              You consent to receiving marketing messages from Interviewed and may opt out
+              from receiving such messages by following the unsubscribe link in our messages,
+              or as detailed in our terms.
             </p>
           </div>
-        </div>
-        <div class="form-submit-button">
-          <button id="sign-up-button">Create Account</button>
-        </div>
-        <span class="form-tip" onclick="showSignIn()">Already have an employer account?</span>
-        <div class="line"/>
-        <div class="service-and-policy">
-          <p>
-            By Creating an account, you agree to Interviewed's
-            <span>Terms of Service</span>, <span>Cookie Policy</span> and <span>Privacy Policy</span>.
-            You consent to receiving marketing messages from Interviewed and may opt out
-            from receiving such messages by following the unsubscribe link in our messages,
-            or as detailed in our terms.
-          </p>
         </div>
       </div>
     </div>
@@ -408,13 +547,13 @@
 　var applicationDomain = 'http://localhost:3000';
 
   function showSignUp() {
-    document.getElementById("sign-in").style.display = "none";
-    document.getElementById("sign-up").style.display = "inline-block";
+    document.getElementById("sign-in-container").style.display = "none";
+    document.getElementById("sign-up-container").style.display = "inline-block";
   }
 
   function showSignIn() {
-    document.getElementById("sign-up").style.display = "none";
-    document.getElementById("sign-in").style.display = "inline-block";
+    document.getElementById("sign-up-container").style.display = "none";
+    document.getElementById("sign-in-container").style.display = "inline-block";
   }
 
   function forgotPassword() {
