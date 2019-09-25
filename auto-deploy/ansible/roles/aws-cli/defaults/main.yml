@@ -1,0 +1,7 @@
+---
+aws_cli_user: '{{ ansible_user }}'
+aws_cli_group: '{{ ansible_user }}'
+aws_output_format: 'json'
+aws_region: '{{ region }}'
+aws_access_key_id: '{{ aws_deploy_access_key }}'
+aws_secret_access_key: '{{ aws_deploy_secret_key }}'

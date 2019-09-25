@@ -1,0 +1,18 @@
+files:
+  "/tmp/consul_installation.sh" :
+    mode: "000755"
+    owner: root
+    group: root
+    content: |
+      #! /bin/bash
+      wget https://releases.hashicorp.com/consul/{{installed_consul_version}}/consul_{{installed_consul_version}}_linux_amd64.zip
+      unzip consul_{{installed_consul_version}}_linux_amd64.zip
+      mv consul /usr/bin/
+      rm consul_{{installed_consul_version}}_linux_amd64.zip
+      BIND_IP=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
+      nohup consul agent -retry-join="provider=aws tag_key=aws:cloudformation:stack-name tag_value={{ stack_prefix }}-{{ env }}-consul-cluster" -bind=${BIND_IP} -data-dir=~/data -ui >/dev/null 2>&1 </dev/null &
+
+commands:
+  consul_install:
+    command: "sh /tmp/consul_installation.sh"
+    ignoreErrors: true

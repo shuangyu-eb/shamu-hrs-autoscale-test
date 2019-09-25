@@ -1,0 +1,27 @@
+server:
+  port: 9000
+  tomcat:
+    max-http-post-size: -1
+
+spring:
+  thymeleaf:
+    cache: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+application:
+  systemEmailAddress: noreply@interviewed.com
+  frontEndAddress: {{website_end_point}}
+
+aws:
+  bucketName: {{stack_prefix}}-{{env}}-company
+  folder: media
+
+cloud:
+  aws:
+    region:
+      auto: true
+

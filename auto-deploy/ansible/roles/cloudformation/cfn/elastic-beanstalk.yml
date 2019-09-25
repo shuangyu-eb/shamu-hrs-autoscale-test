@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Elastic Beanstalk for SHAMU/HRS instance
+Parameters:
+  ApplicationName:
+    Type: String
+  Environment:
+    Type: String
+  SolutionStackName:
+    Type: String
+  Ec2KeyPair:
+    Type: String
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.medium
+      - t2.large
+      - t2.micro
+      - m1.small
+      - m1.large
+    Description: Elastic Beanstalk ec2 instance type
+
+Resources:
+  ShamuHRS:
+  # specifies an Elastic Beanstalk application
+    Type: AWS::ElasticBeanstalk::Application
+    Properties:
+      Description: Elastic Beanstalk for Shamu HRS
+      ApplicationName: !Ref ApplicationName
+  ShamuHRSEnvironment:
+  # specifies an Elastic Beanstalk environment
+    Type: AWS::ElasticBeanstalk::Environment
+    Properties:
+      Description: Elastic Beanstalk for Shamu HRS
+      ApplicationName: !Ref ShamuHRS
+      EnvironmentName: !Ref Environment
+      CNAMEPrefix: !Ref Environment
+      SolutionStackName: !Ref SolutionStackName
+      OptionSettings:
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: InstanceType
+          Value: !Ref InstanceType
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: EC2KeyName
+          Value: !Ref Ec2KeyPair
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: IamInstanceProfile
+          Value: aws-elasticbeanstalk-ec2-role
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: LoadBalancerType
+          Value: application
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: ServiceRole
+          Value: aws-elasticbeanstalk-service-role
+        - Namespace: aws:elasticbeanstalk:healthreporting:system
+          OptionName: SystemType
+          Value: enhanced
+        - Namespace: aws:elasticbeanstalk:environment:process:default
+          OptionName: HealthCheckPath
+          Value: /actuator/health
+        - Namespace: aws:elasticbeanstalk:xray
+          OptionName: XRayEnabled
+          Value: false
+Outputs:
+  ShamuHRS:
+    Description: Elastic Beanstalk application name
+    Value: !Ref ShamuHRS
+  ElasticBeanstalkEndpointURL:
+    Description: Endpoint URL of Elastic Beanstalk instance
+    Value: !GetAtt ShamuHRSEnvironment.EndpointURL

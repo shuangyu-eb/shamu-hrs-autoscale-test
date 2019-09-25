@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create Redis ElastiCache cluster for Shamu HRS instance
+Parameters:
+  PrefixName:
+    Type: String
+  SubnetId:
+    Type: 'AWS::EC2::Subnet::Id'
+  CacheNodeType:
+    Type: String
+    Default: cache.t2.micro
+  Port:
+    Type: String
+  VPCID:
+    Type: 'AWS::EC2::VPC::Id'
+  VPCCIDR:
+    Type: String
+Resources:
+  RedisSubnetGroup:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      CacheSubnetGroupName: !Ref PrefixName
+      Description: Subnet Group for Shamu HRS Redis ElasticCache
+      SubnetIds:
+        - !Ref SubnetId
+  Redis:
+    Type: AWS::ElastiCache::ReplicationGroup
+    Properties:
+      ReplicationGroupId: !Ref PrefixName
+      ReplicationGroupDescription: Redis ElastiCache cluster for Shamu HRS instance
+      CacheNodeType: !Ref CacheNodeType
+      CacheSubnetGroupName: !Ref RedisSubnetGroup
+      Engine: redis
+      EngineVersion: 5.0.4
+      NumCacheClusters: 3
+      Port: !Ref Port
+      AutomaticFailoverEnabled: false
+      SecurityGroupIds:
+        - !GetAtt RedisSG.GroupId
+  RedisSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Redis ElastiCache security group for Shamu HRS instance
+      GroupName: !Sub ${PrefixName}-redis
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        IpProtocol: tcp
+        FromPort: !Ref Port
+        ToPort: !Ref Port
+        CidrIp: !Ref VPCCIDR
+Outputs:
+  RedisEndpoint:
+    Description: Redis ElastiCache primary endpoint
+    Value: !GetAtt Redis.PrimaryEndPoint.Address
+  ReplicaEndpoints:
+    Description: Redis ElastiCache replica endpoints
+    Value: !GetAtt Redis.ReadEndPoint.Addresses
