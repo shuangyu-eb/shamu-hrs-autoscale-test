@@ -540,13 +540,13 @@
     window.location.href = applicationDomain + '/account/forget-password';
   }
 
-  // var currentUrl = location.href;
-  // var actionMatch = currentUrl.match(/action=(\w+)(&.*)?$/);
-  // if (actionMatch && (action = actionMatch[1]) === 'signup') {
-  //   showSignUp();
-  // } else {
-  //   showSignIn();
-  // }
+  var currentUrl = location.href;
+  var actionMatch = currentUrl.match(/action=(\w+)(&.*)?$/);
+  if (actionMatch && (action = actionMatch[1]) === 'signup') {
+    showSignUp();
+  } else {
+    showSignIn();
+  }
 
   function checkSignInEmail(event) {
     var email = event.target.value;
@@ -635,24 +635,24 @@
 
   window.addEventListener('load', function() {
 
-    // var config = JSON.parse(
-    //     decodeURIComponent(escape(window.atob('@@config@@')))
-    // );
-    //
-    // var params = Object.assign({
-    //   // additional configuration needed for use of custom domains
-    //   overrides: {
-    //     __tenant: config.auth0Tenant,
-    //     __token_issuer: config.authorizationServer.issuer
-    //   },
-    //   domain: config.auth0Domain,
-    //   clientID: config.clientID,
-    //   redirectUri: config.callbackURL,
-    //   responseType: 'code'
-    // }, config.internalOptions);
-    //
-    //
-    // var webAuth = new auth0.WebAuth(params);
+    var config = JSON.parse(
+        decodeURIComponent(escape(window.atob('@@config@@')))
+    );
+
+    var params = Object.assign({
+      // additional configuration needed for use of custom domains
+      overrides: {
+        __tenant: config.auth0Tenant,
+        __token_issuer: config.authorizationServer.issuer
+      },
+      domain: config.auth0Domain,
+      clientID: config.clientID,
+      redirectUri: config.callbackURL,
+      responseType: 'code'
+    }, config.internalOptions);
+
+
+    var webAuth = new auth0.WebAuth(params);
 
     var databaseConnection = 'hrs-data-store';
 
@@ -672,51 +672,51 @@
       }, 5000);
     }
 
-    // function signIn(event) {
-    //   event.preventDefault();
-    //
-    //   var email = document.querySelector("#sign-in-email").value;
-    //   var password = document.querySelector("#sign-in-password").value;
-    //
-    //   var emailValid = checkEmail(email, 0);
-    //   var passwordValid = checkPassword(password, 1);
-    //
-    //   if (emailValid && passwordValid) {
-    //     disableButton(0);
-    //     webAuth.login({
-    //       realm: databaseConnection,
-    //       username: email,
-    //       password: password
-    //     }, function(err) {
-    //       if (err) displayError(err);
-    //     });
-    //   }
-    // }
-    //
-    // function signUp(event) {
-    //   event.preventDefault();
-    //   var email = document.querySelector("#sign-up-email").value;
-    //   var password = document.querySelector("#sign-up-password").value;
-    //
-    //   var emailValid = checkEmail(email, 2);
-    //   var passwordValid = checkPassword(password, 3);
-    //
-    //   if (emailValid && passwordValid) {
-    //     disableButton(1);
-    //     webAuth.signup({
-    //       connection: databaseConnection,
-    //       email: email,
-    //       password: password,
-    //       userMetadata: {
-    //         role: 'ADMIN',
-    //       },
-    //     }, function(err) {
-    //       if (err) return displayError(err);
-    //
-    //       return window.location.href = applicationDomain + '/account/sign-up/done';
-    //     });
-    //   }
-    // }
+    function signIn(event) {
+      event.preventDefault();
+
+      var email = document.querySelector("#sign-in-email").value;
+      var password = document.querySelector("#sign-in-password").value;
+
+      var emailValid = checkEmail(email, 0);
+      var passwordValid = checkPassword(password, 1);
+
+      if (emailValid && passwordValid) {
+        disableButton(0);
+        webAuth.login({
+          realm: databaseConnection,
+          username: email,
+          password: password
+        }, function(err) {
+          if (err) displayError(err);
+        });
+      }
+    }
+
+    function signUp(event) {
+      event.preventDefault();
+      var email = document.querySelector("#sign-up-email").value;
+      var password = document.querySelector("#sign-up-password").value;
+
+      var emailValid = checkEmail(email, 2);
+      var passwordValid = checkPassword(password, 3);
+
+      if (emailValid && passwordValid) {
+        disableButton(1);
+        webAuth.signup({
+          connection: databaseConnection,
+          email: email,
+          password: password,
+          userMetadata: {
+            role: 'ADMIN',
+          },
+        }, function(err) {
+          if (err) return displayError(err);
+
+          return window.location.href = applicationDomain + '/account/sign-up/done';
+        });
+      }
+    }
 
     var signInButton = document.querySelector("#sign-in-button");
     var signUpButton = document.querySelector("#sign-up-button");
