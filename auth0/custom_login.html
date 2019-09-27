@@ -2,20 +2,28 @@
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link rel="icon" href="https://hrs.interviewed-qa.com/favicon.ico" />
+
   <style>
+    :root {
+      --background-color: #f0f2f5;
+      --primary-color: #ff6600;
+      --blue: #0075DF;
+      --step-bar-background: #f0f2f5;
+      --border-color: #dfe2e9;
+      --password-helper-dot: #ff6600;
+      --font-color: #2E3033;
+      --grey-font: #7b7e84;
+    }
+
     body {
       height: 98%;
       width: 98%;
-      background-color: #f0f2f5;
+      background-color: var(--background-color);
     }
 
-    #sign-in-container {
-      display: none;
-    }
+    #sign-in-container { display: none; }
 
-    #sign-up-container {
-      display: none;
-    }
+    #sign-up-container { display: block; }
 
 
     .navbar {
@@ -26,7 +34,7 @@
       left: 0;
       right: 0;
       background-color: white;
-      border-bottom: 1px solid #dfe2e9;
+      border-bottom: 1px solid var(--border-color);
       z-index: 99;
     }
 
@@ -39,7 +47,7 @@
     .navbar > div {
       width: 80px;
       height: 80px;
-      border-right: 1px solid #dfe2e9;
+      border-right: 1px solid var(--border-color);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -71,7 +79,7 @@
       font-family: Roboto;
       font-size: 36px;
       text-align: center;
-      color: #2e3033;
+      color: var(--font-color);
       height: 33px;
       font-weight: normal;
       font-style: normal;
@@ -95,7 +103,7 @@
       font-size: 12px;
       font-style: normal;
       font-stretch: normal;
-      color: #2e3033;
+      color: var(--font-color);
     }
 
     .form-input {
@@ -107,20 +115,18 @@
       height: 40px;
       border-radius: 4px;
       border: solid 1px #d8dadf;
-      background-color: #ffffff;
+      background-color: white;
 
       padding: 5px 5px 5px 45px;
     }
 
-    .form-input input:focus {
-      outline: none;
-    }
+    .form-input input:focus { outline: none; }
 
     .input-prefix {
       width: 40px;
       height: 38px;
       border-radius: 4px 0 0 4px;
-      border: solid 1px #dfe2e9;
+      border: solid 1px var(--border-color);
       background-color: #f7f8fa;
       position: absolute;
       display: flex;
@@ -128,10 +134,7 @@
       justify-content: center;
     }
 
-    .input-prefix img{
-      width: 25px;
-      height: 25px;
-    }
+    .input-prefix img{ width: 25px; height: 25px; }
 
     .form-submit-button {
       display: flex;
@@ -144,12 +147,12 @@
       height: 40px;
       border-radius: 20px;
       box-shadow: 2px 2px 4px 0 rgba(72, 142, 255, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.12);
-      background-color: #488eff;
+      background-color: var(--blue);
       outline: none;
       border: 0;
       display: inline-block;
       font-size: 14px;
-      color: #ffffff;
+      color: white;
       cursor: pointer;
       font-family: Roboto;
       font-weight: 500;
@@ -175,36 +178,32 @@
       line-height: normal;
       letter-spacing: 0.31px;
       text-align: center;
-      color: #488eff;
-
+      color: var(--blue);
     }
 
     .line {
       width: 358px;
       margin-top: 20px;
-      border: solid 1px #f0f2f5;
+      border: solid 1px var(--background-color);
       margin-left: -25px;
       border-bottom: none;
     }
 
     .service-and-policy {
       font-size: 13px;
-      color: #7b7e84;
+      color: var(--grey-font);
       text-align: center;
       margin-top: 15px;
     }
 
     .service-and-policy > p {
       font-size: 13px;
-      color: #7b7e84;
+      color: var(--grey-font);
       text-align: center;
       display: inline-block;
     }
 
-    .service-and-policy span {
-      color: #488eff;
-      cursor: pointer;
-    }
+    .service-and-policy span { color: var(--blue); cursor: pointer; }
 
     .policy-description {
       margin-top: 0;
@@ -218,7 +217,7 @@
       width: 8px;
       display: inline-block;
       margin-right: 5px;
-      background-color: #f59931;
+      background-color: var(--password-helper-dot);
       border-radius: 50%;
     }
 
@@ -230,9 +229,7 @@
       align-items: center;
     }
 
-    .sign-up-password-rule-passed {
-      color: #9C9FA6;
-    }
+    .sign-up-password-rule-passed { color: #9C9FA6; }
 
     .sign-up-password-helper {
       width: 9px;
@@ -240,9 +237,7 @@
       margin-right: 5px;
     }
 
-    .sign-up-password-tip-container {
-      margin-top: 14px;
-    }
+    .sign-up-password-tip-container { margin-top: 14px; }
 
     .required-tip {
       margin-top: 30px;
@@ -258,23 +253,13 @@
       margin-right: 3px;
     }
 
-    .error-img img {
-      width: 100%;
-      height: 100%;
-    }
+    .error-img img { width: 100%; height: 100%; }
 
-    .error-info {
-      font-size: 12px;
-      color: red;
-    }
+    .error-info { font-size: 12px; color: red; }
 
-    .error-tip-container {
-      display: none;
-    }
+    .error-tip-container { display: none; }
 
-    .sign-up-password-rule-passed {
-      display: none;
-    }
+    .sign-up-password-rule-passed { display: none; }
 
     #error-message {
       display: none;
@@ -286,10 +271,7 @@
       color: red;
     }
 
-    button[disabled] {
-      background-color: #DFE2E9;
-      box-shadow: none;
-    }
+    button[disabled] { background-color: var(--border-color); box-shadow: none; }
 
     .account-tab-item {
       display: inline-block;
@@ -301,27 +283,21 @@
       padding: 28px 26px 34px 26px;
     }
 
-    .account-tab-item:focus {
-      border: 0;
-      outline: 0;
-    }
+    .account-tab-item:focus { border: 0; outline: 0; }
 
 
-    .step-component {
-      margin-bottom: 20px;
-      margin-top: 115px;
-    }
+    .step-component { margin-bottom: 20px; margin-top: 115px; }
 
     .no-pointer {
       width: 10px;
       height: 10px;
       border-radius: 50%;
       position: relative;
-      border: 2px solid #dfe2e9;
+      border: 2px solid var(--border-color);
       margin-left: 70px;
       display: inline-block;
       padding: 5px;
-      background-color: #f0f2f5;
+      background-color: var(--background-color);
     }
 
     .point-center {
@@ -331,7 +307,7 @@
       border-radius: 50%;
       position: relative;
       padding: 7px;
-      border: 2px solid #dfe2e9;
+      border: 2px solid var(--border-color);
       margin-left: 0;
       display: inline-block;
     }
@@ -344,14 +320,14 @@
       height: 10px;
       left: 7px;
       top: 7px;
-      background-color: #488EFF;
+      background-color: var(--blue);
       border-radius: 50%;
     }
 
     .bubble-active {
       height: 52px;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .04);
-      border: solid 1px #dfe2e9;
+      border: solid 1px var(--border-color);
       background-color: white;
       position: absolute;
       text-align: center;
@@ -367,7 +343,7 @@
       content: "";
       width: 120px;
       height: 3px;
-      background-color: #dfe2e9;
+      background-color: var(--border-color);
       position: absolute;
       display: inline-block;
       right: 0;
@@ -405,7 +381,7 @@
       font-weight: 500;
       letter-spacing: .3px;
       text-align: center;
-      color: #7b7e84;
+      color: var(--grey-font);
       position: relative;
       display: block;
     }
@@ -414,7 +390,7 @@
 <body>
 <div class="navbar">
   <div>
-    <img src="https://hrs.interviewed-qa.com/image/Logo.svg" alt="logo" />
+    <img src="https://hrs.interviewed-qa.com/image/logo.simplyhired.png" alt="logo" />
   </div>
 </div>
 <div class="form-container">
@@ -564,13 +540,13 @@
     window.location.href = applicationDomain + '/account/forget-password';
   }
 
-  var currentUrl = location.href;
-  var actionMatch = currentUrl.match(/action=(\w+)(&.*)?$/);
-  if (actionMatch && (action = actionMatch[1]) === 'signup') {
-    showSignUp();
-  } else {
-    showSignIn();
-  }
+  // var currentUrl = location.href;
+  // var actionMatch = currentUrl.match(/action=(\w+)(&.*)?$/);
+  // if (actionMatch && (action = actionMatch[1]) === 'signup') {
+  //   showSignUp();
+  // } else {
+  //   showSignIn();
+  // }
 
   function checkSignInEmail(event) {
     var email = event.target.value;
@@ -659,24 +635,24 @@
 
   window.addEventListener('load', function() {
 
-    var config = JSON.parse(
-        decodeURIComponent(escape(window.atob('@@config@@')))
-    );
-
-    var params = Object.assign({
-      // additional configuration needed for use of custom domains
-      overrides: {
-        __tenant: config.auth0Tenant,
-        __token_issuer: config.authorizationServer.issuer
-      },
-      domain: config.auth0Domain,
-      clientID: config.clientID,
-      redirectUri: config.callbackURL,
-      responseType: 'code'
-    }, config.internalOptions);
-
-
-    var webAuth = new auth0.WebAuth(params);
+    // var config = JSON.parse(
+    //     decodeURIComponent(escape(window.atob('@@config@@')))
+    // );
+    //
+    // var params = Object.assign({
+    //   // additional configuration needed for use of custom domains
+    //   overrides: {
+    //     __tenant: config.auth0Tenant,
+    //     __token_issuer: config.authorizationServer.issuer
+    //   },
+    //   domain: config.auth0Domain,
+    //   clientID: config.clientID,
+    //   redirectUri: config.callbackURL,
+    //   responseType: 'code'
+    // }, config.internalOptions);
+    //
+    //
+    // var webAuth = new auth0.WebAuth(params);
 
     var databaseConnection = 'hrs-data-store';
 
@@ -696,51 +672,51 @@
       }, 5000);
     }
 
-    function signIn(event) {
-      event.preventDefault();
-
-      var email = document.querySelector("#sign-in-email").value;
-      var password = document.querySelector("#sign-in-password").value;
-
-      var emailValid = checkEmail(email, 0);
-      var passwordValid = checkPassword(password, 1);
-
-      if (emailValid && passwordValid) {
-        disableButton(0);
-        webAuth.login({
-          realm: databaseConnection,
-          username: email,
-          password: password
-        }, function(err) {
-          if (err) displayError(err);
-        });
-      }
-    }
-
-    function signUp(event) {
-      event.preventDefault();
-      var email = document.querySelector("#sign-up-email").value;
-      var password = document.querySelector("#sign-up-password").value;
-
-      var emailValid = checkEmail(email, 2);
-      var passwordValid = checkPassword(password, 3);
-
-      if (emailValid && passwordValid) {
-        disableButton(1);
-        webAuth.signup({
-          connection: databaseConnection,
-          email: email,
-          password: password,
-          userMetadata: {
-            role: 'ADMIN',
-          },
-        }, function(err) {
-          if (err) return displayError(err);
-
-          return window.location.href = applicationDomain + '/account/sign-up/done';
-        });
-      }
-    }
+    // function signIn(event) {
+    //   event.preventDefault();
+    //
+    //   var email = document.querySelector("#sign-in-email").value;
+    //   var password = document.querySelector("#sign-in-password").value;
+    //
+    //   var emailValid = checkEmail(email, 0);
+    //   var passwordValid = checkPassword(password, 1);
+    //
+    //   if (emailValid && passwordValid) {
+    //     disableButton(0);
+    //     webAuth.login({
+    //       realm: databaseConnection,
+    //       username: email,
+    //       password: password
+    //     }, function(err) {
+    //       if (err) displayError(err);
+    //     });
+    //   }
+    // }
+    //
+    // function signUp(event) {
+    //   event.preventDefault();
+    //   var email = document.querySelector("#sign-up-email").value;
+    //   var password = document.querySelector("#sign-up-password").value;
+    //
+    //   var emailValid = checkEmail(email, 2);
+    //   var passwordValid = checkPassword(password, 3);
+    //
+    //   if (emailValid && passwordValid) {
+    //     disableButton(1);
+    //     webAuth.signup({
+    //       connection: databaseConnection,
+    //       email: email,
+    //       password: password,
+    //       userMetadata: {
+    //         role: 'ADMIN',
+    //       },
+    //     }, function(err) {
+    //       if (err) return displayError(err);
+    //
+    //       return window.location.href = applicationDomain + '/account/sign-up/done';
+    //     });
+    //   }
+    // }
 
     var signInButton = document.querySelector("#sign-in-button");
     var signUpButton = document.querySelector("#sign-up-button");
