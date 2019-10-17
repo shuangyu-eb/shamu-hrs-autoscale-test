@@ -3,7 +3,7 @@ vpc_id: vpc-1bbf4870
 vpc_cidr: 172.31.0.0/16 # used for security group
 public_subnet: subnet-3d7c6355 # used to create a private subnet
 private_subnet_cidr: 172.31.64.0/20 # used to create a private subnet
-key_pair: hrs-qa-deploy-server  # used to allow ssh connection
+key_pair: hrs-staging-deploy-server  # used to allow ssh connection
 region: us-east-2 # ohio
 aws_deploy_access_key: 
 aws_deploy_secret_key: 
