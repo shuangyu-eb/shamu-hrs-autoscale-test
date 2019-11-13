@@ -58,6 +58,7 @@ eb_application_name: "{{stack_prefix}}-{{env}}"
 eb_environment_name: "{{stack_prefix}}-{{env}}"
 eb_java_platform: "64bit Amazon Linux 2018.03 v2.9.1 running Java 8"
 eb_instance_class: t2.micro
+eb_deploy_branch: v1
 # vars for consul cluster
 bastion_security_groupId: sg-9ca48de5 # security group used for consul ssh connect source
 consul_instance_type: t2.small
@@ -65,15 +66,18 @@ consul_server_nodes: 3
 installed_consul_version: 1.6.0
 # vars for ecr
 company_repository_name: "{{stack_prefix}}-{{env}}-company-service"
-document_repository_name: "{{stack_prefix}}-{{env}}-documnet-service"
+document_repository_name: "{{stack_prefix}}-{{env}}-document-service"
+search_repository_name: "{{stack_prefix}}-{{env}}-search-service"
 # vars for ecs
 company_cluster_name: "{{stack_prefix}}-{{env}}-company"
 document_cluster_name: "{{stack_prefix}}-{{env}}-document"
+search_cluster_name: "{{stack_prefix}}-{{env}}-search"
 ecs_instance_type: t2.medium
 ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
 cluster_size: 2
 company_service_name: "{{stack_prefix}}-{{env}}-company-service"
-document_service_name: "{{stack_prefix}}-{{env}}-documnet-service"
+document_service_name: "{{stack_prefix}}-{{env}}-document-service"
+search_service_name: "{{stack_prefix}}-{{env}}-search-service"
 desired_count: 1
 command: --spring.profiles.active={{env}}
 # others
