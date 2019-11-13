@@ -101,14 +101,14 @@ auth0_client_secret_management: !vault |
   37636332343335343638366631333266376338656266303362323036323262353962343530316666
   38373866653661373335623438393430396635316161613863333763616666363438343366366232
   64316561306136306462
-auth0_jwks: https://simplyhired-staging.auth0.com/.well-known/jwks.json
+auth0_jwks: https://account.simplyhired-staging.com/.well-known/jwks.json
 auth0_algorithm: RS256
-auth0_auth_domain: https://simplyhired-staging.auth0.com/
-auth0_domain: simplyhired-staging.auth0.com
+auth0_auth_domain: https://account.simplyhired-staging.com/
+auth0_domain: account.simplyhired-staging.com
 auth0_database: hrs-data-store
 auth0_namespace: https://simplyhired-staging.com
 auth0_audience: hrs-backend   # HRS backend api
-auth0_managementIdentifier: https://simplyhired-staging.auth0.com/api/v2/   # Management api Identifier
+auth0_managementIdentifier: https://account.simplyhired-staging.com/api/v2/   # Management api Identifier
 hello_sign_api: https://api.hellosign.com
 hello_sign_clientId: VAULTTODO # VAULT TODO
 hello_sign_apiKey: VAULTTODO # VAULT TODO
