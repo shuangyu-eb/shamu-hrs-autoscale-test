@@ -6,6 +6,8 @@ Parameters:
     Type: String
   SearchRepositoryName:
     Type: String
+  LoggingRepositoryName:
+    Type: String
 Resources:
   CompanyRepository:
   # specifies an Amazon Elastic Container Registry (Amazon ECR) repository for company service
@@ -22,6 +24,11 @@ Resources:
     Type: AWS::ECR::Repository
     Properties:
       RepositoryName: !Ref SearchRepositoryName
+  LoggingRepository:
+    # specifies an Amazon Elastic Container Registry (Amazon ECR) repository for logging service
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref LoggingRepositoryName
 Outputs:
   CompanyRepositoryArn:
     Value: !GetAtt CompanyRepository.Arn
@@ -29,3 +36,5 @@ Outputs:
     Value: !GetAtt DocumentRepository.Arn
   SearchRepositoryArn:
     Value: !GetAtt SearchRepository.Arn
+  LoggingRepositoryArn:
+    Value: !GetAtt LoggingRepository.Arn

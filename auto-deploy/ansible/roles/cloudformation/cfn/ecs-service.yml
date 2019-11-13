@@ -6,6 +6,8 @@ Parameters:
     Type: String
   SearchClusterName:
     Type: String
+  LoggingClusterName:
+    Type: String
   DesiredCount:
     Type: Number
   CompanyImage:
@@ -14,11 +16,15 @@ Parameters:
     Type: String
   SearchImage:
     Type: String
+  LoggingImage:
+    Type: String
   CompanyServiceName:
     Type: String
   DocumentServiceName:
     Type: String
   SearchServiceName:
+    Type: String
+  LoggingServiceName:
     Type: String
   Command:
     Type: String
@@ -249,6 +255,79 @@ Resources:
       RoleARN: !Ref ApplicationAutoScalingRole
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
+  LoggingTask:
+    # describes the container and volume definitions of the logging ECS task
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Name: logging-service
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LoggingCloudWatchLogsGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+          PortMappings:
+            - HostPort: 9002
+              Protocol: tcp
+              ContainerPort: 9002
+          Command:
+            - !Ref Command
+          Cpu: 0
+          MemoryReservation: 400
+          Image:
+            !Join
+            - ''
+            - - !Select ['4', !Split [':',!Ref LoggingImage]]
+              - '.dkr.ecr.'
+              - !Ref "AWS::Region"
+              - '.amazonaws.com/'
+              - !Ref LoggingServiceName
+      ExecutionRoleArn: !Ref EcsTaskExecutionRole
+      Memory: 1024
+      TaskRoleArn: !Ref EcsTaskExecutionRole
+      Family: !Ref LoggingServiceName
+      RequiresCompatibilities: ['EC2']
+      NetworkMode: host
+      Cpu: 512
+  LoggingCloudWatchLogsGroup:
+    # specifies a log group for logging service
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /ecs/${LoggingServiceName}
+      RetentionInDays: 365
+  LoggingService:
+    # creates an Amazon ECS for logging service that runs and maintains the requested number of tasks
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Ref LoggingServiceName
+      Cluster: !Ref LoggingClusterName
+      TaskDefinition: !Ref LoggingTask
+      LaunchType: EC2
+      SchedulingStrategy: REPLICA
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: !Ref DesiredCount
+      PlacementStrategies:
+        - Type: spread
+          Field: instanceId
+        - Type: spread
+          Field: attribute:ecs.availability-zone
+  LoggingServiceScalableTarget:
+    # specifies the logging service that Application Auto Scaling can scale.
+    Type: "AWS::ApplicationAutoScaling::ScalableTarget"
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join
+        - /
+        - - service
+          - !Ref LoggingClusterName
+          - !GetAtt LoggingService.Name
+      RoleARN: !Ref ApplicationAutoScalingRole
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
 Outputs:
   CompanyServiceArn:
     Value: !Ref CompanyService
@@ -256,3 +335,5 @@ Outputs:
     Value: !Ref DocumentService
   SearchServiceArn:
     Value: !Ref SearchService
+  LoggingServiceArn:
+    Value: !Ref LoggingService
