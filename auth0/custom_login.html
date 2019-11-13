@@ -21,9 +21,17 @@
       background-color: var(--background-color);
     }
 
-    #sign-in-container { display: none; }
+    #sign-in-container {
+      display: none;
+    }
 
-    #sign-up-container { display: block; }
+    #sign-up-container {
+      display: block;
+    }
+
+    #verify-token-container {
+      display: none;
+    }
 
 
     .navbar {
@@ -120,7 +128,9 @@
       padding: 5px 5px 5px 45px;
     }
 
-    .form-input input:focus { outline: none; }
+    .form-input input:focus {
+      outline: none;
+    }
 
     .input-prefix {
       width: 40px;
@@ -134,7 +144,10 @@
       justify-content: center;
     }
 
-    .input-prefix img{ width: 25px; height: 25px; }
+    .input-prefix img {
+      width: 25px;
+      height: 25px;
+    }
 
     .form-submit-button {
       display: flex;
@@ -203,7 +216,10 @@
       display: inline-block;
     }
 
-    .service-and-policy span { color: var(--blue); cursor: pointer; }
+    .service-and-policy span {
+      color: var(--blue);
+      cursor: pointer;
+    }
 
     .policy-description {
       margin-top: 0;
@@ -229,7 +245,9 @@
       align-items: center;
     }
 
-    .sign-up-password-rule-passed { color: #9C9FA6; }
+    .sign-up-password-rule-passed {
+      color: #9C9FA6;
+    }
 
     .sign-up-password-helper {
       width: 9px;
@@ -237,7 +255,9 @@
       margin-right: 5px;
     }
 
-    .sign-up-password-tip-container { margin-top: 14px; }
+    .sign-up-password-tip-container {
+      margin-top: 14px;
+    }
 
     .required-tip {
       margin-top: 30px;
@@ -253,13 +273,23 @@
       margin-right: 3px;
     }
 
-    .error-img img { width: 100%; height: 100%; }
+    .error-img img {
+      width: 100%;
+      height: 100%;
+    }
 
-    .error-info { font-size: 12px; color: red; }
+    .error-info {
+      font-size: 12px;
+      color: red;
+    }
 
-    .error-tip-container { display: none; }
+    .error-tip-container {
+      display: none;
+    }
 
-    .sign-up-password-rule-passed { display: none; }
+    .sign-up-password-rule-passed {
+      display: none;
+    }
 
     #error-message {
       display: none;
@@ -271,7 +301,10 @@
       color: red;
     }
 
-    button[disabled] { background-color: var(--border-color); box-shadow: none; }
+    button[disabled] {
+      background-color: var(--border-color);
+      box-shadow: none;
+    }
 
     .account-tab-item {
       display: inline-block;
@@ -283,10 +316,16 @@
       padding: 28px 26px 34px 26px;
     }
 
-    .account-tab-item:focus { border: 0; outline: 0; }
+    .account-tab-item:focus {
+      border: 0;
+      outline: 0;
+    }
 
 
-    .step-component { margin-bottom: 20px; margin-top: 115px; }
+    .step-component {
+      margin-bottom: 20px;
+      margin-top: 115px;
+    }
 
     .no-pointer {
       width: 10px;
@@ -405,24 +444,34 @@
             <div class="form-label">Work Email&nbsp;*</div>
             <div class="form-input">
               <div class="input-prefix">
-                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email"/>
+                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email" />
               </div>
-              <input id="sign-in-email" name="sign-in-email" type="text" onkeyup="checkSignInEmail(event);" />
-              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
+              <input id="sign-in-email" name="sign-in-email" type="text"
+                     onkeyup="checkSignInEmail(event);" />
+              <span class="error-tip-container"><span class="error-img"><img
+                  src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span
+                  class="error-info">Please enter a valid email.</span></span>
             </div>
           </div>
           <div class="form-item">
             <div class="form-label">Password&nbsp;*</div>
             <div class="form-input">
               <div class="input-prefix">
-                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password"/>
+                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password" />
               </div>
-              <input id="sign-in-password" name="sign-in-password" type="password" onkeyup="checkSignInPassword(event);" />
-              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
+              <input id="sign-in-password" name="sign-in-password" type="password"
+                     onkeyup="checkSignInPassword(event);" />
+              <span class="error-tip-container">
+                <span class="error-img">
+                <img src="https://hrs.interviewed-qa.com/image/Warning.svg">
+              </span>
+                <span class="error-info">Please enter a password.</span>
+              </span>
             </div>
           </div>
           <div class="form-submit-button">
-            <button class="is-primary is-rounded sign-up-button-text" id="sign-in-button">Sign In</button>
+            <button class="is-primary is-rounded sign-up-button-text" id="sign-in-button">Sign In
+            </button>
           </div>
           <span class="form-tip" onclick="forgotPassword()">Forgot your password?</span>
           <span class="form-tip" onclick="showSignUp()">Create an organization account.</span>
@@ -449,20 +498,24 @@
             <div class="form-label">Work Email&nbsp;*</div>
             <div class="form-input">
               <div class="input-prefix">
-                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email"/>
+                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email" />
               </div>
-              <input id="sign-up-email" onkeyup="checkSignUpEmail(event);"  />
-              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
+              <input id="sign-up-email" onkeyup="checkSignUpEmail(event);" />
+              <span class="error-tip-container"><span class="error-img"><img
+                  src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span
+                  class="error-info">Please enter a valid email.</span></span>
             </div>
           </div>
           <div class="form-item">
             <div class="form-label">Password&nbsp;*</div>
             <div class="form-input">
               <div class="input-prefix">
-                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password"/>
+                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password" />
               </div>
               <input id="sign-up-password" type="password" onkeyup="checkSignUpPassword(event);" />
-              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
+              <span class="error-tip-container"><span class="error-img"><img
+                  src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span
+                  class="error-info">Please enter a password.</span></span>
             </div>
             <div class="sign-up-password-tip-container">
               <p class="sign-up-password-tip">
@@ -470,7 +523,8 @@
                 8 or more characters
               </p>
               <p class="sign-up-password-tip sign-up-password-rule-passed">
-                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                <img class="sign-up-password-helper"
+                     src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
                 8 or more characters
               </p>
               <p class="sign-up-password-tip">
@@ -478,7 +532,8 @@
                 At least 1 lowercase
               </p>
               <p class="sign-up-password-tip sign-up-password-rule-passed">
-                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                <img class="sign-up-password-helper"
+                     src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
                 At least 1 lowercase
               </p>
               <p class="sign-up-password-tip">
@@ -486,7 +541,8 @@
                 At least 1 uppercase
               </p>
               <p class="sign-up-password-tip sign-up-password-rule-passed">
-                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                <img class="sign-up-password-helper"
+                     src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
                 At least 1 uppercase
               </p>
               <p class="sign-up-password-tip">
@@ -494,7 +550,8 @@
                 At least 1 number
               </p>
               <p class="sign-up-password-tip sign-up-password-rule-passed">
-                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                <img class="sign-up-password-helper"
+                     src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
                 At least 1 number
               </p>
             </div>
@@ -507,13 +564,43 @@
           <div class="service-and-policy">
             <p class="policy-description">
               By creating an account, you agree to Interviewed's
-              <span>Terms of Service</span>, <span>Cookie Policy</span> and <span>Privacy Policy</span>.
+              <span>Terms of Service</span>, <span>Cookie Policy</span> and
+              <span>Privacy Policy</span>.
             </p>
             <p class="policy-description">
               You consent to receiving marketing messages from Interviewed and may opt out
-            from receiving such messages by following the unsubscribe link in our messages,
+              from receiving such messages by following the unsubscribe link in our messages,
               or as detailed in our terms.
             </p>
+          </div>
+        </div>
+      </div>
+      <div id="verify-token-container">
+        <h1 class="form-title">Verify Token</h1>
+        <div class="account-tab-item" id="verify-token" tabindex="0">
+          <div class="form-item">
+            <div class="form-label">Token&nbsp;*</div>
+            <div class="form-input">
+              <div class="input-prefix">
+                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password" />
+              </div>
+              <input id="token" name="sign-in-email" type="password" />
+              <span id="token-error" class="error-tip-container">
+                <span class="error-img">
+                <img src="https://hrs.interviewed-qa.com/image/Warning.svg">
+              </span>
+                <span class="error-info">Please enter the correct token.</span>
+              </span>
+            </div>
+          </div>
+          <div class="form-submit-button">
+            <button
+                id="token-button"
+                onclick="verifyToken()"
+                class="is-primary is-rounded sign-up-button-text"
+            >
+              Verify
+            </button>
           </div>
         </div>
       </div>
@@ -524,16 +611,45 @@
 <script src="https://cdn.auth0.com/js/auth0/9.11.2/auth0.min.js"></script>
 <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
 <script>
-　var applicationDomain = 'http://localhost:3000';
+  var applicationDomain = 'http://localhost:3000';
+  var tokenName = 'sign-up-token';
+  var tokenValue = '#!UVsBaTqS%25Tgx7f9s5h';
 
   function showSignUp() {
-    document.getElementById("sign-in-container").style.display = "none";
-    document.getElementById("sign-up-container").style.display = "inline-block";
+    document.getElementById('sign-in-container').style.display = 'none';
+
+    var token = getItem(tokenName);
+    if (token.trim() !== tokenValue.trim()) {
+      document.getElementById('sign-up-container').style.display = 'none';
+      document.getElementById('verify-token-container').style.display = 'inline-block';
+    } else {
+      document.getElementById('sign-up-container').style.display = 'inline-block';
+    }
+  }
+
+  function getItem(sKey) {
+    return decodeURIComponent(document.cookie.replace(
+      new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(sKey).replace(/[-.+*]/g, '\\$&')
+      + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || '';
   }
 
   function showSignIn() {
-    document.getElementById("sign-up-container").style.display = "none";
-    document.getElementById("sign-in-container").style.display = "inline-block";
+    document.getElementById('sign-up-container').style.display = 'none';
+    document.getElementById('verify-token-container').style.display = 'none';
+    document.getElementById('sign-in-container').style.display = 'inline-block';
+  }
+
+  function verifyToken() {
+    var token = document.querySelector('#token').value;
+    if (token.trim() === tokenValue.trim()) {
+      document.cookie = `${tokenName}=${tokenValue}`;
+      document.getElementById('sign-up-container').style.display = 'inline-block';
+      document.getElementById('token-error').style.display = 'none';
+      document.getElementById('verify-token-container').style.display = 'none';
+      document.getElementById('sign-in-container').style.display = 'none';
+    }else {
+      document.getElementById('token-error').style.display = 'block';
+    }
   }
 
   function forgotPassword() {
@@ -564,11 +680,13 @@
   }
 
   function checkEmail(value, index) {
-    if (!value || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+)+$/.test(value)) {
-      document.querySelectorAll(".error-tip-container").item(index).style.display = "block";
+    if (!value
+      || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+)+$/.test(
+        value)) {
+      document.querySelectorAll('.error-tip-container').item(index).style.display = 'block';
       return false;
     } else {
-      document.querySelectorAll(".error-tip-container").item(index).style.display = "none";
+      document.querySelectorAll('.error-tip-container').item(index).style.display = 'none';
       return true;
     }
   }
@@ -619,38 +737,39 @@
   }
 
   function changePasswordTip(index, visible) {
-    document.querySelectorAll('.sign-up-password-rule-passed').item(index).style.display = visible ? "none": "block";
-    document.querySelectorAll('p.sign-up-password-tip:not(.sign-up-password-rule-passed)').item(index).style.display = visible ? "block": "none";
+    document.querySelectorAll('.sign-up-password-rule-passed').item(index).style.display = visible
+      ? 'none' : 'block';
+    document.querySelectorAll('p.sign-up-password-tip:not(.sign-up-password-rule-passed)').item(
+      index).style.display = visible ? 'block' : 'none';
   }
 
   function checkPassword(value, index) {
     if (!value) {
-      document.querySelectorAll(".error-tip-container").item(index).style.display = "block";
+      document.querySelectorAll('.error-tip-container').item(index).style.display = 'block';
       return false;
     } else {
-      document.querySelectorAll(".error-tip-container").item(index).style.display = "none";
+      document.querySelectorAll('.error-tip-container').item(index).style.display = 'none';
       return true;
     }
   }
 
-  window.addEventListener('load', function() {
+  window.addEventListener('load', function () {
 
     var config = JSON.parse(
-        decodeURIComponent(escape(window.atob('@@config@@')))
+      decodeURIComponent(escape(window.atob('@@config@@'))),
     );
 
     var params = Object.assign({
       // additional configuration needed for use of custom domains
       overrides: {
         __tenant: config.auth0Tenant,
-        __token_issuer: config.authorizationServer.issuer
+        __token_issuer: config.authorizationServer.issuer,
       },
       domain: config.auth0Domain,
       clientID: config.clientID,
       redirectUri: config.callbackURL,
-      responseType: 'code'
+      responseType: 'code',
     }, config.internalOptions);
-
 
     var webAuth = new auth0.WebAuth(params);
 
@@ -666,17 +785,17 @@
     }
 
     function disableButton(index) {
-      document.querySelectorAll("button").item(index).disabled=true;
-      setTimeout(function() {
-        document.querySelectorAll("button").item(index).disabled=false;
+      document.querySelectorAll('button').item(index).disabled = true;
+      setTimeout(function () {
+        document.querySelectorAll('button').item(index).disabled = false;
       }, 5000);
     }
 
     function signIn(event) {
       event.preventDefault();
 
-      var email = document.querySelector("#sign-in-email").value;
-      var password = document.querySelector("#sign-in-password").value;
+      var email = document.querySelector('#sign-in-email').value;
+      var password = document.querySelector('#sign-in-password').value;
 
       var emailValid = checkEmail(email, 0);
       var passwordValid = checkPassword(password, 1);
@@ -686,17 +805,19 @@
         webAuth.login({
           realm: databaseConnection,
           username: email,
-          password: password
-        }, function(err) {
-          if (err) displayError(err);
+          password: password,
+        }, function (err) {
+          if (err) {
+            displayError(err);
+          }
         });
       }
     }
 
     function signUp(event) {
       event.preventDefault();
-      var email = document.querySelector("#sign-up-email").value;
-      var password = document.querySelector("#sign-up-password").value;
+      var email = document.querySelector('#sign-up-email').value;
+      var password = document.querySelector('#sign-up-password').value;
 
       var emailValid = checkEmail(email, 2);
       var passwordValid = checkPassword(password, 3);
@@ -710,18 +831,20 @@
           userMetadata: {
             role: 'ADMIN',
           },
-        }, function(err) {
-          if (err) return displayError(err);
+        }, function (err) {
+          if (err) {
+            return displayError(err);
+          }
 
           return window.location.href = applicationDomain + '/account/sign-up/done';
         });
       }
     }
 
-    var signInButton = document.querySelector("#sign-in-button");
-    var signUpButton = document.querySelector("#sign-up-button");
-    signInButton.addEventListener("click", signIn);
-    signUpButton.addEventListener("click", signUp);
+    var signInButton = document.querySelector('#sign-in-button');
+    var signUpButton = document.querySelector('#sign-up-button');
+    signInButton.addEventListener('click', signIn);
+    signUpButton.addEventListener('click', signUp);
 
     function onPressEnter(event, element) {
       if (event.keyCode === 13) {
@@ -737,8 +860,8 @@
       onPressEnter(event, signUpButton);
     }
 
-    document.querySelector("#sign-in").addEventListener("keyup", onSignInKeyDown);
-    document.querySelector("#sign-up").addEventListener("keyup", onSignUpKeyDown);
+    document.querySelector('#sign-in').addEventListener('keyup', onSignInKeyDown);
+    document.querySelector('#sign-up').addEventListener('keyup', onSignUpKeyDown);
   });
 </script>
 </body>
