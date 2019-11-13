@@ -209,7 +209,7 @@ Resources:
     Type: 'AWS::CloudFormation::WaitConditionHandle'
   AWSEBSecurityGroupSSHIngress:
     Properties:
-      CidrIp: 0.0.0.0/0
+      CidrIp: 172.31.0.0/16
       GroupName: !Ref AWSEBSecurityGroup
       FromPort: '22'
       ToPort: '22'

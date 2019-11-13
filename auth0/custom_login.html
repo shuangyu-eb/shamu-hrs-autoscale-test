@@ -2,11 +2,23 @@
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link rel="icon" href="https://hrs.interviewed-qa.com/favicon.ico" />
+
   <style>
+    :root {
+      --background-color: #f0f2f5;
+      --primary-color: #ff6600;
+      --blue: #0075DF;
+      --step-bar-background: #f0f2f5;
+      --border-color: #dfe2e9;
+      --password-helper-dot: #ff6600;
+      --font-color: #2E3033;
+      --grey-font: #7b7e84;
+    }
+
     body {
       height: 98%;
       width: 98%;
-      background-color: #f0f2f5;
+      background-color: var(--background-color);
     }
 
     #sign-in-container {
@@ -14,6 +26,10 @@
     }
 
     #sign-up-container {
+      display: block;
+    }
+
+    #verify-token-container {
       display: none;
     }
 
@@ -26,7 +42,7 @@
       left: 0;
       right: 0;
       background-color: white;
-      border-bottom: 1px solid #dfe2e9;
+      border-bottom: 1px solid var(--border-color);
       z-index: 99;
     }
 
@@ -39,7 +55,7 @@
     .navbar > div {
       width: 80px;
       height: 80px;
-      border-right: 1px solid #dfe2e9;
+      border-right: 1px solid var(--border-color);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -71,7 +87,7 @@
       font-family: Roboto;
       font-size: 36px;
       text-align: center;
-      color: #2e3033;
+      color: var(--font-color);
       height: 33px;
       font-weight: normal;
       font-style: normal;
@@ -95,7 +111,7 @@
       font-size: 12px;
       font-style: normal;
       font-stretch: normal;
-      color: #2e3033;
+      color: var(--font-color);
     }
 
     .form-input {
@@ -107,7 +123,7 @@
       height: 40px;
       border-radius: 4px;
       border: solid 1px #d8dadf;
-      background-color: #ffffff;
+      background-color: white;
 
       padding: 5px 5px 5px 45px;
     }
@@ -120,7 +136,7 @@
       width: 40px;
       height: 38px;
       border-radius: 4px 0 0 4px;
-      border: solid 1px #dfe2e9;
+      border: solid 1px var(--border-color);
       background-color: #f7f8fa;
       position: absolute;
       display: flex;
@@ -128,7 +144,7 @@
       justify-content: center;
     }
 
-    .input-prefix img{
+    .input-prefix img {
       width: 25px;
       height: 25px;
     }
@@ -144,12 +160,12 @@
       height: 40px;
       border-radius: 20px;
       box-shadow: 2px 2px 4px 0 rgba(72, 142, 255, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.12);
-      background-color: #488eff;
+      background-color: var(--blue);
       outline: none;
       border: 0;
       display: inline-block;
       font-size: 14px;
-      color: #ffffff;
+      color: white;
       cursor: pointer;
       font-family: Roboto;
       font-weight: 500;
@@ -175,34 +191,33 @@
       line-height: normal;
       letter-spacing: 0.31px;
       text-align: center;
-      color: #488eff;
-
+      color: var(--blue);
     }
 
     .line {
       width: 358px;
       margin-top: 20px;
-      border: solid 1px #f0f2f5;
+      border: solid 1px var(--background-color);
       margin-left: -25px;
       border-bottom: none;
     }
 
     .service-and-policy {
       font-size: 13px;
-      color: #7b7e84;
+      color: var(--grey-font);
       text-align: center;
       margin-top: 15px;
     }
 
     .service-and-policy > p {
       font-size: 13px;
-      color: #7b7e84;
+      color: var(--grey-font);
       text-align: center;
       display: inline-block;
     }
 
     .service-and-policy span {
-      color: #488eff;
+      color: var(--blue);
       cursor: pointer;
     }
 
@@ -218,7 +233,7 @@
       width: 8px;
       display: inline-block;
       margin-right: 5px;
-      background-color: #f59931;
+      background-color: var(--password-helper-dot);
       border-radius: 50%;
     }
 
@@ -287,7 +302,7 @@
     }
 
     button[disabled] {
-      background-color: #DFE2E9;
+      background-color: var(--border-color);
       box-shadow: none;
     }
 
@@ -317,11 +332,11 @@
       height: 10px;
       border-radius: 50%;
       position: relative;
-      border: 2px solid #dfe2e9;
+      border: 2px solid var(--border-color);
       margin-left: 70px;
       display: inline-block;
       padding: 5px;
-      background-color: #f0f2f5;
+      background-color: var(--background-color);
     }
 
     .point-center {
@@ -331,7 +346,7 @@
       border-radius: 50%;
       position: relative;
       padding: 7px;
-      border: 2px solid #dfe2e9;
+      border: 2px solid var(--border-color);
       margin-left: 0;
       display: inline-block;
     }
@@ -344,14 +359,14 @@
       height: 10px;
       left: 7px;
       top: 7px;
-      background-color: #488EFF;
+      background-color: var(--blue);
       border-radius: 50%;
     }
 
     .bubble-active {
       height: 52px;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .04);
-      border: solid 1px #dfe2e9;
+      border: solid 1px var(--border-color);
       background-color: white;
       position: absolute;
       text-align: center;
@@ -367,7 +382,7 @@
       content: "";
       width: 120px;
       height: 3px;
-      background-color: #dfe2e9;
+      background-color: var(--border-color);
       position: absolute;
       display: inline-block;
       right: 0;
@@ -405,7 +420,7 @@
       font-weight: 500;
       letter-spacing: .3px;
       text-align: center;
-      color: #7b7e84;
+      color: var(--grey-font);
       position: relative;
       display: block;
     }
@@ -414,7 +429,7 @@
 <body>
 <div class="navbar">
   <div>
-    <img src="https://hrs.interviewed-qa.com/image/Logo.svg" alt="logo" />
+    <img src="https://hrs.interviewed-qa.com/image/logo.simplyhired.png" alt="logo" />
   </div>
 </div>
 <div class="form-container">
@@ -429,24 +444,34 @@
             <div class="form-label">Work Email&nbsp;*</div>
             <div class="form-input">
               <div class="input-prefix">
-                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email"/>
+                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email" />
               </div>
-              <input id="sign-in-email" name="sign-in-email" type="text" onkeyup="checkSignInEmail(event);" />
-              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
+              <input id="sign-in-email" name="sign-in-email" type="text"
+                     onkeyup="checkSignInEmail(event);" />
+              <span class="error-tip-container"><span class="error-img"><img
+                  src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span
+                  class="error-info">Please enter a valid email.</span></span>
             </div>
           </div>
           <div class="form-item">
             <div class="form-label">Password&nbsp;*</div>
             <div class="form-input">
               <div class="input-prefix">
-                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password"/>
+                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password" />
               </div>
-              <input id="sign-in-password" name="sign-in-password" type="password" onkeyup="checkSignInPassword(event);" />
-              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
+              <input id="sign-in-password" name="sign-in-password" type="password"
+                     onkeyup="checkSignInPassword(event);" />
+              <span class="error-tip-container">
+                <span class="error-img">
+                <img src="https://hrs.interviewed-qa.com/image/Warning.svg">
+              </span>
+                <span class="error-info">Please enter a password.</span>
+              </span>
             </div>
           </div>
           <div class="form-submit-button">
-            <button class="is-primary is-rounded sign-up-button-text" id="sign-in-button">Sign In</button>
+            <button class="is-primary is-rounded sign-up-button-text" id="sign-in-button">Sign In
+            </button>
           </div>
           <span class="form-tip" onclick="forgotPassword()">Forgot your password?</span>
           <span class="form-tip" onclick="showSignUp()">Create an organization account.</span>
@@ -473,20 +498,24 @@
             <div class="form-label">Work Email&nbsp;*</div>
             <div class="form-input">
               <div class="input-prefix">
-                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email"/>
+                <img src="https://hrs.interviewed-qa.com/image/Email.svg" alt="email" />
               </div>
-              <input id="sign-up-email" onkeyup="checkSignUpEmail(event);"  />
-              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a valid email.</span></span>
+              <input id="sign-up-email" onkeyup="checkSignUpEmail(event);" />
+              <span class="error-tip-container"><span class="error-img"><img
+                  src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span
+                  class="error-info">Please enter a valid email.</span></span>
             </div>
           </div>
           <div class="form-item">
             <div class="form-label">Password&nbsp;*</div>
             <div class="form-input">
               <div class="input-prefix">
-                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password"/>
+                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password" />
               </div>
               <input id="sign-up-password" type="password" onkeyup="checkSignUpPassword(event);" />
-              <span class="error-tip-container"><span class="error-img"><img src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span class="error-info">Please enter a password.</span></span>
+              <span class="error-tip-container"><span class="error-img"><img
+                  src="https://hrs.interviewed-qa.com/image/Warning.svg"></span><span
+                  class="error-info">Please enter a password.</span></span>
             </div>
             <div class="sign-up-password-tip-container">
               <p class="sign-up-password-tip">
@@ -494,7 +523,8 @@
                 8 or more characters
               </p>
               <p class="sign-up-password-tip sign-up-password-rule-passed">
-                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                <img class="sign-up-password-helper"
+                     src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
                 8 or more characters
               </p>
               <p class="sign-up-password-tip">
@@ -502,7 +532,8 @@
                 At least 1 lowercase
               </p>
               <p class="sign-up-password-tip sign-up-password-rule-passed">
-                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                <img class="sign-up-password-helper"
+                     src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
                 At least 1 lowercase
               </p>
               <p class="sign-up-password-tip">
@@ -510,7 +541,8 @@
                 At least 1 uppercase
               </p>
               <p class="sign-up-password-tip sign-up-password-rule-passed">
-                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                <img class="sign-up-password-helper"
+                     src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
                 At least 1 uppercase
               </p>
               <p class="sign-up-password-tip">
@@ -518,7 +550,8 @@
                 At least 1 number
               </p>
               <p class="sign-up-password-tip sign-up-password-rule-passed">
-                <img class="sign-up-password-helper" src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
+                <img class="sign-up-password-helper"
+                     src="https://hrs.interviewed-qa.com/image/Check.svg" alt="success" />
                 At least 1 number
               </p>
             </div>
@@ -531,13 +564,43 @@
           <div class="service-and-policy">
             <p class="policy-description">
               By creating an account, you agree to Interviewed's
-              <span>Terms of Service</span>, <span>Cookie Policy</span> and <span>Privacy Policy</span>.
+              <span>Terms of Service</span>, <span>Cookie Policy</span> and
+              <span>Privacy Policy</span>.
             </p>
             <p class="policy-description">
               You consent to receiving marketing messages from Interviewed and may opt out
-            from receiving such messages by following the unsubscribe link in our messages,
+              from receiving such messages by following the unsubscribe link in our messages,
               or as detailed in our terms.
             </p>
+          </div>
+        </div>
+      </div>
+      <div id="verify-token-container">
+        <h1 class="form-title">Verify Token</h1>
+        <div class="account-tab-item" id="verify-token" tabindex="0">
+          <div class="form-item">
+            <div class="form-label">Token&nbsp;*</div>
+            <div class="form-input">
+              <div class="input-prefix">
+                <img src="https://hrs.interviewed-qa.com/image/Lock.svg" alt="password" />
+              </div>
+              <input id="token" name="sign-in-email" type="password" />
+              <span id="token-error" class="error-tip-container">
+                <span class="error-img">
+                <img src="https://hrs.interviewed-qa.com/image/Warning.svg">
+              </span>
+                <span class="error-info">Please enter the correct token.</span>
+              </span>
+            </div>
+          </div>
+          <div class="form-submit-button">
+            <button
+                id="token-button"
+                onclick="verifyToken()"
+                class="is-primary is-rounded sign-up-button-text"
+            >
+              Verify
+            </button>
           </div>
         </div>
       </div>
@@ -548,16 +611,45 @@
 <script src="https://cdn.auth0.com/js/auth0/9.11.2/auth0.min.js"></script>
 <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
 <script>
-　var applicationDomain = 'http://localhost:3000';
+  var applicationDomain = 'http://localhost:3000';
+  var tokenName = 'sign-up-token';
+  var tokenValue = '#!UVsBaTqS%25Tgx7f9s5h';
 
   function showSignUp() {
-    document.getElementById("sign-in-container").style.display = "none";
-    document.getElementById("sign-up-container").style.display = "inline-block";
+    document.getElementById('sign-in-container').style.display = 'none';
+
+    var token = getItem(tokenName);
+    if (token.trim() !== tokenValue.trim()) {
+      document.getElementById('sign-up-container').style.display = 'none';
+      document.getElementById('verify-token-container').style.display = 'inline-block';
+    } else {
+      document.getElementById('sign-up-container').style.display = 'inline-block';
+    }
+  }
+
+  function getItem(sKey) {
+    return decodeURIComponent(document.cookie.replace(
+      new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(sKey).replace(/[-.+*]/g, '\\$&')
+      + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || '';
   }
 
   function showSignIn() {
-    document.getElementById("sign-up-container").style.display = "none";
-    document.getElementById("sign-in-container").style.display = "inline-block";
+    document.getElementById('sign-up-container').style.display = 'none';
+    document.getElementById('verify-token-container').style.display = 'none';
+    document.getElementById('sign-in-container').style.display = 'inline-block';
+  }
+
+  function verifyToken() {
+    var token = document.querySelector('#token').value;
+    if (token.trim() === tokenValue.trim()) {
+      document.cookie = `${tokenName}=${tokenValue}`;
+      document.getElementById('sign-up-container').style.display = 'inline-block';
+      document.getElementById('token-error').style.display = 'none';
+      document.getElementById('verify-token-container').style.display = 'none';
+      document.getElementById('sign-in-container').style.display = 'none';
+    }else {
+      document.getElementById('token-error').style.display = 'block';
+    }
   }
 
   function forgotPassword() {
@@ -588,11 +680,13 @@
   }
 
   function checkEmail(value, index) {
-    if (!value || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+)+$/.test(value)) {
-      document.querySelectorAll(".error-tip-container").item(index).style.display = "block";
+    if (!value
+      || !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+)+$/.test(
+        value)) {
+      document.querySelectorAll('.error-tip-container').item(index).style.display = 'block';
       return false;
     } else {
-      document.querySelectorAll(".error-tip-container").item(index).style.display = "none";
+      document.querySelectorAll('.error-tip-container').item(index).style.display = 'none';
       return true;
     }
   }
@@ -643,38 +737,39 @@
   }
 
   function changePasswordTip(index, visible) {
-    document.querySelectorAll('.sign-up-password-rule-passed').item(index).style.display = visible ? "none": "block";
-    document.querySelectorAll('p.sign-up-password-tip:not(.sign-up-password-rule-passed)').item(index).style.display = visible ? "block": "none";
+    document.querySelectorAll('.sign-up-password-rule-passed').item(index).style.display = visible
+      ? 'none' : 'block';
+    document.querySelectorAll('p.sign-up-password-tip:not(.sign-up-password-rule-passed)').item(
+      index).style.display = visible ? 'block' : 'none';
   }
 
   function checkPassword(value, index) {
     if (!value) {
-      document.querySelectorAll(".error-tip-container").item(index).style.display = "block";
+      document.querySelectorAll('.error-tip-container').item(index).style.display = 'block';
       return false;
     } else {
-      document.querySelectorAll(".error-tip-container").item(index).style.display = "none";
+      document.querySelectorAll('.error-tip-container').item(index).style.display = 'none';
       return true;
     }
   }
 
-  window.addEventListener('load', function() {
+  window.addEventListener('load', function () {
 
     var config = JSON.parse(
-        decodeURIComponent(escape(window.atob('@@config@@')))
+      decodeURIComponent(escape(window.atob('@@config@@'))),
     );
 
     var params = Object.assign({
       // additional configuration needed for use of custom domains
       overrides: {
         __tenant: config.auth0Tenant,
-        __token_issuer: config.authorizationServer.issuer
+        __token_issuer: config.authorizationServer.issuer,
       },
       domain: config.auth0Domain,
       clientID: config.clientID,
       redirectUri: config.callbackURL,
-      responseType: 'code'
+      responseType: 'code',
     }, config.internalOptions);
-
 
     var webAuth = new auth0.WebAuth(params);
 
@@ -690,17 +785,17 @@
     }
 
     function disableButton(index) {
-      document.querySelectorAll("button").item(index).disabled=true;
-      setTimeout(function() {
-        document.querySelectorAll("button").item(index).disabled=false;
+      document.querySelectorAll('button').item(index).disabled = true;
+      setTimeout(function () {
+        document.querySelectorAll('button').item(index).disabled = false;
       }, 5000);
     }
 
     function signIn(event) {
       event.preventDefault();
 
-      var email = document.querySelector("#sign-in-email").value;
-      var password = document.querySelector("#sign-in-password").value;
+      var email = document.querySelector('#sign-in-email').value;
+      var password = document.querySelector('#sign-in-password').value;
 
       var emailValid = checkEmail(email, 0);
       var passwordValid = checkPassword(password, 1);
@@ -710,17 +805,19 @@
         webAuth.login({
           realm: databaseConnection,
           username: email,
-          password: password
-        }, function(err) {
-          if (err) displayError(err);
+          password: password,
+        }, function (err) {
+          if (err) {
+            displayError(err);
+          }
         });
       }
     }
 
     function signUp(event) {
       event.preventDefault();
-      var email = document.querySelector("#sign-up-email").value;
-      var password = document.querySelector("#sign-up-password").value;
+      var email = document.querySelector('#sign-up-email').value;
+      var password = document.querySelector('#sign-up-password').value;
 
       var emailValid = checkEmail(email, 2);
       var passwordValid = checkPassword(password, 3);
@@ -734,18 +831,20 @@
           userMetadata: {
             role: 'ADMIN',
           },
-        }, function(err) {
-          if (err) return displayError(err);
+        }, function (err) {
+          if (err) {
+            return displayError(err);
+          }
 
           return window.location.href = applicationDomain + '/account/sign-up/done';
         });
       }
     }
 
-    var signInButton = document.querySelector("#sign-in-button");
-    var signUpButton = document.querySelector("#sign-up-button");
-    signInButton.addEventListener("click", signIn);
-    signUpButton.addEventListener("click", signUp);
+    var signInButton = document.querySelector('#sign-in-button');
+    var signUpButton = document.querySelector('#sign-up-button');
+    signInButton.addEventListener('click', signIn);
+    signUpButton.addEventListener('click', signUp);
 
     function onPressEnter(event, element) {
       if (event.keyCode === 13) {
@@ -761,8 +860,8 @@
       onPressEnter(event, signUpButton);
     }
 
-    document.querySelector("#sign-in").addEventListener("keyup", onSignInKeyDown);
-    document.querySelector("#sign-up").addEventListener("keyup", onSignUpKeyDown);
+    document.querySelector('#sign-in').addEventListener('keyup', onSignInKeyDown);
+    document.querySelector('#sign-up').addEventListener('keyup', onSignUpKeyDown);
   });
 </script>
 </body>

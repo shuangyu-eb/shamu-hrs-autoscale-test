@@ -4,6 +4,8 @@ Parameters:
     Type: String
   DocumentClusterName:
     Type: String
+  SearchClusterName:
+    Type: String
   InstanceType:
     Type: String
     Default: t2.small
@@ -37,6 +39,16 @@ Resources:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName: !Ref CompanyClusterName
+  DocumentCluster:
+    # creates an Amazon Elastic Container Service (Amazon ECS) cluster.
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Ref DocumentClusterName
+  SearchCluster:
+    # creates an Amazon Elastic Container Service (Amazon ECS) cluster.
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Ref SearchClusterName
   CompanyAutoScalingGroup:
     # defines an Amazon EC2 Auto Scaling group with the specified name and attributes for company service
     DependsOn: CompanyCluster
@@ -67,11 +79,6 @@ Resources:
           - AlarmNotification
           - ScheduledActions
         WaitOnResourceSignals: true
-  DocumentCluster:
-    # creates an Amazon Elastic Container Service (Amazon ECS) cluster.
-    Type: AWS::ECS::Cluster
-    Properties:
-      ClusterName: !Ref DocumentClusterName
   DocumentAutoScalingGroup:
     # defines an Amazon EC2 Auto Scaling group with the specified name and attributes for document service
     DependsOn: DocumentCluster
@@ -87,8 +94,23 @@ Resources:
         - Key: Name
           Value: !Sub ${DocumentCluster} ECS host
           PropagateAtLaunch: true
+  SearchAutoScalingGroup:
+    # defines an Amazon EC2 Auto Scaling group with the specified name and attributes for search service
+    DependsOn: SearchCluster
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier:
+        - !Ref Subnet
+      LaunchConfigurationName: !Ref SearchLaunchConfiguration
+      MinSize: 0
+      MaxSize: !Ref ClusterSize
+      DesiredCapacity: !Ref ClusterSize
+      Tags:
+        - Key: Name
+          Value: !Sub ${SearchCluster} ECS host
+          PropagateAtLaunch: true
   CompanyLaunchConfiguration:
-  # Specifies an Amazon EC2 Auto Scaling launch configuration used by the Auto Scaling group to configure Amazon EC2 instances
+    # Specifies an Amazon EC2 Auto Scaling launch configuration used by the Auto Scaling group to configure Amazon EC2 instances
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       ImageId: !Ref ECSAMI
@@ -217,6 +239,71 @@ Resources:
             - ' -bind=${BIND_IP}'
             - ' -data-dir=~/data'
             - ' -ui > log.txt &'
+  SearchLaunchConfiguration:
+    # Specifies an Amazon EC2 Auto Scaling launch configuration used by the Auto Scaling group to configure Amazon EC2 instances
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref ECSAMI
+      InstanceType: !Ref InstanceType
+      SecurityGroups:
+        - !Ref SecurityGroup
+      IamInstanceProfile: !Ref IamInstanceProfile
+      KeyName: !Ref KeyName
+      UserData: !Base64
+        Fn::Join:
+          - ''
+          - - |
+              #!/bin/bash
+            - !Sub 'echo ECS_CLUSTER=${SearchCluster} >> /etc/ecs/ecs.config'
+            - |+
+
+            - yum install -y aws-cfn-bootstrap
+            - |+
+
+            - !Sub '/opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource SearchAutoScalingGroup --region ${AWS::Region}'
+            - |+
+
+            - 'yum -y install wget unzip'
+            - |+
+
+            - !Sub 'wget https://releases.hashicorp.com/consul/${ConsulVersion}/consul_${ConsulVersion}_linux_amd64.zip'
+            - |+
+
+            - 'mkdir consul'
+            - |+
+
+            - !Sub 'unzip consul_${ConsulVersion}_linux_amd64.zip -d consul'
+            - |+
+
+            - 'mv consul/consul /usr/bin/'
+            - |+
+
+            - !Sub 'rm consul_${ConsulVersion}_linux_amd64.zip'
+            - |+
+
+            - 'rm -R consul/'
+            - |+
+
+            - 'BIND_IP=`curl http://169.254.169.254/latest/meta-data/local-ipv4`'
+            - |+
+
+            - !Sub
+              'nohup consul agent'
+            - ' -retry-join="'
+            - ' provider=aws'
+            - ' tag_key=aws:cloudformation:stack-name'
+            - ' tag_value='
+            - !Ref ConsulClusterName
+            - ' region='
+            - !Ref Region
+            - ' access_key_id='
+            - !Ref AccessKey
+            - ' secret_access_key='
+            - !Ref SecretKey
+            - '"'
+            - ' -bind=${BIND_IP}'
+            - ' -data-dir=~/data'
+            - ' -ui > log.txt &'
 Outputs:
   CompanyCluster:
     Description: A reference to Company ECS cluster
@@ -224,3 +311,6 @@ Outputs:
   DocumentCluster:
     Description: A reference to Document ECS cluster
     Value: !GetAtt DocumentCluster.Arn
+  SearchCluster:
+    Description: A reference to Search ECS cluster
+    Value: !GetAtt SearchCluster.Arn

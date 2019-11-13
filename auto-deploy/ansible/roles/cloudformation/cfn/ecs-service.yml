@@ -4,15 +4,21 @@ Parameters:
     Type: String
   DocumentClusterName:
     Type: String
+  SearchClusterName:
+    Type: String
   DesiredCount:
     Type: Number
   CompanyImage:
     Type: String
   DocumentImage:
     Type: String
+  SearchImage:
+    Type: String
   CompanyServiceName:
     Type: String
   DocumentServiceName:
+    Type: String
+  SearchServiceName:
     Type: String
   Command:
     Type: String
@@ -56,6 +62,44 @@ Resources:
       RequiresCompatibilities: ['EC2']
       NetworkMode: host
       Cpu: 512
+  CompanyCloudWatchLogsGroup:
+    # specifies a log group for company service
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /ecs/${CompanyServiceName}
+      RetentionInDays: 365
+  CompanyService:
+    # creates an Amazon ECS for company service that runs and maintains the requested number of tasks
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Ref CompanyServiceName
+      Cluster: !Ref CompanyClusterName
+      TaskDefinition: !Ref CompanyTask
+      LaunchType: EC2
+      SchedulingStrategy: REPLICA
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: !Ref DesiredCount
+      PlacementStrategies:
+        - Type: spread
+          Field: instanceId
+        - Type: spread
+          Field: attribute:ecs.availability-zone
+  CompanyServiceScalableTarget:
+    # specifies the company service that Application Auto Scaling can scale.
+    Type: "AWS::ApplicationAutoScaling::ScalableTarget"
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join
+        - /
+        - - service
+          - !Ref CompanyClusterName
+          - !GetAtt CompanyService.Name
+      RoleARN: !Ref ApplicationAutoScalingRole
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
   DocumentTask:
   # describes the container and volume definitions of the company ECS task
     Type: AWS::ECS::TaskDefinition
@@ -94,50 +138,12 @@ Resources:
       RequiresCompatibilities: ['EC2']
       NetworkMode: host
       Cpu: 520
-  CompanyCloudWatchLogsGroup:
-  # specifies a log group for company service
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub /ecs/${CompanyServiceName}
-      RetentionInDays: 365
   DocumentCloudWatchLogsGroup:
   # specifies a log group for document service
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub /ecs/${DocumentServiceName}
       RetentionInDays: 365
-  CompanyService:
-  # creates an Amazon ECS for company service that runs and maintains the requested number of tasks
-    Type: AWS::ECS::Service
-    Properties:
-      ServiceName: !Ref CompanyServiceName
-      Cluster: !Ref CompanyClusterName
-      TaskDefinition: !Ref CompanyTask
-      LaunchType: EC2
-      SchedulingStrategy: REPLICA
-      DeploymentConfiguration:
-        MaximumPercent: 200
-        MinimumHealthyPercent: 100
-      DesiredCount: !Ref DesiredCount
-      PlacementStrategies:
-      - Type: spread
-        Field: instanceId
-      - Type: spread
-        Field: attribute:ecs.availability-zone
-  CompanyServiceScalableTarget:
-  # specifies the company service that Application Auto Scaling can scale.
-    Type: "AWS::ApplicationAutoScaling::ScalableTarget"
-    Properties:
-      MaxCapacity: 1
-      MinCapacity: 1
-      ResourceId: !Join
-        - /
-        - - service
-          - !Ref CompanyClusterName
-          - !GetAtt CompanyService.Name
-      RoleARN: !Ref ApplicationAutoScalingRole
-      ScalableDimension: ecs:service:DesiredCount
-      ServiceNamespace: ecs
   DocumentService:
   # creates an Amazon ECS for company service that runs and maintains the requested number of tasks
     Type: AWS::ECS::Service
@@ -170,8 +176,83 @@ Resources:
       RoleARN: !Ref ApplicationAutoScalingRole
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
+  SearchTask:
+    # describes the container and volume definitions of the search ECS task
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Name: search-service
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref SearchCloudWatchLogsGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+          PortMappings:
+            - HostPort: 9002
+              Protocol: tcp
+              ContainerPort: 9002
+          Command:
+            - !Ref Command
+          Cpu: 0
+          MemoryReservation: 400
+          Image:
+            !Join
+            - ''
+            - - !Select ['4', !Split [':',!Ref SearchImage]]
+              - '.dkr.ecr.'
+              - !Ref "AWS::Region"
+              - '.amazonaws.com/'
+              - !Ref SearchServiceName
+      ExecutionRoleArn: !Ref EcsTaskExecutionRole
+      Memory: 1024
+      TaskRoleArn: !Ref EcsTaskExecutionRole
+      Family: !Ref SearchServiceName
+      RequiresCompatibilities: ['EC2']
+      NetworkMode: host
+      Cpu: 512
+  SearchCloudWatchLogsGroup:
+    # specifies a log group for search service
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /ecs/${SearchServiceName}
+      RetentionInDays: 365
+  SearchService:
+    # creates an Amazon ECS for search service that runs and maintains the requested number of tasks
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Ref SearchServiceName
+      Cluster: !Ref SearchClusterName
+      TaskDefinition: !Ref SearchTask
+      LaunchType: EC2
+      SchedulingStrategy: REPLICA
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: !Ref DesiredCount
+      PlacementStrategies:
+        - Type: spread
+          Field: instanceId
+        - Type: spread
+          Field: attribute:ecs.availability-zone
+  SearchServiceScalableTarget:
+    # specifies the search service that Application Auto Scaling can scale.
+    Type: "AWS::ApplicationAutoScaling::ScalableTarget"
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join
+        - /
+        - - service
+          - !Ref SearchClusterName
+          - !GetAtt SearchService.Name
+      RoleARN: !Ref ApplicationAutoScalingRole
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
 Outputs:
   CompanyServiceArn:
     Value: !Ref CompanyService
   DocumentServiceArn:
     Value: !Ref DocumentService
+  SearchServiceArn:
+    Value: !Ref SearchService

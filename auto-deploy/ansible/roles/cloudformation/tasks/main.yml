@@ -88,8 +88,8 @@
     template: "roles/cloudformation/cfn/secrets-manager.yml"
     template_parameters:
       DeployEnv: "{{ env }}"
-      CompanyRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{{company_db_name}}?zeroDateTimeBehavior=convertToNull"'
-      DocumentRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{{document_db_name}}?zeroDateTimeBehavior=convertToNull"'
+      CompanyRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{{company_db_name}}?zeroDateTimeBehavior=convertToNull?serverTimezone=UTC"'
+      DocumentRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{{document_db_name}}?zeroDateTimeBehavior=convertToNull?serverTimezone=UTC"'
       RdsUserName: '"spring.datasource.username": "{{ db_user }}"'
       RdsPassword: '"spring.datasource.password": "{{ db_password }}"'
       SendGridApiKey: '"sendGrid.apiKey": "{{ sendGrid_apiKey }}"'
@@ -158,6 +158,7 @@
     template_parameters:
       CompanyRepositoryName: "{{ company_repository_name }}"
       DocumentRepositoryName: "{{ document_repository_name }}"
+      SearchRepositoryName: "{{ search_repository_name }}"
   register: ecr_stack
 - debug:
     msg: "ECR stack outputs: {{ ecr_stack.stack_outputs}}"
@@ -171,6 +172,7 @@
     template_parameters:
       CompanyClusterName: "{{ company_cluster_name }}"
       DocumentClusterName: "{{ document_cluster_name }}"
+      SearchClusterName: "{{ search_cluster_name }}"
       InstanceType: "{{ ecs_instance_type }}"
       ClusterSize: "{{ cluster_size }}"
       VPC: "{{ vpc_id }}"
@@ -206,6 +208,15 @@
     msg: "document service's repository image has been uploaded "
   when: document_result.imageIds != []
 
+- name: check if search repository image is uploaded
+  shell: aws ecr list-images --repository-name {{ search_repository_name }}
+  register: result
+- set_fact:
+    search_result: "{{ result.stdout | from_json }}"
+- debug:
+    msg: "search service's repository image has been uploaded "
+  when: search_result.imageIds != []
+
 - name: create ecs service stack
   cloudformation:
     stack_name: "{{ stack_prefix }}-{{ env }}-ecs-service"
@@ -215,16 +226,19 @@
     template_parameters:
       CompanyClusterName: "{{ company_cluster_name }}"
       DocumentClusterName: "{{ document_cluster_name }}"
+      SearchClusterName: "{{ search_cluster_name }}"
       DesiredCount: "{{ desired_count }}"
       CompanyImage: "{{ ecr_stack.stack_outputs.CompanyRepositoryArn}}"
       DocumentImage: "{{ ecr_stack.stack_outputs.DocumentRepositoryArn}}"
+      SearchImage: "{{ ecr_stack.stack_outputs.SearchRepositoryArn}}"
       CompanyServiceName: "{{ company_service_name }}"
       DocumentServiceName: "{{ document_service_name }}"
+      SearchServiceName: "{{ search_service_name }}"
       Command: "{{ command }}"
       EcsTaskExecutionRole: "{{ iam_roles_stack.stack_outputs.EcsTaskExecutionRoleArn }}"
       ApplicationAutoScalingRole: "{{ iam_roles_stack.stack_outputs.ApplicationAutoScalingRoleArn }}"
   register: ecs_service_stack
-  when: document_result.imageIds != [] and company_result.imageIds != []
+  when: document_result.imageIds != [] and company_result.imageIds != [] and search_result.imageIds != []
 - debug:
     msg: "ECS service stack outputs: {{ ecs_service_stack.stack_outputs}}"
-  when: document_result.imageIds != [] and company_result.imageIds != []
+  when: document_result.imageIds != [] and company_result.imageIds != [] and search_result.imageIds != []

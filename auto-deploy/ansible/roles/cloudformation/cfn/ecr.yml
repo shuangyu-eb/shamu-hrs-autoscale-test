@@ -4,6 +4,8 @@ Parameters:
     Type: String
   DocumentRepositoryName:
     Type: String
+  SearchRepositoryName:
+    Type: String
 Resources:
   CompanyRepository:
   # specifies an Amazon Elastic Container Registry (Amazon ECR) repository for company service
@@ -15,8 +17,15 @@ Resources:
     Type: AWS::ECR::Repository
     Properties:
       RepositoryName: !Ref DocumentRepositoryName
+  SearchRepository:
+    # specifies an Amazon Elastic Container Registry (Amazon ECR) repository for search service
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref SearchRepositoryName
 Outputs:
   CompanyRepositoryArn:
     Value: !GetAtt CompanyRepository.Arn
   DocumentRepositoryArn:
     Value: !GetAtt DocumentRepository.Arn
+  SearchRepositoryArn:
+    Value: !GetAtt SearchRepository.Arn
