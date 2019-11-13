@@ -97,3 +97,17 @@
     dest: ~/hrs/shamu-hrs-search-service/config/deploy.env
 - debug:
     msg: "Search service deploy file created"
+
+- name: Create config file for logging service
+  template:
+    src: ../templates/config_file_logging_template.j2
+    dest: ~/hrs/shamu-hrs-logging-service/config/application-{{ env }}.yml
+- debug:
+    msg: "Logging service config file created"
+
+- name: Create deploy file for logging service
+  template:
+    src: ../templates/deploy_file_logging_template.j2
+    dest: ~/hrs/shamu-hrs-logging-service/config/deploy.env
+- debug:
+    msg: "Logging service deploy file created"

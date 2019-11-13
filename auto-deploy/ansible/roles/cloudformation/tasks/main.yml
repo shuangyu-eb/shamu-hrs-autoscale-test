@@ -159,6 +159,7 @@
       CompanyRepositoryName: "{{ company_repository_name }}"
       DocumentRepositoryName: "{{ document_repository_name }}"
       SearchRepositoryName: "{{ search_repository_name }}"
+      LoggingRepositoryName: "{{ logging_repository_name }}"
   register: ecr_stack
 - debug:
     msg: "ECR stack outputs: {{ ecr_stack.stack_outputs}}"
@@ -173,6 +174,7 @@
       CompanyClusterName: "{{ company_cluster_name }}"
       DocumentClusterName: "{{ document_cluster_name }}"
       SearchClusterName: "{{ search_cluster_name }}"
+      LoggingClusterName: "{{ logging_cluster_name }}"
       InstanceType: "{{ ecs_instance_type }}"
       ClusterSize: "{{ cluster_size }}"
       VPC: "{{ vpc_id }}"
@@ -217,6 +219,15 @@
     msg: "search service's repository image has been uploaded "
   when: search_result.imageIds != []
 
+- name: check if logging repository image is uploaded
+  shell: aws ecr list-images --repository-name {{ logging_repository_name }}
+  register: result
+- set_fact:
+    logging_result: "{{ result.stdout | from_json }}"
+- debug:
+    msg: "logging service's repository image has been uploaded "
+  when: logging_result.imageIds != []
+
 - name: create ecs service stack
   cloudformation:
     stack_name: "{{ stack_prefix }}-{{ env }}-ecs-service"
@@ -227,18 +238,21 @@
       CompanyClusterName: "{{ company_cluster_name }}"
       DocumentClusterName: "{{ document_cluster_name }}"
       SearchClusterName: "{{ search_cluster_name }}"
+      LoggingClusterName: "{{ logging_cluster_name }}"
       DesiredCount: "{{ desired_count }}"
       CompanyImage: "{{ ecr_stack.stack_outputs.CompanyRepositoryArn}}"
       DocumentImage: "{{ ecr_stack.stack_outputs.DocumentRepositoryArn}}"
       SearchImage: "{{ ecr_stack.stack_outputs.SearchRepositoryArn}}"
+      LoggingImage: "{{ ecr_stack.stack_outputs.LoggingRepositoryArn}}"
       CompanyServiceName: "{{ company_service_name }}"
       DocumentServiceName: "{{ document_service_name }}"
       SearchServiceName: "{{ search_service_name }}"
+      LoggingServiceName: "{{ logging_service_name }}"
       Command: "{{ command }}"
       EcsTaskExecutionRole: "{{ iam_roles_stack.stack_outputs.EcsTaskExecutionRoleArn }}"
       ApplicationAutoScalingRole: "{{ iam_roles_stack.stack_outputs.ApplicationAutoScalingRoleArn }}"
   register: ecs_service_stack
-  when: document_result.imageIds != [] and company_result.imageIds != [] and search_result.imageIds != []
+  when: document_result.imageIds != [] and company_result.imageIds != [] and search_result.imageIds != [] and logging_result.imageIds != []
 - debug:
     msg: "ECS service stack outputs: {{ ecs_service_stack.stack_outputs}}"
-  when: document_result.imageIds != [] and company_result.imageIds != [] and search_result.imageIds != []
+  when: document_result.imageIds != [] and company_result.imageIds != [] and search_result.imageIds != [] and logging_result.imageIds != []

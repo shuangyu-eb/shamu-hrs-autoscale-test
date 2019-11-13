@@ -49,16 +49,19 @@ installed_consul_version: 1.6.0
 company_repository_name: "{{stack_prefix}}-{{env}}-company-service"
 document_repository_name: "{{stack_prefix}}-{{env}}-document-service"
 search_repository_name: "{{stack_prefix}}-{{env}}-search-service"
+logging_repository_name: "{{stack_prefix}}-{{env}}-logging-service"
 # vars for ecs
 company_cluster_name: "{{stack_prefix}}-{{env}}-company"
 document_cluster_name: "{{stack_prefix}}-{{env}}-document"
 search_cluster_name: "{{stack_prefix}}-{{env}}-search"
+logging_cluster_name: "{{stack_prefix}}-{{env}}-logging"
 ecs_instance_type: t2.medium
 ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
 cluster_size: 2
 company_service_name: "{{stack_prefix}}-{{env}}-company-service"
 document_service_name: "{{stack_prefix}}-{{env}}-document-service"
 search_service_name: "{{stack_prefix}}-{{env}}-search-service"
+logging_service_name: "{{stack_prefix}}-{{env}}-logging-service"
 desired_count: 1
 command: --spring.profiles.active={{env}}
 # others
