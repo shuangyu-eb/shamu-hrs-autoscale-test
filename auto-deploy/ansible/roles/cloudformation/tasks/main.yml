@@ -88,8 +88,8 @@
     template: "roles/cloudformation/cfn/secrets-manager.yml"
     template_parameters:
       DeployEnv: "{{ env }}"
-      CompanyRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{{company_db_name}}?zeroDateTimeBehavior=convertToNull"'
-      DocumentRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{{document_db_name}}?zeroDateTimeBehavior=convertToNull"'
+      CompanyRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{{company_db_name}}?zeroDateTimeBehavior=convertToNull?serverTimezone=UTC"'
+      DocumentRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{{document_db_name}}?zeroDateTimeBehavior=convertToNull?serverTimezone=UTC"'
       RdsUserName: '"spring.datasource.username": "{{ db_user }}"'
       RdsPassword: '"spring.datasource.password": "{{ db_password }}"'
       SendGridApiKey: '"sendGrid.apiKey": "{{ sendGrid_apiKey }}"'
