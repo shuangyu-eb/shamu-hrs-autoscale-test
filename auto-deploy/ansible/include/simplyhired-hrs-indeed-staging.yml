@@ -1,0 +1,111 @@
+# vars for aws
+vpc_id: vpc-1bbf4870
+vpc_cidr: 172.31.0.0/16 # used for security group
+public_subnet: subnet-3d7c6355 # used to create a private subnet
+private_subnet_cidr: 172.31.64.0/20 # used to create a private subnet
+key_pair: hrs-staging-deploy-server  # used to allow ssh connection
+region: us-east-2 # ohio
+aws_deploy_access_key: 
+aws_deploy_secret_key: 
+aws_deploy_security_token: 
+# vars for S3
+s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.amazonaws.com/
+s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.amazonaws.com/
+hrs_domain: https://hr.simplyhired-{{env}}.com
+proxy_domain: https://hr-api.simplyhired-{{env}}.com
+website_end_point: https://hr.simplyhired-{{env}}.com
+# vars for rds
+db_cluster_name: "{{stack_prefix}}-{{env}}-cluster"
+db_instance_name: "{{stack_prefix}}-{{env}}"
+rds_availability_zone: us-east-2b
+db_instance_class: db.t2.small
+db_user: simplyhiredhrs
+db_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  66343338646366643836636365353365356366633561353663623461656431376332366164626434
+  3334626234613134333131333430363963663762383135620a373137333463376131653463353537
+  61366538333737376336363331326539383062393534666466653239616237366630316632323962
+  6632663737663431340a363435653761646363323633376461363636333431393137626364663730
+  33323530343638383931613965316664333461326335333262326333353865373434
+company_db_name: company
+document_db_name: document
+rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
+# vars for redis
+cache_node_type: cache.t2.micro
+redis_port: 6379
+redis_expiration: 36000
+# vars for eb
+eb_application_name: "{{stack_prefix}}-{{env}}"
+eb_environment_name: "{{stack_prefix}}-{{env}}"
+eb_java_platform: "64bit Amazon Linux 2018.03 v2.9.2 running Java 8"
+eb_instance_class: t2.micro
+eb_deploy_branch: master
+# vars for consul cluster
+bastion_security_groupId: sg-03bf20960c9c2405f # security group used for consul ssh connect source
+consul_instance_type: t2.small
+consul_server_nodes: 3
+installed_consul_version: 1.6.0
+# vars for ecr
+company_repository_name: "{{stack_prefix}}-{{env}}-company-service"
+document_repository_name: "{{stack_prefix}}-{{env}}-document-service"
+# vars for ecs
+company_cluster_name: "{{stack_prefix}}-{{env}}-company"
+document_cluster_name: "{{stack_prefix}}-{{env}}-document"
+ecs_instance_type: t2.medium
+ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
+cluster_size: 2
+company_service_name: "{{stack_prefix}}-{{env}}-company-service"
+document_service_name: "{{stack_prefix}}-{{env}}-document-service"
+desired_count: 1
+command: --spring.profiles.active={{env}}
+# others
+sendGrid_apiKey: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  34313737336666633530373166653036323537613833353039646463393630656363633039663233
+  3139353830346539363639306336326636623132616630310a666436386562623865396430353930
+  31343638373466303037633066643865306665633936396462303662613238343536653934613732
+  6632376465343663660a376437613931613034623564616138636662616362326138333663366562
+  33623834653834303932353461376635353262383161336137313936323131383733383266623936
+  66313766323464646638623538316337633861366639326636613731356163386334343332383730
+  33643534623264326264326538363966306537313638663964653437396361373662333933636338
+  61663036613838363937
+# auth0 management application clientId
+auth0_clientId_management: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  61383738363065386237393765386432643937653238663934633837316265613965646164353539
+  6433326261376638383432346430633433363266326666390a656166626166303530353637323330
+  30366363373761303636393535376537656265363639313664326238313064653138653764353466
+  3931643735333836350a643130303263363130626436383564376137636433313434636562653139
+  36303630656661316263613262383037663164303963306335393065633161656461353262663964
+  3732653830353461316633356233386665383363646538633164
+# auth0 web application clientId
+auth0_clientId_web: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  30383565663733633965383262346432616534346335633666316232653930396434373438303538
+  3361363630623363613363363134623038313231653864630a303836666663626663666365373239
+  65636532383961616130393135653730623138633966333062633363326137646563313365343337
+  3763663861386237320a646334303965643565376332376437333833636234373030316134636231
+  33303334363436623962376561376262343833346134326235303565393165366133326335636539
+  6636643238636633363139303237363266636632613462333066
+# auth0 management application secret
+auth0_client_secret_management: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  66653037373364663534646665623637313535373566376339623933646433623633613136316535
+  3331613262373263656364643566643563346335666630650a313036303865663239626564336166
+  32623331353364333639396132326230363839323739393761383361663638373731646337663066
+  3038653035663262310a393264626235313932616466333463326132646466623135326531613435
+  34663265343865333937333039346439643963313463343638653461653565326362353837313462
+  37636332343335343638366631333266376338656266303362323036323262353962343530316666
+  38373866653661373335623438393430396635316161613863333763616666363438343366366232
+  64316561306136306462
+auth0_jwks: https://simplyhired-staging.auth0.com/.well-known/jwks.json
+auth0_algorithm: RS256
+auth0_auth_domain: https://simplyhired-staging.auth0.com/
+auth0_domain: simplyhired-staging.auth0.com
+auth0_database: hrs-data-store
+auth0_namespace: https://simplyhired-staging.com
+auth0_audience: hrs-backend   # HRS backend api
+auth0_managementIdentifier: https://simplyhired-staging.auth0.com/api/v2/   # Management api Identifier
+hello_sign_api: https://api.hellosign.com
+hello_sign_clientId: VAULTTODO # VAULT TODO
+hello_sign_apiKey: VAULTTODO # VAULT TODO
