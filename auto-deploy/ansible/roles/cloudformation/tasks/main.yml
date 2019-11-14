@@ -108,6 +108,8 @@
       RedisPort: '"spring.redis.port": "{{ redis_port }}"'
       RedisExpiration: '"spring.redis.expiration": "{{ redis_expiration }}"'
       Auth0CustomNamespace: '"auth0.customNamespace": "{{ auth0_namespace }}"'
+      CryptoAHash: '"crypto.hash": "{{ crypto_hash }}"'
+      CryptoASalt: '"crypto.salt": "{{ crypto_salt }}"'
   register: secrets_manager_stack
 - debug:
     msg: "Secret manager stack outputs: {{ secrets_manager_stack.stack_outputs }}"
