@@ -29,6 +29,7 @@ db_password: !vault |
   35346433303230343436353136303137356435393663326462346363636462313263
 company_db_name: company
 document_db_name: document
+secret_db_name: secret
 rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
 # vars for redis
 cache_node_type: cache.t2.micro
@@ -37,11 +38,11 @@ redis_expiration: 36000
 # vars for eb
 eb_application_name: "{{stack_prefix}}-{{env}}"
 eb_environment_name: "{{stack_prefix}}-{{env}}"
-eb_java_platform: "64bit Amazon Linux 2018.03 v2.9.2 running Java 8"
+eb_java_platform: "64bit Amazon Linux 2018.03 v2.10.0 running Java 8"
 eb_instance_class: t2.micro
 eb_deploy_branch: master
 # vars for consul cluster
-bastion_security_groupId: sg-03bf20960c9c2405f # security group used for consul ssh connect source
+bastion_security_groupId: sg-0c8896330a1ddbac8 # security group used for consul ssh connect source
 consul_instance_type: t2.small
 consul_server_nodes: 3
 installed_consul_version: 1.6.0

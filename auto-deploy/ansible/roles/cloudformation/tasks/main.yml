@@ -91,10 +91,13 @@
     template: "roles/cloudformation/cfn/secrets-manager.yml"
     template_parameters:
       DeployEnv: "{{ env }}"
-      CompanyRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{{company_db_name}}?zeroDateTimeBehavior=convertToNull?serverTimezone=UTC"'
+      CompanyRdsUrl: '"spring.datasource.jdbc-url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{{company_db_name}}?zeroDateTimeBehavior=convertToNull?serverTimezone=UTC"'
+      SecretRdsUrl: '"spring.secret.datasource.jdbc-url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.SecretRdsEndpoint}}/{{secret_db_name}}?characterEncoding=utf-8"'
       DocumentRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{{document_db_name}}?zeroDateTimeBehavior=convertToNull?serverTimezone=UTC"'
       RdsUserName: '"spring.datasource.username": "{{ db_user }}"'
       RdsPassword: '"spring.datasource.password": "{{ db_password }}"'
+      SecretUserName: '"spring.datasource.secret.username": "{{ db_user }}"'
+      SecretPassword: '"spring.datasource.secret.password": "{{ db_password }}"'
       SendGridApiKey: '"sendGrid.apiKey": "{{ sendGrid_apiKey }}"'
       Auth0ClientId: '"auth0.clientId": "{{ auth0_clientId_management }}"'
       Auth0ClientSecret: '"auth0.clientSecret": "{{ auth0_client_secret_management }}"'
