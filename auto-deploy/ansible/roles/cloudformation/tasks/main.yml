@@ -110,6 +110,8 @@
       Auth0CustomNamespace: '"auth0.customNamespace": "{{ auth0_namespace }}"'
       CryptoAHash: '"crypto.hash": "{{ crypto_hash }}"'
       CryptoASalt: '"crypto.salt": "{{ crypto_salt }}"'
+      IndeedClipSecret: '"indeed.clip.secret": "{{ indeed_clip_secret }}"'
+      IndeedClipUrl: '"indeed.clip.url": "{{ indeed_clip_url }}"'
   register: secrets_manager_stack
 - debug:
     msg: "Secret manager stack outputs: {{ secrets_manager_stack.stack_outputs }}"
