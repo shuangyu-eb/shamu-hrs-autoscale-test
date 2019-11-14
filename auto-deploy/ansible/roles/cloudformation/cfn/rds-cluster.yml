@@ -4,13 +4,19 @@ Parameters:
     Type: String
   DocumentDBClusterName:
     Type: String
+  SecretDBClusterName:
+    Type: String
   CompanyDBInstanceName:
     Type: String
   DocumentDBInstanceName:
     Type: String
+  SecretDBInstanceName:
+    Type: String
   CompanyDatabaseName:
     Type: String
   DocumentDatabaseName:
+    Type: String
+  SecretDatabaseName:
     Type: String
   MasterUsername:
     Type: String
@@ -30,7 +36,7 @@ Parameters:
     Type: String
 Resources:
   CompanyRDSCluster:
-  # creates an Amazon Aurora DB cluster for company service
+    # creates an Amazon Aurora DB cluster for company service
     Type: AWS::RDS::DBCluster
     Properties:
       DBClusterIdentifier: !Ref CompanyDBClusterName
@@ -41,7 +47,7 @@ Resources:
       VpcSecurityGroupIds: [!GetAtt RdsSecurityGroup.GroupId]
       StorageEncrypted: true
   CompanyRDSDBInstance:
-  # creates an Amazon RDS DB instance for company service
+    # creates an Amazon RDS DB instance for company service
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
@@ -52,7 +58,7 @@ Resources:
       AvailabilityZone: !Ref AvailabilityZone
       DBInstanceClass: !Ref DBInstanceClass
   DocumentRDSCluster:
-  # creates an Amazon Aurora DB cluster for document service
+    # creates an Amazon Aurora DB cluster for document service
     Type: AWS::RDS::DBCluster
     Properties:
       DBClusterIdentifier: !Ref DocumentDBClusterName
@@ -63,7 +69,7 @@ Resources:
       VpcSecurityGroupIds: [!GetAtt RdsSecurityGroup.GroupId]
       StorageEncrypted: true
   DocumentRDSDBInstance:
-  # creates an Amazon RDS DB instance for document service
+    # creates an Amazon RDS DB instance for document service
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
@@ -73,8 +79,30 @@ Resources:
       PubliclyAccessible: true
       AvailabilityZone: !Ref AvailabilityZone
       DBInstanceClass: !Ref DBInstanceClass
+  SecretRDSCluster:
+    # creates an Amazon Aurora DB cluster for secret storage
+    Type: AWS::RDS::DBCluster
+    Properties:
+      DBClusterIdentifier: !Ref SecretDBClusterName
+      DatabaseName: !Ref SecretDatabaseName
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterUserPassword
+      Engine: aurora
+      VpcSecurityGroupIds: [!GetAtt RdsSecurityGroup.GroupId]
+      StorageEncrypted: true
+  SecretRDSDBInstance:
+    # creates an Amazon RDS DB instance for secret storage
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: aurora
+      DBClusterIdentifier:
+        Ref: SecretRDSCluster
+      DBInstanceIdentifier: !Ref SecretDBInstanceName
+      PubliclyAccessible: true
+      AvailabilityZone: !Ref AvailabilityZone
+      DBInstanceClass: !Ref DBInstanceClass
   RdsSecurityGroup:
-  # Specifies a vpc security group for rds cluster
+    # Specifies a vpc security group for rds cluster
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: !Ref RdsSecurityGroupName
@@ -85,7 +113,6 @@ Resources:
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
-
 Outputs:
   CompanyRdsEndpoint:
     Description: Company RDS endpoint
@@ -93,3 +120,6 @@ Outputs:
   DocumentRdsEndpoint:
     Description: Document RDS endpoint
     Value: !GetAtt DocumentRDSDBInstance.Endpoint.Address
+  SecretRdsEndpoint:
+    Description: secret RDS endpoint
+    Value: !GetAtt SecretRDSDBInstance.Endpoint.Address

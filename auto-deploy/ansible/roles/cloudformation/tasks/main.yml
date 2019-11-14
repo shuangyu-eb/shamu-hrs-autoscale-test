@@ -38,10 +38,13 @@
     template_parameters:
       CompanyDBClusterName: "{{ db_cluster_name }}-company"
       DocumentDBClusterName: "{{ db_cluster_name }}-document"
+      SecretDBClusterName: "{{ db_cluster_name }}-secret"
       CompanyDBInstanceName: "{{ db_instance_name }}-company"
       DocumentDBInstanceName: "{{ db_instance_name }}-document"
+      SecretDBInstanceName: "{{ db_instance_name }}-secret"
       CompanyDatabaseName: "{{ company_db_name }}"
       DocumentDatabaseName: "{{ document_db_name }}"
+      SecretDatabaseName: "{{ secret_db_name }}"
       MasterUsername: "{{ db_user }}"
       MasterUserPassword: "{{ db_password }}"
       AvailabilityZone: "{{ rds_availability_zone }}"
