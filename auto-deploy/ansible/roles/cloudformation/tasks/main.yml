@@ -110,6 +110,9 @@
       Auth0CustomNamespace: '"auth0.customNamespace": "{{ auth0_namespace }}"'
       CryptoAHash: '"crypto.hash": "{{ crypto_hash }}"'
       CryptoASalt: '"crypto.salt": "{{ crypto_salt }}"'
+      CompanySentry: '"sentry.dsn": "{{ company_sentry }}"'
+      DocumentSentry: '"sentry.dsn": "{{ document_sentry }}"'
+      GatewaySentry: '"sentry.dsn": "{{ gateway_sentry }}"'
   register: secrets_manager_stack
 - debug:
     msg: "Secret manager stack outputs: {{ secrets_manager_stack.stack_outputs }}"
