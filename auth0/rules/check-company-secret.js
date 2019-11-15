@@ -32,7 +32,7 @@ function (user, context, callback) {
     companyServiceConnection.end();
   }
 
-  const get_company_id = 'SELECT hex(company_id) FROM users WHERE id = unhex(?)';
+  const get_company_id = 'SELECT hex(company_id) as company_id FROM users WHERE id = unhex(?)';
 
   const user_id = user.app_metadata.id;
 
@@ -49,7 +49,7 @@ function (user, context, callback) {
 
     const { company_id } = results[0];
 
-    const get_company_hash = 'SELECT secret_hash FROM company_secrets WHERE company_id = ?';
+    const get_company_hash = 'SELECT secret_hash FROM company_secrets WHERE company_id = unhex(?)';
     secretConnection.query(get_company_hash, [company_id], function(err, results) {
       if (err) {
         closeConnections();
@@ -57,7 +57,7 @@ function (user, context, callback) {
       }
 
       if (results.length === 0) {
-        const add_company_secret_hash = 'INSERT INTO company_secrets (company_id, secret_hash) VALUES (?, ?)';
+        const add_company_secret_hash = 'INSERT INTO company_secrets (company_id, secret_hash) VALUES (unhex(?), ?)';
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(`${company_id}`, salt);
         secretConnection.query(add_company_secret_hash, [company_id, hash], function(err, results){
