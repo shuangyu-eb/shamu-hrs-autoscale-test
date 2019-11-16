@@ -112,7 +112,7 @@ auth0_domain: account.simplyhired.com
 auth0_database: hrs-data-store
 auth0_namespace: https://simplyhired.com
 auth0_audience: hrs-backend   # HRS backend api
-auth0_managementIdentifier: https://account.simplyhired.com/api/v2/   # Management api Identifier
+auth0_managementIdentifier: https://simplyhired-dev.auth0.com/api/v2/   # Management api Identifier
 hello_sign_api: https://api.hellosign.com
 hello_sign_clientId: VAULTTODO # VAULT TODO
 hello_sign_apiKey: VAULTTODO # VAULT TODO
