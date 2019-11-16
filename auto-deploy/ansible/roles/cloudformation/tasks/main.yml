@@ -50,6 +50,7 @@
       AvailabilityZone: "{{ rds_availability_zone }}"
       DBInstanceClass: "{{ db_instance_class }}"
       RdsSecurityGroupName: "{{ rds_security_group_name }}"
+      RdsWhiteListSecurityGroupGroupName: "{{ rds_security_group_name }}-whitelist"
       VpcId: "{{ vpc_id }}"
       VPCCIDR: "{{ vpc_cidr }}"
   register: rds_cluster_stack

@@ -30,6 +30,8 @@ Parameters:
     Type: String
   RdsSecurityGroupName:
     Type: String
+  RdsWhiteListSecurityGroupGroupName:
+    Type: String
   VpcId:
     Type: String
   VPCCIDR:
@@ -44,7 +46,7 @@ Resources:
       MasterUsername: !Ref MasterUsername
       MasterUserPassword: !Ref MasterUserPassword
       Engine: aurora
-      VpcSecurityGroupIds: [!GetAtt RdsSecurityGroup.GroupId]
+      VpcSecurityGroupIds: [!GetAtt RdsWhitelistSecurityGroup.GroupId]
       StorageEncrypted: true
   CompanyRDSDBInstance:
     # creates an Amazon RDS DB instance for company service
@@ -88,7 +90,7 @@ Resources:
       MasterUsername: !Ref MasterUsername
       MasterUserPassword: !Ref MasterUserPassword
       Engine: aurora
-      VpcSecurityGroupIds: [!GetAtt RdsSecurityGroup.GroupId]
+      VpcSecurityGroupIds: [!GetAtt RdsWhitelistSecurityGroup.GroupId]
       StorageEncrypted: true
   SecretRDSDBInstance:
     # creates an Amazon RDS DB instance for secret storage
@@ -110,6 +112,69 @@ Resources:
       VpcId: !Ref VpcId
       SecurityGroupIngress:
         - CidrIp: !Ref VPCCIDR
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+  RdsWhitelistSecurityGroup:
+    # Specifies a vpc security group for rds cluster
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Ref RdsWhiteListSecurityGroupGroupName
+      GroupDescription: RDS with whitelist security group for Shamu HRS instance
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - CidrIp: !Ref VPCCIDR
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      # Auth0 IPs
+      SecurityGroupIngress:
+        - CidrIp: 35.167.74.121
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      SecurityGroupIngress:
+        - CidrIp: 35.166.202.113
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      SecurityGroupIngress:
+        - CidrIp: 35.160.3.103
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      SecurityGroupIngress:
+        - CidrIp: 54.183.64.135
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      SecurityGroupIngress:
+        - CidrIp: 54.67.77.38
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      SecurityGroupIngress:
+        - CidrIp: 54.67.15.170
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      SecurityGroupIngress:
+        - CidrIp: 54.183.204.205
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      SecurityGroupIngress:
+        - CidrIp: 35.171.156.124
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      SecurityGroupIngress:
+        - CidrIp: 18.233.90.226
+          IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+      SecurityGroupIngress:
+        - CidrIp: 3.211.189.167
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
