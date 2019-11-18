@@ -14,5 +14,6 @@ SENTRY_DSN={{web_sentry}}
 HELLO_SIGN_CLIENT_ID={{hello_sign_clientId}}
 # please remove it for production
 HELLO_SIGN_TEST=true
-# If you add this token, users must verify it to access this website
+{% if verify_token is defined and verify_token | bool %}
 VERIFY_TOKEN={{verify_token}}
+{% endif %}
