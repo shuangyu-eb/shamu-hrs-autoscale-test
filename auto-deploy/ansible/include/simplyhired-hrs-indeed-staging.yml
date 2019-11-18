@@ -42,7 +42,7 @@ eb_java_platform: "64bit Amazon Linux 2018.03 v2.9.2 running Java 8"
 eb_instance_class: t2.micro
 eb_deploy_branch: master
 # vars for consul cluster
-bastion_security_groupId: sg-03bf20960c9c2405f # security group used for consul ssh connect source
+bastion_security_groupId: sg-0e63ab4c431733895 # security group used for consul ssh connect source
 consul_instance_type: t2.small
 consul_server_nodes: 3
 installed_consul_version: 1.6.0
