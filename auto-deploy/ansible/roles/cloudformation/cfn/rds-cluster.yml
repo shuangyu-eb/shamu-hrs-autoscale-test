@@ -129,52 +129,52 @@ Resources:
           ToPort: 3306
       # Auth0 IPs
       SecurityGroupIngress:
-        - CidrIp: 35.167.74.121
+        - CidrIp: 35.167.74.121/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
       SecurityGroupIngress:
-        - CidrIp: 35.166.202.113
+        - CidrIp: 35.166.202.113/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
       SecurityGroupIngress:
-        - CidrIp: 35.160.3.103
+        - CidrIp: 35.160.3.103/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
       SecurityGroupIngress:
-        - CidrIp: 54.183.64.135
+        - CidrIp: 54.183.64.135/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
       SecurityGroupIngress:
-        - CidrIp: 54.67.77.38
+        - CidrIp: 54.67.77.38/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
       SecurityGroupIngress:
-        - CidrIp: 54.67.15.170
+        - CidrIp: 54.67.15.170/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
       SecurityGroupIngress:
-        - CidrIp: 54.183.204.205
+        - CidrIp: 54.183.204.205/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
       SecurityGroupIngress:
-        - CidrIp: 35.171.156.124
+        - CidrIp: 35.171.156.124/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
       SecurityGroupIngress:
-        - CidrIp: 18.233.90.226
+        - CidrIp: 18.233.90.226/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
       SecurityGroupIngress:
-        - CidrIp: 3.211.189.167
+        - CidrIp: 3.211.189.167/32
           IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
