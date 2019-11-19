@@ -151,7 +151,7 @@ hello_sign_apiKey: !vault |
 
 crypto_hash: system-hash
 crypto_salt: 12ab
-
+system_email_address: no-reply@interviewed-qa.com
 
 company_sentry: !vault |
   $ANSIBLE_VAULT;1.1;AES256
