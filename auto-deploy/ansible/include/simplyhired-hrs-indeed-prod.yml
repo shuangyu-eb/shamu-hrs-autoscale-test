@@ -3,7 +3,7 @@ vpc_id: vpc-981454e2
 vpc_cidr: 172.31.0.0/16 # used for security group
 public_subnet: subnet-81e6d7dd # used to create a private subnet
 private_subnet_cidr: 172.31.96.0/20 # used to create a private subnet
-key_pair: hrs-production-deploy-server  # used to allow ssh connection
+key_pair: hrs-prod-deploy-server  # used to allow ssh connection
 region: us-east-1 # Virginia
 aws_deploy_access_key: 
 aws_deploy_secret_key: 
