@@ -117,7 +117,6 @@ hello_sign_api: https://api.hellosign.com
 hello_sign_clientId: VAULTTODO # VAULT TODO
 hello_sign_apiKey: VAULTTODO # VAULT TODO
 crypto_hash: system-hash
-crypto_salt: hrsprodsalt
 system_email_address: no-reply@simplyhired.com
 web_sentry_release: mvp
 web_sentry_env: prod

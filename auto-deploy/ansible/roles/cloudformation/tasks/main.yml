@@ -116,7 +116,6 @@
       RedisExpiration: '"spring.redis.expiration": "{{ redis_expiration }}"'
       Auth0CustomNamespace: '"auth0.customNamespace": "{{ auth0_namespace }}"'
       CryptoAHash: '"crypto.hash": "{{ crypto_hash }}"'
-      CryptoASalt: '"crypto.salt": "{{ crypto_salt }}"'
       IndeedClipSecret: '"indeed.clip.secret": "{{ indeed_clip_secret }}"'
       IndeedClipUrl: '"indeed.clip.url": "{{ indeed_clip_url }}"'
       CompanySentry: '"sentry.dsn": "{{ company_sentry }}"'
