@@ -13,6 +13,7 @@
       --password-helper-dot: #ff6600;
       --font-color: #2E3033;
       --grey-font: #7b7e84;
+      --error-font-color: #4a4a4a;
     }
 
     body {
@@ -33,6 +34,16 @@
       display: none;
     }
 
+    #privacy-policy-tip {
+      height: 12px;
+      margin-top: 15px;
+      margin-bottom: -10px;
+    }
+
+    #privacy-policy-tip > a {
+      font-size: 12px;
+      color: var(--blue);
+    }
 
     .navbar {
       width: 100%;
@@ -152,7 +163,7 @@
     .form-submit-button {
       display: flex;
       justify-content: center;
-      margin-top: 4px;
+      margin-top: 20px;
     }
 
     .form-submit-button button {
@@ -223,8 +234,12 @@
 
     .policy-description {
       margin-top: 0;
-      margin-bottom: 0;
+      margin-bottom: -10px;
       text-align: center;
+    }
+
+    .policy-description > a {
+      color: var(--blue);
     }
 
     .sign-up-password-helper-dot {
@@ -291,14 +306,32 @@
       display: none;
     }
 
-    #error-message {
+    #error-message-container > img {
+      height: 25px;
+      width: 25px;
+    }
+
+    #error-message-container {
       display: none;
-      width: 333px;
-      background-color: white;
-      margin-bottom: 10px;
-      border-radius: 12px;
+      align-items: center;
+      box-shadow: 0 0 8px var(--border-color);
+      position: fixed;
+      right: 15px;
+      top: 15px;
+      z-index: 99;
+      border-radius: 4px;
       padding: 15px 15px 15px 15px;
-      color: red;
+    }
+
+    #error-message {
+      display: block;
+      background-color: white;
+      border-radius: 12px;
+      color: var(--error-font-color);
+      padding-left: 8px;
+      padding-right: 8px;
+      font-family: "Roboto", sans-serif;
+      line-height: 1.5;
     }
 
     button[disabled] {
@@ -438,7 +471,11 @@
 </div>
 <div class="form-container">
   <div class="auth-form">
-    <div id="error-message">Get the wrong things.</div>
+    <div id="error-message-container">
+      <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNDhweCIgaGVpZ2h0PSI0OHB4IiB2aWV3Qm94PSIwIDAgNDggNDgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+aWNvbi13YXJuaW5nPC90aXRsZT4KICAgIDxkZXNjPjwvZGVzYz4KICAgIDxkZWZzPjwvZGVmcz4KICAgIDxnIGlkPSJpY29uLXdhcm5pbmciIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxwb2x5Z29uIGlkPSJTaGFwZSIgcG9pbnRzPSIwIDAgNDggMCA0OCA0OCAwIDQ4Ij48L3BvbHlnb24+CiAgICAgICAgPHBhdGggZD0iTTIyLDMwIEwyNiwzMCBMMjYsMzQgTDIyLDM0IEwyMiwzMCBaIE0yMiwxNCBMMjYsMTQgTDI2LDI2IEwyMiwyNiBMMjIsMTQgWiBNMjMuOTgsNCBDMTIuOTQsNCA0LDEyLjk2IDQsMjQgQzQsMzUuMDQgMTIuOTQsNDQgMjMuOTgsNDQgQzM1LjA0LDQ0IDQ0LDM1LjA0IDQ0LDI0IEM0NCwxMi45NiAzNS4wNCw0IDIzLjk4LDQgWiBNMjQsNDAgQzE1LjE2LDQwIDgsMzIuODQgOCwyNCBDOCwxNS4xNiAxNS4xNiw4IDI0LDggQzMyLjg0LDggNDAsMTUuMTYgNDAsMjQgQzQwLDMyLjg0IDMyLjg0LDQwIDI0LDQwIFoiIGlkPSJTaGFwZSIgZmlsbD0iI0QzMUUyRSIgZmlsbC1ydWxlPSJub256ZXJvIj48L3BhdGg+CiAgICA8L2c+Cjwvc3ZnPgo=" alt="warning" />
+      <div id="error-message">Invalid sign up.</div>
+    </div>
+
     <br>
     <div class="auth-form-center">
       <div id="sign-in-container">
@@ -479,6 +516,10 @@
           </div>
           <span class="form-tip" onclick="forgotPassword()">Forgot your password?</span>
           <span class="form-tip" onclick="showSignUp()">Create an organization account.</span>
+          <div class="line"></div>
+          <div class="form-tip" id="privacy-policy-tip">
+            <a href="https://hrs.interviewed-qa.com/privacy" target="_blank">Read our Privacy Policy.</a>
+          </div>
         </div>
       </div>
 
@@ -560,19 +601,19 @@
               </p>
             </div>
           </div>
+          <div class="service-and-policy">
+            <p class="policy-description">
+              By creating an account, you agree to SimplyHired&rsquo;s
+              <a href="https://hrs.interviewed-qa.com/privacy" target="_blank"> HRIS Service Privacy Policy</a>.
+              You also consent to receiving marketing messages from SimplyHired and may opt out from receiving such
+              messages by following the unsubscribe link in our messages or by contacting us at privacyoffice@simplyhired.com.
+            </p>
+          </div>
+          <div class="line"></div>
           <div class="form-submit-button">
             <button id="sign-up-button">Create Account</button>
           </div>
           <span class="form-tip" onclick="showSignIn()">Already have an employer account?</span>
-          <div class="line"></div>
-          <div class="service-and-policy">
-            <p class="policy-description">
-              By creating an account, you agree to SimplyHired’s HRIS
-              <a href="https://hrs.interviewed-qa.com/privacy" target="_blank"> Privacy Policy</a>.
-              You consent to receiving marketing messages from Interviewed and may opt out from receiving such
-              messages by following the unsubscribe link in our messages, or as detailed in our terms.
-            </p>
-          </div>
         </div>
       </div>
       <div id="verify-token-container">
@@ -619,7 +660,8 @@
     document.getElementById('sign-in-container').style.display = 'none';
 
     var token = getItem(tokenName);
-    if (token.trim() !== tokenValue.trim()) {
+    if (applicationDomain.indexOf('localhost') === -1 && applicationDomain.indexOf('127') === -1
+        && token.trim() !== tokenValue.trim()) {
       document.getElementById('sign-up-container').style.display = 'none';
       document.getElementById('verify-token-container').style.display = 'inline-block';
     } else {
@@ -778,9 +820,11 @@
     function displayError(err) {
       var errorMessage = document.getElementById('error-message');
       errorMessage.innerHTML = err.description;
-      errorMessage.style.display = 'inline-block';
+
+      var errorMessageContainer = document.getElementById('error-message-container');
+      errorMessageContainer.style.display = 'flex';
       setTimeout(function () {
-        errorMessage.style.display = 'none';
+        errorMessageContainer.style.display = 'none';
       }, 3000);
     }
 
