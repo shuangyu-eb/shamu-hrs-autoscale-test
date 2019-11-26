@@ -38,7 +38,7 @@ redis_expiration: 36000
 # vars for eb
 eb_application_name: "{{stack_prefix}}-{{env}}"
 eb_environment_name: "{{stack_prefix}}-{{env}}"
-eb_java_platform: "64bit Amazon Linux 2018.03 v2.10.0 running Java 8"
+eb_java_platform: "64bit Amazon Linux 2018.03 v2.10.1 running Java 8"
 eb_instance_class: t2.micro
 eb_deploy_branch: master
 # vars for consul cluster

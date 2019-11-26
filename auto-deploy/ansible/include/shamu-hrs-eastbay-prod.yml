@@ -48,7 +48,7 @@ db_password: !vault |
   3466
 company_db_name: company
 document_db_name: document
-secret_db_name: "{{stack_prefix}}-secret-{{env}}"
+secret_db_name: secret
 rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
 # vars for redis
 cache_node_type: cache.t2.micro
@@ -57,7 +57,7 @@ redis_expiration: 36000
 # vars for eb
 eb_application_name: "{{stack_prefix}}-{{env}}"
 eb_environment_name: "{{stack_prefix}}-{{env}}"
-eb_java_platform: "64bit Amazon Linux 2018.03 v2.10.0 running Java 8"
+eb_java_platform: "64bit Amazon Linux 2018.03 v2.10.1 running Java 8"
 eb_instance_class: t2.micro
 eb_deploy_branch: v1
 # vars for consul cluster
@@ -69,16 +69,19 @@ installed_consul_version: 1.6.0
 company_repository_name: "{{stack_prefix}}-{{env}}-company-service"
 document_repository_name: "{{stack_prefix}}-{{env}}-document-service"
 search_repository_name: "{{stack_prefix}}-{{env}}-search-service"
+logging_repository_name: "{{stack_prefix}}-{{env}}-logging-service"
 # vars for ecs
 company_cluster_name: "{{stack_prefix}}-{{env}}-company"
 document_cluster_name: "{{stack_prefix}}-{{env}}-document"
 search_cluster_name: "{{stack_prefix}}-{{env}}-search"
+logging_cluster_name: "{{stack_prefix}}-{{env}}-logging"
 ecs_instance_type: t2.medium
 ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
 cluster_size: 2
 company_service_name: "{{stack_prefix}}-{{env}}-company-service"
 document_service_name: "{{stack_prefix}}-{{env}}-document-service"
 search_service_name: "{{stack_prefix}}-{{env}}-search-service"
+logging_service_name: "{{stack_prefix}}-{{env}}-logging-service"
 desired_count: 1
 command: --spring.profiles.active={{env}}
 # others
@@ -160,7 +163,7 @@ company_sentry: !vault |
   3833633766346537650a393335613933363463303464343262326530396137396265323264323935
   35323833353534326332376131636435366666663866646661633035313530656437613136636461
   36383063323230323164353062636661633365356263333438316631623235306635633764353535
-  33363431333434343363363566616162326
+  333634313334343433633635666161623261
 
 document_sentry: !vault |
   $ANSIBLE_VAULT;1.1;AES256
@@ -181,3 +184,11 @@ gateway_sentry: !vault |
   34663032643431616134343063333064636235323562376438303065636132376630303634623530
   33396430626236393762376364313336383233313062653430343432323037366432373461666531
   383937633838656235313863656666383239
+
+# add for running on v1
+aws_deploy_security_token:
+web_sentry_release: mvp
+web_sentry_env: prod
+web_sentry:
+indeed_clip_url:  # URL TODO
+indeed_clip_secret: # SECRET TODO
