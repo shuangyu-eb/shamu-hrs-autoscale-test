@@ -268,9 +268,9 @@ Resources:
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: ecs
           PortMappings:
-            - HostPort: 9002
+            - HostPort: 9003
               Protocol: tcp
-              ContainerPort: 9002
+              ContainerPort: 9003
           Command:
             - !Ref Command
           Cpu: 0
