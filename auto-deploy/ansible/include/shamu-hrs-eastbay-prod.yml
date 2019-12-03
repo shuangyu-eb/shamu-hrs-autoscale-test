@@ -192,3 +192,4 @@ web_sentry_env: prod
 web_sentry:
 indeed_clip_url:  # URL TODO
 indeed_clip_secret: # SECRET TODO
+enable_logging: false
