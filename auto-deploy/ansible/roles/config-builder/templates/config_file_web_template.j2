@@ -17,3 +17,6 @@ HELLO_SIGN_TEST=true
 {% if verify_token is defined and verify_token | bool %}
 VERIFY_TOKEN={{verify_token}}
 {% endif %}
+{% if enable_logging is defined and enable_logging | bool %}
+ENABLE_LOGGING={{enable_logging}}
+{% endif %}
