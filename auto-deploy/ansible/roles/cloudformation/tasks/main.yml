@@ -80,6 +80,9 @@
     region: "{{ region }}"
     state: "present"
     template: "roles/cloudformation/cfn/iam-roles.yml"
+    template_parameters:
+      StackPrefix: "{{ stack_prefix }}"
+      Env: "{{ env }}"
   register: iam_roles_stack
 - debug:
     msg: "IAM roles stack outputs: {{ iam_roles_stack.stack_outputs }}"

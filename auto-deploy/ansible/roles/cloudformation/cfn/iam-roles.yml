@@ -1,9 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  StackPrefix:
+    Type: String
+  Env:
+    Type: String
 Resources:
   EcsInstanceRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ecsInstanceRole-shamu-hrs
+      RoleName: !Sub ecsInstanceRole-${StackPrefix}-${Env}
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -18,13 +23,13 @@ Resources:
   EcsInstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      InstanceProfileName: ecsInstanceProfile-shamu-hrs
+      InstanceProfileName: !Sub ecsInstanceProfile-${StackPrefix}-${Env}
       Roles:
         - !Ref EcsInstanceRole
   EcsTaskExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ecsTaskExecutionRole-shamu-hrs
+      RoleName: !Sub ecsTaskExecutionRole-${StackPrefix}-${Env}
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -42,7 +47,7 @@ Resources:
   ApplicationAutoScalingRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: applicationAutoScalingRole-shamu-hrs
+      RoleName: !Sub applicationAutoScalingRole-${StackPrefix}-${Env}
       AssumeRolePolicyDocument:
         Statement:
           - Action:
