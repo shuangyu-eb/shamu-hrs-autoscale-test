@@ -820,7 +820,15 @@
 
     function displayError(err) {
       var errorMessage = document.getElementById('error-message');
-      errorMessage.innerHTML = err.description;
+      switch (err.code) {
+        case 'invalid_password':
+          errorMessage.innerHTML = 'Password is too weak.'; break;
+        case 'user_exists':
+        case 'invalid_user_password':
+          errorMessage.innerHTML = err.description; break;
+        default:
+          errorMessage.innerHTML = 'Unknown error.';
+      }
 
       var errorMessageContainer = document.getElementById('error-message-container');
       errorMessageContainer.style.display = 'flex';
