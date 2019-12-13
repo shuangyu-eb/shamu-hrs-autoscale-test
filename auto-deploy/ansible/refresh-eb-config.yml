@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+
+  - name: include variables from file
+    include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
+
+  - name: create AWS CloudFormation Stack
+    include_role:
+      name: 'eb-config-refresh'
