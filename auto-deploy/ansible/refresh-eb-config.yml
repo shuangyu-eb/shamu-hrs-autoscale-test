@@ -7,6 +7,17 @@
   - name: include variables from file
     include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
 
-  - name: create AWS CloudFormation Stack
-    include_role:
-      name: 'eb-config-refresh'
+  - name: Create eb init config file directory
+    file:
+      path: "{{ workspace }}/shamu-hrs-gateway/.elasticbeanstalk"
+      state: directory
+      mode: 0755
+  - debug:
+      msg: "EB init config file directory created"
+
+  - name: Create eb init config file for gateway
+    template:
+      src: ./roles/config-builder/templates/eb_init_file_template.j2
+      dest: "{{ workspace }}/shamu-hrs-gateway/.elasticbeanstalk/config.yml"
+  - debug:
+      msg: "EB init config file created"
