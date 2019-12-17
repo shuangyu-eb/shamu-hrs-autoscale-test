@@ -10,11 +10,6 @@
   - name: Simulates AWS configure on the deploy server
     include_role:
       name: 'aws-cli'
-      apply:
-        tags:
-          - 'aws-cli'
-    tags:
-      - 'always'
 
   - name: create project config and deploy files
     include_role:
@@ -28,9 +23,3 @@
   - name: create AWS CloudFormation Stack
     include_role:
       name: 'cloudformation'
-      apply:
-        tags:
-          - 'cloudformation'
-    tags:
-      - 'always'
-
