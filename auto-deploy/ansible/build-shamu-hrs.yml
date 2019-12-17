@@ -6,6 +6,8 @@
 
   - name: include variables from file
     include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
+    tags:
+      - 'always'
 
   - name: Simulates AWS configure on the deploy server
     include_role:
