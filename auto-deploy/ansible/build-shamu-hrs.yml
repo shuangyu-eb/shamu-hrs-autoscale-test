@@ -12,25 +12,25 @@
       name: 'aws-cli'
       apply:
         tags:
-          - aws-cli
+          - 'aws-cli'
     tags:
-      - always
+      - 'always'
 
   - name: create project config and deploy files
     include_role:
       name: 'config-builder'
       apply:
         tags:
-          - config-builder
+          - 'config-builder'
     tags:
-      - always
+      - 'always'
 
   - name: create AWS CloudFormation Stack
     include_role:
       name: 'cloudformation'
       apply:
         tags:
-          - cloudformation
+          - 'cloudformation'
     tags:
-      - always
+      - 'always'
 
