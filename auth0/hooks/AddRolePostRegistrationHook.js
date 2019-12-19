@@ -34,10 +34,19 @@ module.exports = function (user, context, cb) {
   const applicationDomain = 'XXXXXXXXXXXXXXXXXX';
 
   let targetRole = 'EMPLOYEE';
-  const userMetadata = user.user_metadata || {};
-  const role = userMetadata.role;
-  if (role) {
+
+  const appMetadata = user.app_metadata || {};
+  const idVerified = appMetadata.idVerified;
+  const role = appMetadata.role;
+
+  if (role && idVerified) {
+    if (role == 'SUPER_ADMIN') {
+      return cb(new Error("Unauthorized creation of super admin user."));
+    }
+
     targetRole = role;
+  } else if (!role && !idVerified) {
+    targetRole = 'ADMIN';
   }
 
   if (context.connection.name === databaseName) {
@@ -82,13 +91,13 @@ module.exports = function (user, context, cb) {
               }
             });
       }).then(() => {
-        if (userMetadata) {
-          delete userMetadata.role;
+        if (appMetadata) {
+          delete appMetadata.role;
         }
 
         return axios.patch(
             `https://${applicationDomain}/api/v2/users/auth0|${user.id}`,
-            { "user_metadata": userMetadata },
+            { "app_metadata": appMetadata },
             {
               headers: {
                 "cache-control": "no-cache",
