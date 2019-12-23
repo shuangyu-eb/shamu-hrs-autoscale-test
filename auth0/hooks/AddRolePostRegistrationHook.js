@@ -24,14 +24,15 @@
 module.exports = function (user, context, cb) {
   const axios = require('axios@0.18.0');
 
-  const databaseName = 'XXXXXX';
+  // Be sure to add these secrets into the Auth0 hooks secret manager.
+  const databaseName = context.webtask.secrets.db_name;
   // applicationClientId and applicationClientSecret are from a machine-to-machine application
   // which has permission of management api.
-  const applicationClientId = 'XXXXXXXXXXXXXX';
-  const applicationClientSecret = 'XXXXXXXXXXXXXXXXXXXXXXXX';
+  const applicationClientId = context.webtask.secrets.client_id;
+  const applicationClientSecret = context.webtask.secrets.client_secret;
   const grantType = 'client_credentials';
   // Domain of your spa application without prefix like http/https
-  const applicationDomain = 'XXXXXXXXXXXXXXXXXX';
+  const applicationDomain = context.webtask.secrets.domain;
 
   let targetRole = 'EMPLOYEE';
 
