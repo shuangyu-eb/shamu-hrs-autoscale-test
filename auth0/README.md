@@ -1,3 +1,5 @@
+This subdirectory is currently only used to store hooks of Auth0 as auth0-deploy-cli doesn't contain  hooks. All other information will be contained in repository shamu-hrs-auth0-deploy-config which is used by auth0-deploy-cli. 
+
 #### Custom Domain  
 To use custom domain, there are several steps to go through:  
 1. Make sure that `Custom Domains` has been configured and verified from [Tenant Settings](https://manage.auth0.com/#/tenant).  
