@@ -6,6 +6,8 @@
 
   - name: include variables from file
     include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
+    tags:
+      - 'always'
 
   - name: Simulates AWS configure on the deploy server
     include_role:
@@ -14,8 +16,12 @@
   - name: create project config and deploy files
     include_role:
       name: 'config-builder'
+      apply:
+        tags:
+          - 'config-builder'
+    tags:
+      - 'always'
 
   - name: create AWS CloudFormation Stack
     include_role:
       name: 'cloudformation'
-

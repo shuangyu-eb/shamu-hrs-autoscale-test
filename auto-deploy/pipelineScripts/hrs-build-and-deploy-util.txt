@@ -1,0 +1,74 @@
+def getRelease
+def getEnvironment
+
+pipeline {
+   agent any
+
+   stages {
+       stage('parallel build and deploy') {
+            parallel {
+            stage('Shamu-hrs-company-deploy') {
+                steps {
+                    dir(path: "${params.HRS_WORKSPACE}/shamu-hrs-company-service") {
+                        sh "git checkout ${params.RELEASE} && sudo bin/deploy ${params.ENV}"
+                    }
+                }
+            }
+            stage('Shamu-hrs-gateway-deploy') {
+                steps {
+                    script { env = sh(returnStdout: true, script: "echo ${params.ENV} | sed 's/^.*-//'") }
+                    script { stack_prefix = sh(returnStdout: true, script: """ echo ${params.ENV} | sed 's/-[^-]*\$//' """)}
+                    dir(path: "${params.HRS_WORKSPACE}") {
+                        // Add current branch info into .elasticbeanstalk/config.yml.
+                        sh "sudo ansible-playbook --vault-password-file password -e 'stack_prefix=${stack_prefix} env=${env} workspace=${params.HRS_WORKSPACE} eb_deploy_branch=heads/${params.RELEASE}' shamu-hrs/auto-deploy/ansible/refresh-eb-config.yml"
+                    }
+                    dir(path: "${params.HRS_WORKSPACE}/shamu-hrs-gateway") {
+                        sh "git checkout master"
+                        // TODO refactor
+                        sh """
+                            if [ ${params.RELEASE} = master ]
+                            then
+                                echo 'Already in branch master.'
+                            elif [ `git branch --list ${params.RELEASE}` ]
+                            then
+                                git checkout ${params.RELEASE}
+                            else
+                                git checkout -b ${params.RELEASE} ${params.RELEASE}
+                            fi
+                            """
+                        sh "sudo bin/deploy ${env}"
+                    }
+                }
+            }
+            stage('Shamu-hrs-document-deploy') {
+                steps {
+                    dir(path: "${params.HRS_WORKSPACE}/shamu-hrs-document-service") {
+                        sh "git checkout ${params.RELEASE} && sudo bin/deploy ${params.ENV}"
+                    }
+                }
+            }
+            stage('Shamu-hrs-logging-deploy') {
+                steps {
+                    dir(path: "${params.HRS_WORKSPACE}/shamu-hrs-logging-service") {
+                        sh "git checkout ${params.RELEASE} && sudo bin/deploy ${params.ENV}"
+                    }
+                }
+            }
+            stage('Shamu-hrs-search-deploy') {
+                steps {
+                    dir(path: "${params.HRS_WORKSPACE}/shamu-hrs-search-service") {
+                        sh "git checkout ${params.RELEASE} && sudo bin/deploy ${params.ENV}"
+                    }
+                }
+            }
+            stage('Shamu-hrs-web-deploy') {
+                steps {
+                    dir(path: "${params.HRS_WORKSPACE}/shamu-hrs-web") {
+                        sh "git checkout ${params.RELEASE} && sudo bin/deploy ${params.ENV}"
+                    }
+                }
+            }
+           }
+       }
+   }
+}
