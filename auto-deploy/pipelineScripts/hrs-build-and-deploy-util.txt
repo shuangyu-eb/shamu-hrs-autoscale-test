@@ -23,16 +23,10 @@ pipeline {
                         sh "sudo ansible-playbook --vault-password-file password -e 'stack_prefix=${stack_prefix} env=${env} workspace=${params.HRS_WORKSPACE} eb_deploy_branch=heads/${params.RELEASE}' shamu-hrs/auto-deploy/ansible/refresh-eb-config.yml"
                     }
                     dir(path: "${params.HRS_WORKSPACE}/shamu-hrs-gateway") {
-                        script { MASTER = sh(returnStdout: true, script:''' git branch | grep '^*\\?\\s*master$'  ''')}
                         sh """
-                            git checkout origin/master
-                            if [ -n "${MASTER}" ] & [ "${params.RELEASE}" = "origin/master" ]
+                            if [ -z `git branch | grep '^*\\?\\s*${params.RELEASE}\$'` ]
                             then
-                                git branch -D master
-                                git checkout -b master ${params.RELEASE}
-                            elif [ -z "${MASTER}" ] & [ "${params.RELEASE}" = "origin/master" ]
-                            then
-                                git git checkout -b master ${params.RELEASE}
+                                git checkout -b ${params.RELEASE} ${params.RELEASE}
                             else
                                 git branch -D ${params.RELEASE}
                                 git checkout -b ${params.RELEASE} ${params.RELEASE}

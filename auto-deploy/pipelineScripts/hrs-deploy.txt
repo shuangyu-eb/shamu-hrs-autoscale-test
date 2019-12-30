@@ -60,7 +60,7 @@ pipeline {
           steps {
               script {
                   if (getRelease['RELEASE'] == "master") {
-                      getRelease['RELEASE']="origin/master"
+                      getRelease['RELEASE']="remotes/origin/master"
                   }
               }
               build job: 'hrs-build-and-deploy-util',

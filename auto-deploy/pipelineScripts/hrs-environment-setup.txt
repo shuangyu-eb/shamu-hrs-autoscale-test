@@ -62,7 +62,7 @@ pipeline {
                }
                script {
                   if (getRelease['RELEASE'] == "master") {
-                      getRelease['RELEASE']="origin/master"
+                      getRelease['RELEASE']="remotes/origin/master"
                   }
                 }
                // build and deploy hrs
