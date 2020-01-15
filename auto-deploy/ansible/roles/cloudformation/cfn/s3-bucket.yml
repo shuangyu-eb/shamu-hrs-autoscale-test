@@ -3,6 +3,8 @@ Description: Create S3 bucket with appropriate CORS permissions for SHAMU HRS in
 Parameters:
   WebBucketName:
     Type: String
+  WebArtifactName:
+    Type: String
   DocumentBucketName:
     Type: String
   CompanyBucketName:
@@ -63,6 +65,12 @@ Resources:
                 - - !GetAtt WebBucket.Arn
                   - '/*'
             Principal: '*'
+    WebArtifactBucket:
+      # creates an Amazon S3 bucket for shamu-hrs-web artifacts
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: Private
+        BucketName: !Ref WebArtifactName
     DocumentBucket:
     # creates an Amazon S3 bucket for shamu-hrs-document
       Type: AWS::S3::Bucket
@@ -152,5 +160,7 @@ Outputs:
     Value: !GetAtt DocumentBucket.Arn
   CompanyBucketArn:
     Value: !GetAtt CompanyBucket.Arn
+  WebArtifactBucketArn:
+    Value: !GetAtt WebArtifactBucket.Arn
 
 

@@ -20,6 +20,7 @@
     template: "roles/cloudformation/cfn/s3-bucket.yml"
     template_parameters:
       WebBucketName: "{{ stack_prefix }}-{{ env }}-web"
+      WebArtifactName: "{{ stack_prefix }}-{{ env }}-web-artifact"
       DocumentBucketName: "{{ stack_prefix }}-{{ env }}-document"
       CompanyBucketName: "{{ stack_prefix }}-{{ env }}-company"
       HrsDomain: "{{ hrs_domain }}"
