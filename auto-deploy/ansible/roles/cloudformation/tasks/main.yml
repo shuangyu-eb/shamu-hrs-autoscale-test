@@ -141,6 +141,7 @@
       SolutionStackName: "{{ eb_java_platform }}"
       Ec2KeyPair: "{{ key_pair }}"
       InstanceType: "{{ eb_instance_class }}"
+      HRSEnvironment: "{{ hrs_environment }}"
   register: elastic_beanstalk_stack
 - debug:
     msg: "elastic beanstalk stack output: {{ elastic_beanstalk_stack.stack_outputs }}"

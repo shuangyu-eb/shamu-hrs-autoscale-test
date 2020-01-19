@@ -54,6 +54,7 @@ eb_environment_name: "{{stack_prefix}}-{{env}}"
 eb_java_platform: "64bit Amazon Linux 2018.03 v2.10.1 running Java 8"
 eb_instance_class: t2.micro
 eb_deploy_branch: master
+hrs_environment: qa
 # vars for consul cluster
 bastion_security_groupId: sg-6588de1c # security group used for consul ssh connect source
 consul_instance_type: t2.small

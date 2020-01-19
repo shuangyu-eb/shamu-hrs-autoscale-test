@@ -5,6 +5,8 @@ Parameters:
     Type: String
   Environment:
     Type: String
+  HRSEnvironment:
+    Type: String
   SolutionStackName:
     Type: String
   Ec2KeyPair:
@@ -61,6 +63,9 @@ Resources:
         - Namespace: aws:elasticbeanstalk:xray
           OptionName: XRayEnabled
           Value: false
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: ENV
+          Value: !Ref HRSEnvironment
 Outputs:
   ShamuHRS:
     Description: Elastic Beanstalk application name
