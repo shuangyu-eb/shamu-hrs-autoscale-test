@@ -77,6 +77,13 @@
 - debug:
     msg: "EB extension config file for nginx created"
 
+- name: Create eb extention config file for getting environment_variable
+  template:
+    src: ../templates/eb_extention_file_template_for_environment_variable.j2
+    dest: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/env/get-env.config"
+- debug:
+    msg: "EB extension config file for nginx created"
+
 - name: Create eb init config file for gateway
   template:
     src: ../templates/eb_init_file_template.j2
