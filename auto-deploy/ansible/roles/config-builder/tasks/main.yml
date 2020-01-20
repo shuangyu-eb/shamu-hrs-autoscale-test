@@ -75,7 +75,7 @@
   template:
     src: ../templates/eb_extension_file_template_for_consul.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/consul/consul-client-install-and-run.config"
-  debug:
+- debug:
     msg: "EB extension config file for consul created"
 
 - name: Create eb extension config file for nginx
