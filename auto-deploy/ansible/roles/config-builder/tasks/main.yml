@@ -71,23 +71,23 @@
 - debug:
     msg: "EB extension env config file directory created"
 
-- name: Create eb extention config file for consul
+- name: Create eb extension config file for consul
   template:
-    src: ../templates/eb_extention_file_template_for_consul.j2
+    src: ../templates/eb_extension_file_template_for_consul.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/consul/consul-client-install-and-run.config"
-- debug:
+  debug:
     msg: "EB extension config file for consul created"
 
-- name: Create eb extention config file for nginx
+- name: Create eb extension config file for nginx
   template:
-    src: ../templates/eb_extention_file_template_for_nginx.j2
+    src: ../templates/eb_extension_file_template_for_nginx.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/nginx/conf.d/customConf.conf"
 - debug:
     msg: "EB extension config file for nginx created"
 
-- name: Create eb extention config file for getting environment_variable
+- name: Create eb extension config file for getting environment_variable
   template:
-    src: ../templates/eb_extention_file_template_for_environment_variable.j2
+    src: ../templates/eb_extension_file_template_for_environment_variable.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/env/get-env.config"
 - debug:
     msg: "EB extension config file for env created"
