@@ -63,6 +63,14 @@
 - debug:
     msg: "EB init config file directory created"
 
+- name: Create eb extension env config file directory
+  file:
+    path: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/env"
+    state: directory
+    mode: 0755
+- debug:
+    msg: "EB extension env config file directory created"
+
 - name: Create eb extention config file for consul
   template:
     src: ../templates/eb_extention_file_template_for_consul.j2
@@ -82,7 +90,7 @@
     src: ../templates/eb_extention_file_template_for_environment_variable.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/env/get-env.config"
 - debug:
-    msg: "EB extension config file for nginx created"
+    msg: "EB extension config file for env created"
 
 - name: Create eb init config file for gateway
   template:
