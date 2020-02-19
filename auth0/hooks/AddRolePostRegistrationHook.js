@@ -93,7 +93,7 @@ module.exports = function (user, context, cb) {
             });
       }).then(() => {
         if (appMetadata) {
-          delete appMetadata.role;
+          appMetadata.role = null;
         }
 
         return axios.patch(
