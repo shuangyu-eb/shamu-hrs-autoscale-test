@@ -147,7 +147,7 @@ hello_sign_apiKey: !vault |
   32376635323938333338366239613137626135303232353536646433376565333364363039346365
   37393333633532333032
 crypto_hash: system-hash
-system_email_address: no-reply@simplyhired-qa.com
+system_email_address: no-reply@hr.simplyhired-qa.com
 
 company_sentry: !vault |
   $ANSIBLE_VAULT;1.1;AES256
