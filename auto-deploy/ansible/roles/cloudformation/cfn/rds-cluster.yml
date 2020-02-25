@@ -56,7 +56,7 @@ Resources:
       DBClusterIdentifier:
         Ref: CompanyRDSCluster
       DBInstanceIdentifier: !Ref CompanyDBInstanceName
-      PubliclyAccessible: true
+      PubliclyAccessible: false
       AvailabilityZone: !Ref AvailabilityZone
       DBInstanceClass: !Ref DBInstanceClass
   DocumentRDSCluster:
@@ -78,7 +78,7 @@ Resources:
       DBClusterIdentifier:
         Ref: DocumentRDSCluster
       DBInstanceIdentifier: !Ref DocumentDBInstanceName
-      PubliclyAccessible: true
+      PubliclyAccessible: false
       AvailabilityZone: !Ref AvailabilityZone
       DBInstanceClass: !Ref DBInstanceClass
   SecretRDSCluster:
@@ -100,7 +100,7 @@ Resources:
       DBClusterIdentifier:
         Ref: SecretRDSCluster
       DBInstanceIdentifier: !Ref SecretDBInstanceName
-      PubliclyAccessible: true
+      PubliclyAccessible: false
       AvailabilityZone: !Ref AvailabilityZone
       DBInstanceClass: !Ref DBInstanceClass
   RdsSecurityGroup:
