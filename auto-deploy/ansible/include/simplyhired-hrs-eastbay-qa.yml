@@ -71,7 +71,7 @@ document_cluster_name: "{{stack_prefix}}-{{env}}-document"
 search_cluster_name: "{{stack_prefix}}-{{env}}-search"
 logging_cluster_name: "{{stack_prefix}}-{{env}}-logging"
 ecs_instance_type: t2.medium
-ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
+ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
 cluster_size: 2
 company_service_name: "{{stack_prefix}}-{{env}}-company-service"
 document_service_name: "{{stack_prefix}}-{{env}}-document-service"

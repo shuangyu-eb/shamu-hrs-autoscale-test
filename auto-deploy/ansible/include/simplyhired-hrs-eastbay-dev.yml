@@ -23,7 +23,6 @@ aws_deploy_secret_key: !vault |
 # vars for S3
 s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.amazonaws.com/
 s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.amazonaws.com/
-verify_token:
 hrs_domain: https://hr.simplyhired-dev.com
 proxy_domain: https://hr-api.simplyhired-dev.com # gateway address
 website_end_point: https://hr.simplyhired-dev.com
@@ -57,7 +56,7 @@ eb_deploy_branch: master
 hrs_environment: dev
 # vars for consul cluster
 bastion_security_groupId: sg-6588de1c # security group used for consul ssh connect source
-consul_instance_type: t2.small
+consul_instance_type: t2.micro
 consul_server_nodes: 3
 installed_consul_version: 1.6.0
 # vars for ecr
@@ -70,8 +69,8 @@ company_cluster_name: "{{stack_prefix}}-{{env}}-company"
 document_cluster_name: "{{stack_prefix}}-{{env}}-document"
 search_cluster_name: "{{stack_prefix}}-{{env}}-search"
 logging_cluster_name: "{{stack_prefix}}-{{env}}-logging"
-ecs_instance_type: t2.medium
-ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
+ecs_instance_type: t2.small
+ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
 cluster_size: 2
 company_service_name: "{{stack_prefix}}-{{env}}-company-service"
 document_service_name: "{{stack_prefix}}-{{env}}-document-service"
