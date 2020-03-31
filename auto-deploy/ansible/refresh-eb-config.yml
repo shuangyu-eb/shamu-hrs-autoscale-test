@@ -17,7 +17,7 @@
 
   - name: Create eb init config file for gateway
     template:
-      src: ./roles/config-builder/templates/eb_init_file_template.j2
+      src: templates/config-templates/eb_init_file_template.j2
       dest: "{{ workspace }}/shamu-hrs-gateway/.elasticbeanstalk/config.yml"
   - debug:
       msg: "EB init config file created"

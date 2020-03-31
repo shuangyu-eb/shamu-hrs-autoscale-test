@@ -28,3 +28,6 @@
 /public/
 **/node_modules/**
 **/function.zip
+
+# MAC
+**/.DS_Store

@@ -1,48 +1,48 @@
 - name: Create config file for company service
   template:
-    src: ../templates/config_file_company_template.j2
+    src: templates/config-templates/config_file_company_template.j2
     dest: "{{ workspace }}/shamu-hrs-company-service/config/application-{{ env }}.yml"
 - debug:
     msg: "Company service config file created"
 
 - name: Create deploy file for company service
   template:
-    src: ../templates/deploy_file_company_template.j2
+    src: templates/config-templates/deploy_file_company_template.j2
     dest: "{{ workspace }}/shamu-hrs-company-service/config/{{ stack_prefix }}-{{ env }}"
 - debug:
     msg: "Company service deploy file created"
 
 - name: Create config file for document service
   template:
-    src: ../templates/config_file_document_template.j2
+    src: templates/config-templates/config_file_document_template.j2
     dest: "{{ workspace }}/shamu-hrs-document-service/config/application-{{ env }}.yml"
 - debug:
     msg: "Document service config file created"
 
 - name: Create deploy file for document service
   template:
-    src: ../templates/deploy_file_document_template.j2
+    src: templates/config-templates/deploy_file_document_template.j2
     dest: "{{ workspace }}/shamu-hrs-document-service/config/{{ stack_prefix }}-{{ env }}"
 - debug:
     msg: "Document service deploy file created"
 
 - name: Create config file for front-end
   template:
-    src: ../templates/config_file_web_template.j2
+    src: templates/config-templates/config_file_web_template.j2
     dest: "{{ workspace }}/shamu-hrs-web/config/{{ env }}.env"
 - debug:
     msg: "front-end config file created"
 
 - name: Create deploy file for front-end
   template:
-    src: ../templates/deploy_file_web_template.j2
+    src: templates/config-templates/deploy_file_web_template.j2
     dest: "{{ workspace }}/shamu-hrs-web/config/{{ stack_prefix }}-{{ env }}"
 - debug:
     msg: "front-end deploy file created"
 
 - name: Create config file for gateway service
   template:
-    src: ../templates/config_file_gateway_template.j2
+    src: templates/config-templates/config_file_gateway_template.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/src/main/resources/application-{{ env }}.yml"
 - debug:
     msg: "Gateway service config file created"
@@ -73,56 +73,56 @@
 
 - name: Create eb extension config file for consul
   template:
-    src: ../templates/eb_extension_file_template_for_consul.j2
+    src: templates/config-templates/eb_extension_file_template_for_consul.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/consul/consul-client-install-and-run.config"
 - debug:
     msg: "EB extension config file for consul created"
 
 - name: Create eb extension config file for nginx
   template:
-    src: ../templates/eb_extension_file_template_for_nginx.j2
+    src: templates/config-templates/eb_extension_file_template_for_nginx.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/nginx/conf.d/customConf.conf"
 - debug:
     msg: "EB extension config file for nginx created"
 
 - name: Create eb extension config file for getting environment_variable
   template:
-    src: ../templates/eb_extension_file_template_for_environment_variable.j2
+    src: templates/config-templates/eb_extension_file_template_for_environment_variable.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/.ebextensions/env/get-env.config"
 - debug:
     msg: "EB extension config file for env created"
 
 - name: Create eb init config file for gateway
   template:
-    src: ../templates/eb_init_file_template.j2
+    src: templates/config-templates/eb_init_file_template.j2
     dest: "{{ workspace }}/shamu-hrs-gateway/.elasticbeanstalk/config.yml"
 - debug:
     msg: "EB init config file created"
 
 - name: Create config file for search service
   template:
-    src: ../templates/config_file_search_template.j2
+    src: templates/config-templatess/config_file_search_template.j2
     dest: "{{ workspace }}/shamu-hrs-search-service/config/application-{{ env }}.yml"
 - debug:
     msg: "Search service config file created"
 
 - name: Create deploy file for search service
   template:
-    src: ../templates/deploy_file_search_template.j2
+    src: templates/config-templates/deploy_file_search_template.j2
     dest: "{{ workspace }}/shamu-hrs-search-service/config/{{ stack_prefix }}-{{ env }}"
 - debug:
     msg: "Search service deploy file created"
 
 - name: Create config file for logging service
   template:
-    src: ../templates/config_file_logging_template.j2
+    src: templates/config-templates/config_file_logging_template.j2
     dest: "{{ workspace }}/shamu-hrs-logging-service/config/application-{{ env }}.yml"
 - debug:
     msg: "Logging service config file created"
 
 - name: Create deploy file for logging service
   template:
-    src: ../templates/deploy_file_logging_template.j2
+    src: templates/config-templates/deploy_file_logging_template.j2
     dest: "{{ workspace }}/shamu-hrs-logging-service/config/{{ stack_prefix }}-{{ env }}"
 - debug:
     msg: "Logging service deploy file created"

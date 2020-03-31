@@ -1,0 +1,74 @@
+---
+    - hosts: localhost
+      connection: local
+    
+      tasks:
+        - name: include variables from file
+          include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
+          tags:
+            - "always"
+    
+        - name: "Create config file for {{ service_name }} service"
+          template:
+            src: "templates/config-templates/config_file_{{ service_name }}_template.j2"
+            dest: "{{ workspace }}/config/application-{{ env }}.yml"
+          when: service_name in ['company', 'document', 'web', 'logging', 'search']
+    
+        - name: "Create deploy file for {{ service_name }} service"
+          template:
+            src: "templates/config-templates/deploy_file_{{ service_name }}_template.j2"
+            dest: "{{ workspace }}/config/{{ stack_prefix }}-{{ env }}"
+          when: service_name in ['company', 'document', 'web', 'logging', 'search']
+
+        
+        - name: "Create config file for {{ service_name }} service"
+          template:
+            src: "templates/config-templates/config_file_{{ service_name }}_template.j2"
+            dest: "{{ workspace }}/src/main/resources/application-{{ env }}.yml"
+          when: service_name == 'gateway'
+
+          
+        - name: Create eb extension config file directory
+          file:
+            path: "{{ workspace }}/.ebextensions/consul"
+            state: directory
+            mode: 0755
+          when: service_name == 'gateway'
+          
+        - name: Create eb init config file directory
+          file:
+            path: "{{ workspace }}/.elasticbeanstalk"
+            state: directory
+            mode: 0755
+          when: service_name == 'gateway'
+          
+        - name: Create eb extension env config file directory
+          file:
+            path: "{{ workspace }}/.ebextensions/env"
+            state: directory
+            mode: 0755
+          when: service_name == 'gateway'
+          
+        - name: Create eb extension config file for consul
+          template:
+            src: templates/config-templates/eb_extension_file_template_for_consul.j2
+            dest: "{{ workspace }}/.ebextensions/consul/consul-client-install-and-run.config"
+          when: service_name == 'gateway'
+          
+        - name: Create eb extension config file for nginx
+          template:
+            src: templates/config-templates/eb_extension_file_template_for_nginx.j2
+            dest: "{{ workspace }}/.ebextensions/nginx/conf.d/customConf.conf"
+          when: service_name == 'gateway'
+        
+        - name: Create eb extension config file for getting environment_variable
+          template:
+            src: templates/config-templates/eb_extension_file_template_for_environment_variable.j2
+            dest: "{{ workspace }}/.ebextensions/env/get-env.config"
+          when: service_name == 'gateway'
+        
+        - name: Create eb init config file for gateway
+          template:
+            src: templates/config-templates/eb_init_file_template.j2
+            dest: "{{ workspace }}/.elasticbeanstalk/config.yml"
+          when: service_name == 'gateway'   
