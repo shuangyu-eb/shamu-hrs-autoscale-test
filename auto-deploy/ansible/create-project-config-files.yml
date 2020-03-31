@@ -12,7 +12,13 @@
           template:
             src: "templates/config-templates/config_file_{{ service_name }}_template.j2"
             dest: "{{ workspace }}/config/application-{{ env }}.yml"
-          when: service_name in ['company', 'document', 'web', 'logging', 'search']
+          when: service_name in ['company', 'document', 'logging', 'search']
+        
+        - name: "Create config file for {{ service_name }} service"
+          template:
+            src: "templates/config-templates/config_file_{{ service_name }}_template.j2"
+            dest: "{{ workspace }}/config/{{ env }}.env"
+          when: service_name == 'web'
     
         - name: "Create deploy file for {{ service_name }} service"
           template:
