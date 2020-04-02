@@ -1,0 +1,114 @@
+- project:
+    name: branch-build-temp
+    jobs:
+        - 'shamu-{name}-branch-auto-build':
+            name: company
+            generic-webhook-trigger-token: company-service
+            project-url: 'https://github.com/tardisone/shamu-hrs-company-service/'
+        - 'shamu-{name}-branch-auto-build':
+            name: document
+            generic-webhook-trigger-token: document-service
+            project-url: 'https://github.com/tardisone/shamu-hrs-document-service/'
+        - 'shamu-{name}-branch-auto-build':
+            name: search
+            generic-webhook-trigger-token: search-service
+            project-url: 'https://github.com/tardisone/shamu-hrs-search-service/'
+        - 'shamu-{name}-branch-auto-build':
+            name: web
+            generic-webhook-trigger-token: web
+            project-url: 'https://github.com/tardisone/shamu-hrs-web/'
+            shell: |
+              yarn install
+
+              yarn eslint | tee eslint_output.txt
+
+              yarn stylelint | tee stylelint_output.txt
+
+              yarn test --coverage --color
+
+              if [ -z $(grep -E "[1-9]\d* error" ./eslint_output.txt) ] && [ -z $(grep -E "31m✖" ./stylelint_output.txt) ]; then
+                echo "No errors "
+                exit 0
+              else
+                echo "Please correct the errors."
+                exit 1
+              fi
+            publishers:
+              - github-notifier
+    publishers:
+      - jacoco:
+          exec-pattern: '**/**.exec'
+          class-pattern: '**/classes'
+          source-pattern: '**/src/main/java'
+          source-inclusion-pattern: '**/*.java'
+      - github-notifier
+    shell: |
+      #!/bin/bash +x
+
+      rm -rf ./*.txt
+
+      mvn checkstyle:check | tee javalint.txt
+
+      echo '----------------------UNIT TEST----------------------'
+
+      mvn clean test -Dspring.profiles.active=test &> unittest.txt
+      grep -E '4mINFO|1mERROR|3mWARNING' unittest.txt
+
+      unit_test_error=`grep FAILURE unittest.txt`
+      check_style_error=`grep FAILURE javalint.txt`
+
+      if [ -z "$unit_test_error" ] && [ -z "$check_style_error" ]
+      then
+        echo 'BRANCH BUILD SUCCESS'
+        exit 0
+      else
+        echo -e "033[31m please fix the errors! \033[0m"
+        exit 1
+      fi
+
+- job-template:
+    name: 'shamu-{name}-branch-auto-build'
+    project-type: freestyle
+    defaults: global
+    description: 'shamu {name} branch build'
+    disabled: false
+    concurrent: false
+    github-project:
+      project-url: '{project-url}'
+    block-downstream: false
+    block-upstream: false
+    retry-count: 3
+    node: '!master'
+    logrotate:
+      daysToKeep: 5
+      numToKeep: 10
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+    scm:
+      - git:
+          url: '{project-url}'
+          branches:
+            - ':origin/(feature|bugfix|task|hotfix)/SH-.*'
+          wipe-workspace: false
+          credentials-id: 'derek-eb'
+    triggers:
+      - generic-webhook-trigger:
+          post-content-params:
+            - type: 'JSONPath'
+              key: 'ref'
+              value: '$.ref'
+          regex-filter-text: '$ref'
+          regex-filter-expression: '^refs/heads/(feature|bugfix|task|hotfix)/SH-.*$'
+          print-post-content: true
+          print-contrib-var: true
+          cause: '$ref'
+          token: '{generic-webhook-trigger-token}'
+          silent-response: true
+    wrappers:
+      - timestamps
+      - ansicolor:
+          colormap: "xterm"
+    builders:
+      - github-notifier
+      - shell: '{shell}'
+    publishers: '{publishers}'

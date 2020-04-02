@@ -31,3 +31,12 @@
 
 # MAC
 **/.DS_Store
+
+###VsCode###
+.vscode
+
+### Jenkins account info ###
+/jenkins/conf/jenkins_jobs.ini
+
+### Python ###
+**/__pycache__/

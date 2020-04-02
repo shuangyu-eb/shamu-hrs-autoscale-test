@@ -1,0 +1,40 @@
+- job:
+    name: 'shamu-hrs-build'
+    parameters:
+      - password:
+          name: ansiblePassword
+          description: 'This password is used to run ansible playbook to refresh config files.'
+      - string:
+          name: credentialsId
+          description: 'Github Personal Access Token'
+          default: 'derek-eb'
+    project-type: pipeline
+    defaults: global
+    description: 'Build all HRS repos'
+    disabled: false
+    concurrent: false
+    github-project:
+      project-url: https://github.com/tardisone/shamu-hrs
+    block-downstream: false
+    block-upstream: false
+    retry-count: 3
+    node: '!master'
+    logrotate:
+      daysToKeep: 5
+      numToKeep: 10
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+    pipeline-scm:
+      scm:
+        - git:
+            url: https://github.com/tardisone/shamu-hrs
+            branches:
+              - ':origin/master'
+            wipe-workspace: false
+      script-path: 'jenkins/jobs/pipeline-scripts/shamu-hrs-manul-build'
+    wrappers:
+      - timestamps
+      - ansicolor:
+          colormap: "xterm"
+
+

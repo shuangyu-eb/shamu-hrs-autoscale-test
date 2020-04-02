@@ -1,0 +1,73 @@
+- project:
+    name: master-build-temp
+    jobs:
+        - 'shamu-{name}-master-auto-build':
+            name: company
+            generic-webhook-trigger-token: company-service
+            project-url: 'https://github.com/tardisone/shamu-hrs-company-service/'
+        - 'shamu-{name}-master-auto-build':
+            name: document
+            generic-webhook-trigger-token: document-service
+            project-url: 'https://github.com/tardisone/shamu-hrs-document-service/'
+        - 'shamu-{name}-master-auto-build':
+            name: search
+            generic-webhook-trigger-token: search-service
+            project-url: 'https://github.com/tardisone/shamu-hrs-search-service/'
+        - 'shamu-{name}-master-auto-build':
+            name: gateway
+            generic-webhook-trigger-token: gateway
+            project-url: 'https://github.com/tardisone/shamu-hrs-gateway/'
+        - 'shamu-{name}-master-auto-build':
+            name: web
+            generic-webhook-trigger-token: web
+            project-url: 'https://github.com/tardisone/shamu-hrs-web/'
+
+- job-template:
+    name: 'shamu-{name}-master-auto-build'
+    parameters:
+      - string:
+        name: credentialsId
+        description: 'Github Personal Access Token'
+        default: 'derek-eb'
+    project-type: pipeline
+    defaults: global
+    description: 'shamu {name} master build'
+    disabled: false
+    concurrent: false
+    github-project:
+      project-url: '{project-url}'
+    block-downstream: false
+    block-upstream: false
+    retry-count: 3
+    node: '!master'
+    logrotate:
+      daysToKeep: 5
+      numToKeep: 10
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+    pipeline-scm:
+      scm:
+        - git:
+            url: '{project-url}'
+            branches:
+              - ':origin/master'
+            wipe-workspace: false
+            credentials-id: 'derek-eb'
+      script-path: 'CI/Jenkinsfile'
+    triggers:
+      - generic-webhook-trigger:
+          post-content-params:
+            - type: 'JSONPath'
+              key: 'ref'
+              value: '$.ref'
+          regex-filter-text: '$ref'
+          regex-filter-expression: '^refs/heads/master$'
+          print-post-content: true
+          print-contrib-var: true
+          cause: '$ref'
+          token: '{generic-webhook-trigger-token}'
+          silent-response: true
+    wrappers:
+      - timestamps
+      - ansicolor:
+          colormap: "xterm"
