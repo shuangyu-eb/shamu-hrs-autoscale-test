@@ -1,0 +1,73 @@
+- job:
+    name: 'shamu-hrs-manual-build-and-deploy'
+    parameters:
+      - password:
+          name: ANSIBLE_PASSWORD
+          description: "It's ansible vault password. It will be used to decrypt variables to generate config and
+          deploy files for the following build and deploy operations."
+      - string:
+          name: CREDENTIALSID
+          description: "The id of the credential declared in Jenkins Global Credentials. The content of the 
+          credential is github personal access token and its kind is 'Username with passowrd'."
+      - choice:
+          name: BUILD_TARGET_TYPE
+          description: 'Choose to build on tags(e.g. v0.0.1) or release branches(e.g. release/0.0.x).'
+          choices: 
+            - tag
+            - release_branch
+      - choice:
+          name: OPERATION
+          description: "Choose which operation you want to perform. Build, deploy or both of them.
+          If you want to peform 'deploy' operation, please make sure you have corresponding artifacts in aws ecr and s3."
+          choices:
+            - build
+            - deploy
+            - build_and_deploy
+      - bool:
+          name: COMPANY_SERVICE
+          default: true
+      - bool:
+          name: DOCUMENT_SERVICE
+          default: true
+      - bool:
+          name: SEARCH_SERVICE
+          default: true
+      - bool:
+          name: LOGGING_SERVICE
+          default: true
+      - bool:
+          name: WEB
+          default: true
+      - bool:
+          name: GATEWAY
+          default: true
+    project-type: pipeline
+    defaults: global
+    description: 'Build and Deploy All HRS Microservices'
+    disabled: false
+    concurrent: false
+    github-project:
+      project-url: https://github.com/tardisone/shamu-hrs
+    block-downstream: false
+    block-upstream: false
+    retry-count: 3
+    node: '!master'
+    logrotate:
+      daysToKeep: 5
+      numToKeep: 10
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+    pipeline-scm:
+      scm:
+        - git:
+            url: https://github.com/tardisone/shamu-hrs
+            branches:
+              - ':origin/master'
+            wipe-workspace: false
+      script-path: 'jenkins/jobs/pipeline-scripts/shamu-hrs-manual-build-and-deploy'
+    wrappers:
+      - timestamps
+      - ansicolor:
+          colormap: "xterm"
+
+

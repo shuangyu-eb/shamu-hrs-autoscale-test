@@ -12,9 +12,8 @@ void checkoutBuildTarget(String branch, String url) {
 }
 
 pipeline {
-    agent any
+    agent { label '!master' }
     environment {
-        JOB_DIR = "/home/ubuntu/workspace/shamu-hrs-manul-build"
         COMPANY_SERVICE_DIR = "shamu-hrs-company-service"
         DOCUMENT_SERVICE_DIR = "shamu-hrs-document-service"
         LOGGING_SERVICE_DIR = "shamu-hrs-logging-service"
@@ -26,6 +25,7 @@ pipeline {
         stage('Select build target') {
             steps {
                 script { 
+                    JOB_DIR = sh(returnStdout: true, script: 'pwd').trim()
                     if ("$BUILD_TARGET_TYPE" == "tag") {
                         BUILD_TARGETS = sh(returnStdout: true, script: 'git tag')
                     } else {
@@ -64,17 +64,15 @@ pipeline {
                     }
                 }
                 // create ansible vault password file
-                dir("${JOB_DIR}") {
-                    script { env = sh(returnStdout: true, script: "echo ${ENV} | sed 's/^.*-//'").trim() }
-                    script { stack_prefix = sh(returnStdout: true, script: """ echo ${ENV} | sed 's/-[^-]*\$//' """).trim() }
-                    sh '''
-                        touch password
-                        echo $ANSIBLE_PASSWORD > password
-                      '''
-                }
+                script { env = sh(returnStdout: true, script: "echo ${ENV} | sed 's/^.*-//'").trim() }
+                script { stack_prefix = sh(returnStdout: true, script: """ echo ${ENV} | sed 's/-[^-]*\$//' """).trim() }
+                sh '''
+                    touch password
+                    echo $ANSIBLE_PASSWORD > password
+                    '''
             }
         }
-        stage('Build selected repos') {
+        stage('Build and deploy selected microservices') {
             parallel {
                 stage('Build company service') {
                     when { expression { params.COMPANY_SERVICE } }
@@ -87,7 +85,16 @@ pipeline {
                         // generate config files
                         sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${COMPANY_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=company'"
                         dir("${COMPANY_SERVICE_DIR}") {
-                            sh "CI/build -e ${ENV} -r ${RELEASE}"
+                            script {
+                                if ("$OPERATION" == "build") {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                } else if ("$OPERATION" == "deploy") {
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                } else {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                }
+                            }
                         }
                     }
                 }
@@ -100,7 +107,16 @@ pipeline {
                         }
                         sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${DOCUMENT_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=document'"
                         dir("${DOCUMENT_SERVICE_DIR}") {
-                            sh "CI/build -e ${ENV} -r ${RELEASE}"
+                            script {
+                                if ("$OPERATION" == "build") {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                } else if ("$OPERATION" == "deploy") {
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                } else {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                }
+                            }
                         }
                     }
                 }
@@ -113,7 +129,16 @@ pipeline {
                         }
                         sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${SEARCH_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=search'"
                         dir("${SEARCH_SERVICE_DIR}") {
-                            sh "CI/build -e ${ENV} -r ${RELEASE}"
+                            script {
+                                if ("$OPERATION" == "build") {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                } else if ("$OPERATION" == "deploy") {
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                } else {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                }
+                            }
                         }
                     }
                 }
@@ -126,7 +151,16 @@ pipeline {
                         }
                         sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${LOGGING_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=logging'"
                         dir("${LOGGING_SERVICE_DIR}") {
-                            sh "CI/build -e ${ENV} -r ${RELEASE}"
+                            script {
+                                if ("$OPERATION" == "build") {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                } else if ("$OPERATION" == "deploy") {
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                } else {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                }
+                            }
                         }
                     }
                 }
@@ -139,7 +173,16 @@ pipeline {
                         }
                         sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${GATEWAY_DIR} stack_prefix=${stack_prefix} env=${env} service_name=gateway'"
                         dir("${GATEWAY_DIR}") {
-                            sh "CI/build -e ${ENV} -r ${RELEASE}"
+                            script {
+                                if ("$OPERATION" == "build") {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                } else if ("$OPERATION" == "deploy") {
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                } else {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                }
+                            }
                         }
                     }
                 }
@@ -152,7 +195,16 @@ pipeline {
                         }
                         sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${WEB_DIR} stack_prefix=${stack_prefix} env=${env} service_name=web' --vault-password-file password"
                         dir("${WEB_DIR}") {
-                            sh "CI/build -e ${ENV} -r ${RELEASE}"
+                            script {
+                                if ("$OPERATION" == "build") {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                } else if ("$OPERATION" == "deploy") {
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                } else {
+                                    sh "CI/build -e ${ENV} -r ${RELEASE}"
+                                    sh "CI/deploy ${ENV} ${RELEASE}"
+                                }
+                            }
                         }
                     }
                 }
