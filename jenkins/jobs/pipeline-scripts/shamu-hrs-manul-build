@@ -1,94 +1,50 @@
-def getRelease
+def getBuildTarget
 def getEnvironment
+
+void checkoutBuildTarget(String branch, String url) {
+    checkout([
+        $class: 'GitSCM',
+        branches: [[name: branch]],
+        doGenerateSubmoduleConfigurations: false,
+        extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: false, reference: '', trackingSubmodules: false]],
+        userRemoteConfigs: [[credentialsId: "${credentialsId}", url: url]]
+    ])
+}
 
 pipeline {
     agent any
     environment {
-        HRS_WORKSPACE = "/home/ubuntu/workspace/shamu-hrs-manul-build"
-        ROOT_DIR = "/home/ubuntu"
+        JOB_DIR = "/home/ubuntu/workspace/shamu-hrs-manul-build"
+        COMPANY_SERVICE_DIR = "shamu-hrs-company-service"
+        DOCUMENT_SERVICE_DIR = "shamu-hrs-document-service"
+        LOGGING_SERVICE_DIR = "shamu-hrs-logging-service"
+        SEARCH_SERVICE_DIR = "shamu-hrs-search-service"
+        GATEWAY_DIR = "shamu-hrs-gateway"
+        WEB_DIR = "shamu-hrs-web"
     }
     stages {
-        stage('Update all repos') {
-            parallel {
-                stage('Update company service repo') {
-                    steps {
-                        sh 'mkdir -p shamu-hrs-company-service'
-                        dir('shamu-hrs-company-service') {
-                            git branch: "master",
-                            credentialsId: "${credentialsId}",
-                            url: 'https://github.com/tardisone/shamu-hrs-company-service.git'
-                        }
-                    }
-                }
-                stage('Update document service repo') {
-                    steps {
-                        sh 'mkdir -p shamu-hrs-document-service'
-                        dir('shamu-hrs-document-service') {
-                            git branch: "master",
-                            credentialsId: "${credentialsId}",
-                            url: 'https://github.com/tardisone/shamu-hrs-document-service.git'
-                        }
-                    }
-                }
-                stage('Update search service repo') {
-                    steps {
-                        sh 'mkdir -p shamu-hrs-search-service'
-                        dir('shamu-hrs-search-service') {
-                            git branch: "master",
-                            credentialsId: "${credentialsId}",
-                            url: 'https://github.com/tardisone/shamu-hrs-search-service.git'
-                        }
-                    }
-                }
-                stage('Update logging service') {
-                    steps {
-                        sh 'mkdir -p shamu-hrs-logging-service'
-                        dir('shamu-hrs-logging-service') {
-                            git branch: "master",
-                            credentialsId: "${credentialsId}",
-                            url: 'https://github.com/tardisone/shamu-hrs-logging-service.git'
-                        }
-                    }
-                }
-                stage('Update gateway repo') {
-                    steps {
-                        sh 'mkdir -p shamu-hrs-gateway'
-                        dir('shamu-hrs-gateway') {
-                            git branch: "master",
-                            credentialsId: "${credentialsId}",
-                            url: 'https://github.com/tardisone/shamu-hrs-gateway.git'
-                        }
-                    }
-                }
-                stage('Update web repo') {
-                    steps {
-                        sh 'mkdir -p shamu-hrs-web'
-                        dir('shamu-hrs-web') {
-                            git branch: "master",
-                            credentialsId: "${credentialsId}",
-                            url: 'https://github.com/tardisone/shamu-hrs-web.git'
-                        }
-                    }
-                }
-            }
-        }
-        stage('Select release') {
+        stage('Select build target') {
             steps {
-                dir('company') {
-                    // get all releases from git tag
-                    script { RELEASES = sh(returnStdout: true, script: 'git tag') }
+                script { 
+                    if ("$BUILD_TARGET_TYPE" == "tag") {
+                        BUILD_TARGETS = sh(returnStdout: true, script: 'git tag')
+                    } else {
+                        // "$BUILD_TARGET_TYPE" == "release_branch"
+                        BUILD_TARGETS = sh(returnStdout: true, script: '''git branch -r | grep 'release' | sed 's/origin\\///' ''')
+                    }
+                }
 
-                    // select release you want to build
-                    timeout(60) {  // timeout waiting for input after 60 minutes
-                        script {
-                            getRelease = input id: 'release', message: 'Please select your release.', ok: 'Proceed?', parameters: [choice(choices: "${RELEASES}"+"master", description: 'Select a release to deploy.', name: 'RELEASE')], submitter: 'jenkins', submitterParameter: 'jenkins'
-                            RELEASE=getRelease['RELEASE']
-                            BRANCH = RELEASE
-                             if (RELEASE == "") {
-                                 RELEASE = 'master'
-                                 BRANCH = 'origin/master'
-                             }
+                // select specific build target
+                timeout(5) {  // timeout waiting for input after 5 minutes
+                    script {
+                        getBuildTarget = input id: 'build_target', message: 'Please select your release.', ok: 'Proceed?', parameters: [choice(choices: "${BUILD_TARGETS}", description: "Select a ${BUILD_TARGET_TYPE} to deploy", name: 'BUILD_TARGET')], submitter: 'jenkins', submitterParameter: 'jenkins'
+                        BUILD_TARGET=getBuildTarget['BUILD_TARGET']
+
+                        if ("$BUILD_TARGET_TYPE" == "tag") {
+                            BUILD_TARGET = "refs/tags/" + BUILD_TARGET
                         }
+                        // release/0.1.x -> 0.1.x  refs/tags/v0.1.1 -> v0.1.1
+                        RELEASE = sh(returnStdout: true, script: """echo ${BUILD_TARGET} | sed 's/^.*\\///' """).trim()
                     }
                 }
             }
@@ -100,72 +56,103 @@ pipeline {
                     script { ENVIRONMENTS = sh(returnStdout: true, script: '''ls | sed 's/\\.[^.]*$//' ''') }
 
                     // select environment you want to deploy
-                    timeout(60) {  // timeout waiting for input after 60 minutes
+                    timeout(5) {  // timeout waiting for input after 60 minutes
                         script {
                             getEnvironment = input id: 'environment', message: 'Please select your environment.', ok: 'Proceed?', parameters: [choice(choices: ENVIRONMENTS, description: 'Select a environment to deploy.', name: 'ENVIRONMENT')], submitter: 'jenkins', submitterParameter: 'jenkins'
                             ENV=getEnvironment['ENVIRONMENT']
                         }
                     }
                 }
-            }
-        }
-        stage('Create environment related config files') {
-            steps {
-                dir(path: "${HRS_WORKSPACE}") {
-                    script { env = sh(returnStdout: true, script: "echo ${getEnvironment['ENVIRONMENT']} | sed 's/^.*-//'") }
-                    script { stack_prefix = sh(returnStdout: true, script: """ echo ${getEnvironment['ENVIRONMENT']} | sed 's/-[^-]*\$//' """)}
+                // create ansible vault password file
+                dir("${JOB_DIR}") {
+                    script { env = sh(returnStdout: true, script: "echo ${ENV} | sed 's/^.*-//'").trim() }
+                    script { stack_prefix = sh(returnStdout: true, script: """ echo ${ENV} | sed 's/-[^-]*\$//' """).trim() }
                     sh '''
                         touch password
-                        echo $ansiblePassword > password
+                        echo $ANSIBLE_PASSWORD > password
                       '''
-                    sh "sudo ansible-playbook --vault-password-file password -e 'stack_prefix=${stack_prefix} env=${env} workspace=${HRS_WORKSPACE} user=$USER jenkins_home=${ROOT_DIR}' auto-deploy/ansible/build-shamu-hrs.yml --tags config-builder"
-              }
+                }
             }
         }
-        stage('parallel build') {
+        stage('Build selected repos') {
             parallel {
-                stage('Shamu-hrs-company-build') {
+                stage('Build company service') {
+                    when { expression { params.COMPANY_SERVICE } }
                     steps {
-                        dir('shamu-hrs-company-service') {
-                            sh "git checkout ${REF} && CI/build -e ${ENV} -r ${RELEASE}"
+                        sh "mkdir -p ${COMPANY_SERVICE_DIR}"
+                        // pull repo and checkout build target
+                        dir("${COMPANY_SERVICE_DIR}") {
+                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-company-service.git")
+                        }
+                        // generate config files
+                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${COMPANY_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=company'"
+                        dir("${COMPANY_SERVICE_DIR}") {
+                            sh "CI/build -e ${ENV} -r ${RELEASE}"
                         }
                     }
                 }
-                stage('Shamu-hrs-gateway-build') {
+                stage('Build document service') {
+                    when { expression { params.DOCUMENT_SERVICE } }
                     steps {
-                        dir('shamu-hrs-gateway') {
-                            sh "git checkout ${REF} && CI/build -e ${ENV} -r ${RELEASE}"
+                        sh "mkdir -p ${DOCUMENT_SERVICE_DIR}"
+                        dir("${DOCUMENT_SERVICE_DIR}") {
+                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-document-service.git")
+                        }
+                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${DOCUMENT_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=document'"
+                        dir("${DOCUMENT_SERVICE_DIR}") {
+                            sh "CI/build -e ${ENV} -r ${RELEASE}"
                         }
                     }
                 }
-                stage('Shamu-hrs-document-build') {
+                stage('Build search service') {
+                    when { expression { params.SEARCH_SERVICE } }
                     steps {
-                        dir('shamu-hrs-document-service') {
-                            sh "git checkout ${REF} && CI/build -e ${ENV} -r ${RELEASE}"
+                        sh "mkdir -p ${SEARCH_SERVICE_DIR}"
+                        dir("${SEARCH_SERVICE_DIR}") {
+                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-search-service.git")
+                        }
+                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${SEARCH_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=search'"
+                        dir("${SEARCH_SERVICE_DIR}") {
+                            sh "CI/build -e ${ENV} -r ${RELEASE}"
                         }
                     }
                 }
-                stage('Shamu-hrs-logging-deploy') {
-                     when {
-                       expression { return params.ENV == "staging" || params.ENV == "prod" }
-                     }
-                     steps {
-                         dir('shamu-hrs-logging-service') {
-                             sh "git checkout ${REF} && CI/build -e ${ENV} -r ${RELEASE}"
-                         }
-                     }
-                 }
-                stage('Shamu-hrs-search-build') {
+                stage('Build logging service') {
+                    when { expression { params.LOGGING_SERVICE } }
                     steps {
-                        dir('shamu-hrs-search-service') {
-                            sh "git checkout ${REF} && CI/build -e ${ENV} -r ${RELEASE}"
+                        sh "mkdir -p ${LOGGING_SERVICE_DIR}"
+                        dir("${LOGGING_SERVICE_DIR}") {
+                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-logging-service.git")
+                        }
+                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${LOGGING_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=logging'"
+                        dir("${LOGGING_SERVICE_DIR}") {
+                            sh "CI/build -e ${ENV} -r ${RELEASE}"
                         }
                     }
                 }
-                stage('Shamu-hrs-web-build') {
+                stage('Build gateway') {
+                    when { expression { params.GATEWAY } }
                     steps {
-                        dir('shamu-hrs-web') {
-                            sh "git checkout ${REF} && CI/build -e ${ENV} -r ${RELEASE}"
+                        sh "mkdir -p ${GATEWAY_DIR}"
+                        dir("${GATEWAY_DIR}") {
+                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-gateway.git")
+                        }
+                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${GATEWAY_DIR} stack_prefix=${stack_prefix} env=${env} service_name=gateway'"
+                        dir("${GATEWAY_DIR}") {
+                            sh "CI/build -e ${ENV} -r ${RELEASE}"
+                        }
+                    }
+                }
+                stage('Build web') {
+                    when { expression { params.WEB } }
+                    steps {
+                        sh "mkdir -p ${WEB_DIR}"
+                        dir("${WEB_DIR}") {
+                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-web.git")
+                        }
+                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${WEB_DIR} stack_prefix=${stack_prefix} env=${env} service_name=web' --vault-password-file password"
+                        dir("${WEB_DIR}") {
+                            sh "CI/build -e ${ENV} -r ${RELEASE}"
                         }
                     }
                 }

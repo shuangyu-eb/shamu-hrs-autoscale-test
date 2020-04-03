@@ -1,13 +1,36 @@
 - job:
-    name: 'shamu-hrs-build'
+    name: 'shamu-hrs-manul-build'
     parameters:
       - password:
-          name: ansiblePassword
+          name: ANSIBLE_PASSWORD
           description: 'This password is used to run ansible playbook to refresh config files.'
       - string:
-          name: credentialsId
+          name: CREDENTIALSID
           description: 'Github Personal Access Token'
           default: 'derek-eb'
+      - choice:
+          name: BUILD_TARGET_TYPE
+          choices: 
+            - tag
+            - release_branch
+      - bool:
+        name: COMPANY_SERVICE
+        default: true
+      - bool:
+        name: DOCUMENT_SERVICE
+        default: true
+      - bool:
+        name: SEARCH_SERVICE
+        default: true
+      - bool:
+        name: LOGGING_SERVICE
+        default: true
+      - bool:
+        name: WEB
+        default: true
+      - bool:
+        name: GATEWAY
+        default: true
     project-type: pipeline
     defaults: global
     description: 'Build all HRS repos'
