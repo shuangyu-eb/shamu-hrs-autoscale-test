@@ -51,7 +51,21 @@
 
       echo '----------------------UNIT TEST----------------------'
 
-      mvn clean test -Dspring.profiles.active=test &> unittest.txt
+      current_commit_id=`git rev-parse --short HEAD`
+      current_branch_name=`git branch -r --contains $current_commit_id`
+      echo $current_branch_name
+
+      mvn clean test sonar:sonar \
+        -Dsonar.host.url=${url} \
+        -Dsonar.login=${token} \
+        -Dsonar.projectKey=${projectKey} \
+        -Dsonar.sources=src/main/java \
+        -Dsonar.java.binaries=target \
+        -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco-output/coverage-report-unit-tests/jacoco.xml \
+        -Dsonar.tests=target/test-classes \
+        -Dsonar.branch.name="$current_branch_name" \
+        -Dsonar.branch.target=master \
+        &> unittest.txt
       grep -E '4mINFO|1mERROR|3mWARNING' unittest.txt
 
       unit_test_error=`grep FAILURE unittest.txt`
