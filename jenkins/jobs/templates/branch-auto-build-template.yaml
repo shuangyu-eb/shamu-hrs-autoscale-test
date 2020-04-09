@@ -26,7 +26,21 @@
 
               yarn test --coverage --color
 
-              if [ -z $(grep -E "[1-9]\d* error" ./eslint_output.txt) ] && [ -z $(grep -E "31m✖" ./stylelint_output.txt) ]; then
+              current_commit_id=`git rev-parse --short HEAD`
+              current_branch_name=`git branch -r --contains $current_commit_id`
+              echo $current_branch_name
+
+              /home/ubuntu/tools/sonar-scanner-cli/bin/sonar-scanner \
+                -Dsonar.projectKey=shamu-hrs-web \
+                -Dsonar.sources=src \
+                -Dsonar.tests=src/App \
+                -Dsonar.test.inclusions=src/**/*.test.js \
+                -Dsonar.javascript.lcov.reportPaths=src/tests/coverage/lcov.info \
+                -Dsonar.host.url=${url} \
+                -Dsonar.login=${token} \
+                -Dsonar.branch.name="$current_branch_name" \
+                | tee sonar_analysis.txt
+              if [ -z $(grep -E "[1-9]\d* error" ./eslint_output.txt) ] && [ -z $(grep -E "31m✖" ./stylelint_output.txt) ] && [ -z $(grep FAILURE sonar_analysis.txt)]; then
                 echo "No errors "
                 exit 0
               else
