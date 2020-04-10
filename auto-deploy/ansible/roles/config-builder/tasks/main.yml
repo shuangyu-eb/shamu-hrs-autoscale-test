@@ -101,7 +101,7 @@
 
 - name: Create config file for search service
   template:
-    src: templates/config-templatess/config_file_search_template.j2
+    src: templates/config-templates/config_file_search_template.j2
     dest: "{{ workspace }}/shamu-hrs-search-service/config/application-{{ env }}.yml"
 - debug:
     msg: "Search service config file created"
