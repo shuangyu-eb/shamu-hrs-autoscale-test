@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "script": "./Add userId to app metadata.js",
+  "name": "Add userId to app metadata",
+  "order": 2,
+  "stage": "login_success"
+}

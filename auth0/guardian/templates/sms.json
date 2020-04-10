@@ -1,0 +1,5 @@
+{
+  "name": "sms",
+  "enrollment_message": "Your SimplyHired security code is {{ code }}",
+  "verification_message": "Your SimplyHired security code is {{ code }}"
+}

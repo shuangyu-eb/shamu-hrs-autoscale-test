@@ -1,0 +1,15 @@
+{
+  "name": "shamu-hrs",
+  "version": "1.0.0",
+  "description": "Repository to track and deploy configuration changes for the HRS",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Indeed/Eastbay",
+  "license": "UNLICENSED",
+  "devDependencies": {},
+  "dependencies": {
+    "jest": "^24.8.0"
+  }
+}

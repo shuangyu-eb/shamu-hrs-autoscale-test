@@ -1,0 +1,86 @@
+{
+  "name": "EMPLOYEE",
+  "description": "EMPLOYEE",
+  "permissions": [
+    {
+      "permission_name": "CREATE_AND_APPROVED_TIME_OFF_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "DENY_DOCUMENT_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "EDIT_SELF",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_MY_DOCUMENTS_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_SELF_TIME_OFF_BALANCE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_SELF_TIME_OFF_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_CHANGING_WORK_EMAIL",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_DOCUMENT_REPORTS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_EMPLOYEES",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_JOB",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_MY_DOCUMENTS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_MY_TEAM",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_SELF",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_SELF_BENEFITS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_TEAM_CALENDAR",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_TEAM_TIME_OFF_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_CONTACT",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_JOB",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_PERSONAL",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_ROLE_AND_STATUS",
+      "resource_server_identifier": "hrs-backend"
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "name": "ADMIN",
+  "description": "ADMIN",
+  "permissions": [
+    {
+      "permission_name": "CREATE_AND_APPROVED_TIME_OFF_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "CREATE_DEPARTMENT",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "CREATE_DOCUMENT_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "CREATE_EMPLOYEE_TYPE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "CREATE_JOB",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "CREATE_OFFICE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "CREATE_USER",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "DEACTIVATE_USER",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "DELETE_PAID_HOLIDAY",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "DELETE_USER",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "DENY_DOCUMENT_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "EDIT_PAID_HOLIDAY",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "EDIT_SELF",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "EDIT_USER",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_BENEFIT",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_BENEFIT_PLAN",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_COMPANY_DOCUMENT",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_COMPANY_FOLDER",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_COMPANY_USER",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_MY_DOCUMENTS_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_SELF_TIME_OFF_BALANCE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_SELF_TIME_OFF_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_SENT_DOCUMENTS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_SIGNATURE_TEMPLATE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_TEAM_USER",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_TIME_OFF_POLICY",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_TIME_OFF_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_USER_DOCUMENT",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_USER_TIME_OFF_BALANCE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_CHANGING_WORK_EMAIL",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_DISABLED_USER",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_DOCUMENT_REPORTS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_EMPLOYEES",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_JOB",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_MY_DOCUMENTS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_MY_TEAM",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_SELF",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_SELF_BENEFITS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_SETTING",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_TEAM_CALENDAR",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_TEAM_TIME_OFF_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_ADDRESS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_CONTACT",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_EMERGENCY_CONTACT",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_JOB",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_PERSONAL",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_ROLE_AND_STATUS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_TIME_OFF_BALANCE",
+      "resource_server_identifier": "hrs-backend"
+    }
+  ]
+}

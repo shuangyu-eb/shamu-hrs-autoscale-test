@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+
+  - name: include variables from file
+    include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
+    tags:
+      - 'always'
+
+  - name: create auth0 config file
+    include_role:
+      name: 'auth0-cli'
+      apply:
+        tags:
+          - 'auth0-cli'
+    tags:
+      - 'always'

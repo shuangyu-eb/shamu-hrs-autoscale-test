@@ -1,0 +1,209 @@
+{
+  "name": "HRS backend",
+  "identifier": "hrs-backend",
+  "allow_offline_access": false,
+  "skip_consent_for_verifiable_first_party_clients": true,
+  "token_lifetime": 86400,
+  "token_lifetime_for_web": 7200,
+  "signing_alg": "RS256",
+  "scopes": [
+    {
+      "value": "CREATE_USER",
+      "description": "CREATE_USER"
+    },
+    {
+      "value": "DELETE_USER",
+      "description": "DELETE_USER"
+    },
+    {
+      "value": "EDIT_USER",
+      "description": "EDIT_USER"
+    },
+    {
+      "value": "MANAGE_BENEFIT_PLAN",
+      "description": "MANAGE_BENEFIT_PLAN"
+    },
+    {
+      "value": "MANAGE_USER_TIME_OFF_BALANCE",
+      "description": "MANAGE_USER_TIME_OFF_BALANCE"
+    },
+    {
+      "value": "VIEW_SETTING",
+      "description": "VIEW_SETTING"
+    },
+    {
+      "value": "MANAGE_TIME_OFF_POLICY",
+      "description": "MANAGE_TIME_OFF_POLICY"
+    },
+    {
+      "value": "MANAGE_TIME_OFF_REQUEST",
+      "description": "MANAGE_TIME_OFF_REQUEST"
+    },
+    {
+      "value": "VIEW_USER_EMERGENCY_CONTACT",
+      "description": "VIEW_USER_EMERGENCY_CONTACT"
+    },
+    {
+      "value": "VIEW_USER_ADDRESS",
+      "description": "VIEW_USER_ADDRESS"
+    },
+    {
+      "value": "VIEW_MY_TEAM",
+      "description": "VIEW_MY_TEAM"
+    },
+    {
+      "value": "VIEW_USER_CONTACT",
+      "description": "VIEW_USER_CONTACT"
+    },
+    {
+      "value": "VIEW_USER_PERSONAL",
+      "description": "VIEW_USER_PERSONAL"
+    },
+    {
+      "value": "VIEW_USER_JOB",
+      "description": "VIEW_USER_JOB"
+    },
+    {
+      "value": "EDIT_SELF",
+      "description": "EDIT_SELF"
+    },
+    {
+      "value": "VIEW_SELF",
+      "description": "VIEW_SELF"
+    },
+    {
+      "value": "MANAGE_SELF_TIME_OFF_REQUEST",
+      "description": "MANAGE_SELF_TIME_OFF_REQUEST"
+    },
+    {
+      "value": "MANAGE_SELF_TIME_OFF_BALANCE",
+      "description": "MANAGE_SELF_TIME_OFF_BALANCE"
+    },
+    {
+      "value": "VIEW_TEAM_CALENDAR",
+      "description": "VIEW_TEAM_CALENDAR"
+    },
+    {
+      "value": "VIEW_EMPLOYEES",
+      "description": "VIEW_EMPLOYEES"
+    },
+    {
+      "value": "CREATE_DEPARTMENT",
+      "description": "CREATE_DEPARTMENT"
+    },
+    {
+      "value": "CREATE_JOB",
+      "description": "CREATE_JOB"
+    },
+    {
+      "value": "CREATE_EMPLOYEE_TYPE",
+      "description": "CREATE_EMPLOYEE_TYPE"
+    },
+    {
+      "value": "VIEW_JOB",
+      "description": "VIEW_JOB"
+    },
+    {
+      "value": "CREATE_OFFICE",
+      "description": "CREATE_OFFICE"
+    },
+    {
+      "value": "MANAGE_TEAM_USER",
+      "description": "MANAGE_TEAM_USER"
+    },
+    {
+      "value": "MANAGE_COMPANY_USER",
+      "description": "MANAGE_COMPANY_USER"
+    },
+    {
+      "value": "DELETE_PAID_HOLIDAY",
+      "description": "DELETE_PAID_HOLIDAY"
+    },
+    {
+      "value": "EDIT_PAID_HOLIDAY",
+      "description": "EDIT_PAID_HOLIDAY"
+    },
+    {
+      "value": "CREATE_AND_APPROVED_TIME_OFF_REQUEST",
+      "description": "CREATE_AND_APPROVED_TIME_OFF_REQUEST"
+    },
+    {
+      "value": "VIEW_TEAM_TIME_OFF_REQUEST",
+      "description": "VIEW_TEAM_TIME_OFF_REQUEST"
+    },
+    {
+      "value": "SUPER_PERMISSION",
+      "description": "SUPER_PERMISSION"
+    },
+    {
+      "value": "MANAGE_COMPANY_FOLDER",
+      "description": "MANAGE_COMPANY_FOLDER"
+    },
+    {
+      "value": "MANAGE_COMPANY_DOCUMENT",
+      "description": "MANAGE_COMPANY_DOCUMENT"
+    },
+    {
+      "value": "MANAGE_SIGNATURE_TEMPLATE",
+      "description": "MANAGE_SIGNATURE_TEMPLATE"
+    },
+    {
+      "value": "MANAGE_SENT_DOCUMENTS",
+      "description": "MANAGE_SENT_DOCUMENTS"
+    },
+    {
+      "value": "MANAGE_USER_DOCUMENT",
+      "description": "MANAGE_USER_DOCUMENT"
+    },
+    {
+      "value": "CREATE_DOCUMENT_REQUEST",
+      "description": "CREATE_DOCUMENT_REQUEST"
+    },
+    {
+      "value": "DENY_DOCUMENT_REQUEST",
+      "description": "DENY_DOCUMENT_REQUEST"
+    },
+    {
+      "value": "VIEW_DOCUMENT_REPORTS",
+      "description": "VIEW_DOCUMENT_REPORTS"
+    },
+    {
+      "value": "MANAGE_MY_DOCUMENTS_REQUEST",
+      "description": "MANAGE_MY_DOCUMENTS_REQUEST"
+    },
+    {
+      "value": "VIEW_MY_DOCUMENTS",
+      "description": "VIEW_MY_DOCUMENTS"
+    },
+    {
+      "value": "VIEW_CHANGING_WORK_EMAIL",
+      "description": "VIEW_CHANGING_WORK_EMAIL"
+    },
+    {
+      "value": "VIEW_USER_ROLE_AND_STATUS",
+      "description": "VIEW_USER_ROLE_AND_STATUS"
+    },
+    {
+      "value": "DEACTIVATE_USER",
+      "description": "DEACTIVATE_USER"
+    },
+    {
+      "value": "VIEW_USER_TIME_OFF_BALANCE",
+      "description": "VIEW_USER_TIME_OFF_BALANCE"
+    },
+    {
+      "value": "VIEW_SELF_BENEFITS",
+      "description": "VIEW_SELF_BENEFITS"
+    },
+    {
+      "value": "VIEW_DISABLED_USER",
+      "description": "VIEW_DISABLED_USER"
+    },
+    {
+      "value": "MANAGE_BENEFIT",
+      "description": "MANAGE_BENEFIT"
+    }
+  ],
+  "enforce_policies": true,
+  "token_dialect": "access_token_authz"
+}

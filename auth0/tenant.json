@@ -1,0 +1,16 @@
+{
+  "default_audience": "",
+  "default_directory": "hrs-data-store",
+  "enabled_locales": [
+    "en"
+  ],
+  "flags": {
+    "enable_public_signup_user_exists_error": true,
+    "disable_clickjack_protection_headers": false,
+    "enable_mgmt_api_v1": true
+  },
+  "friendly_name": "##FRIENDLY_NAME##",
+  "picture_url": "##ENVIRONMENT_URL##/image/logo.simplyhired.png",
+  "support_email": "hris-help@simplyhired.com",
+  "support_url": "https://www.simplyhired.com/hris"
+}

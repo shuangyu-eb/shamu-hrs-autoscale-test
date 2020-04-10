@@ -1,0 +1,8 @@
+{
+  "name": "sms",
+  "provider": "twilio",
+  "auth_token":"##TWILIO_AUTH_TOKEN##",
+  "sid": "##TWILIO_SID##",
+  "from": "##TWILIO_PHONE_NUMBER##",
+  "messaging_service_sid": null
+}

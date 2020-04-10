@@ -29,10 +29,13 @@
 **/node_modules/**
 **/function.zip
 
-# MAC
+### AUTH0 ###
+/auto-deploy/ansible/auth0_config.json
+
+### MAC ###
 **/.DS_Store
 
-###VsCode###
+### VsCode ###
 .vscode
 
 ### Jenkins account info ###

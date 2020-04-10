@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "script": "./Multifactor with Auth0 Guardian.js",
+  "name": "Multifactor with Auth0 Guardian",
+  "order": 6,
+  "stage": "login_success"
+}

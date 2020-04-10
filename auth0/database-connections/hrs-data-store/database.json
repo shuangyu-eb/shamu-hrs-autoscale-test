@@ -1,0 +1,30 @@
+{
+  "options": {
+    "mfa": {
+      "active": true,
+      "return_enroll_settings": true
+    },
+    "passwordPolicy": "good",
+    "disable_signup": false,
+    "requires_username": false,
+    "validation": {
+      "username": {
+        "min": 1,
+        "max": 15
+      }
+    },
+    "strategy_version": 2,
+    "brute_force_protection": true
+  },
+  "strategy": "auth0",
+  "name": "hrs-data-store",
+  "is_domain_connection": false,
+  "realms": [
+    "hrs-data-store"
+  ],
+  "enabled_clients": [
+    "auth0-deploy-cli-extension",
+    "Management",
+    "HRS Webapp"
+  ]
+}

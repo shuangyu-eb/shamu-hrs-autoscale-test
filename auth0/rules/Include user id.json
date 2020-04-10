@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "script": "./Include user id.js",
+  "name": "Include user id",
+  "order": 3,
+  "stage": "login_success"
+}

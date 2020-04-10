@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "script": "./Disable unverified user.js",
+  "name": "Disable unverified user",
+  "order": 1,
+  "stage": "login_success"
+}

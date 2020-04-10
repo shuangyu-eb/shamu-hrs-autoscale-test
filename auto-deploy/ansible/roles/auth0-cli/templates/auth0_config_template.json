@@ -1,0 +1,19 @@
+{
+  "AUTH0_DOMAIN": "{{auth0_tenant_name}}",
+  "AUTH0_CLIENT_SECRET": "{{auth0_client_secret_cli}}",
+  "AUTH0_CLIENT_ID": "{{auth0_clientId_cli}}",
+  "AUTH0_KEYWORD_REPLACE_MAPPINGS": {
+    "AUTH0_TENANT_NAME": "{{auth0_tenant_name}}",
+    "AUTH0_MANAGEMENT_IDENTIFIER": "{{auth0_managementIdentifier}}",
+    "ENVIRONMENT_URL": "{{hrs_domain}}",
+    "ENVIRONMENT_EMAIL": "{{system_email_address}}",
+    "SENDGRID_API_KEY": "{{sendGrid_apiKey}}",
+    "FRIENDLY_NAME": "{{auth0_friendly_name}}",
+    "BETA_TOKEN": "{{registration_beta_token}}",
+    "TWILIO_AUTH_TOKEN": "{{twilio_auth_token}}",
+    "TWILIO_SID": "{{twilio_sid}}",
+    "TWILIO_PHONE_NUMBER": "{{twilio_phone_number}}"
+  },
+  "AUTH0_ALLOW_DELETE": false,
+  "AUTH0_EXCLUDED_RULES": []
+}
