@@ -3,7 +3,7 @@
     parameters:
       - password:
           name: ANSIBLE_PASSWORD
-          description: "It's ansible vault password. It will be used to decrypt variables to generate config and
+          description: "It's ansible vault password. It will be used to decrypt variables in the YAML file simplyhired-hrs-eastbay-{env}.yml to generate config and
           deploy files for the following build and deploy operations."
       - string:
           name: CREDENTIALSID
@@ -23,24 +23,6 @@
             - build
             - deploy
             - build_and_deploy
-      - bool:
-          name: COMPANY_SERVICE
-          default: true
-      - bool:
-          name: DOCUMENT_SERVICE
-          default: true
-      - bool:
-          name: SEARCH_SERVICE
-          default: true
-      - bool:
-          name: LOGGING_SERVICE
-          default: true
-      - bool:
-          name: WEB
-          default: true
-      - bool:
-          name: GATEWAY
-          default: true
     project-type: pipeline
     defaults: global
     description: 'Build and Deploy All HRS Microservices'
