@@ -726,33 +726,14 @@
       }
       let result = null;
       if (theRequest["userToEmail"] !== undefined) {
-        result = decodeUrlParams(theRequest["userToEmail"]
-                .replace('%2B','+')
-                .replace('%2F','/')
-                .replace('%3F','?')
-                .replace('%25','%')
-                .replace('%23','#')
-                .replace('%3D','=')
-                .replace('%26','&')
-                .replace('%40','@')
-        );
+        result = atob(decodeURIComponent(theRequest["userToEmail"])).split('').reverse().join('');
       }
       if (result !== null) {
         document.getElementById("sign-in-email").value = result
       }
     } catch (e) {
-      console.log(e);
+      return '';
     }
-  }
-
-  function decodeUrlParams(userToEmail) {
-    const split = userToEmail.split('-');
-    const converted = split.map((el) => {
-      if (el === 'at') return '@';
-      if (el === 'dot') return '.';
-      return el;
-    });
-    return converted.join('');
   }
 
   function showSignUp() {
