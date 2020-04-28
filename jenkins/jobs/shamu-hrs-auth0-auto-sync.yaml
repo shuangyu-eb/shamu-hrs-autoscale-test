@@ -39,7 +39,7 @@
           print-post-content: true
           print-contrib-var: true
           cause: '$ref $changed_files'
-          token: 'shamu-hrs-auth0-auto-sync'
+          token: 'shamu-hrs'
           silent-response: true
     wrappers:
       - timestamps

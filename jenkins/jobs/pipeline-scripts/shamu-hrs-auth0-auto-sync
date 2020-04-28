@@ -10,5 +10,6 @@ pipeline {
         sh "ansible-playbook --vault-password-file ansible-vault-file -e 'stack_prefix=simplyhired-hrs-eastbay env=dev' auto-deploy/ansible/build-auth0-config.yml"
         sh "a0deploy import -c auto-deploy/ansible/auth0_config.json -i auth0"
       }
+    }
   }
 }
