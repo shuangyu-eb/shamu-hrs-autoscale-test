@@ -4,7 +4,10 @@ function (user, context, callback) {
 
     const requireMFA = roles.some(role => (role === 'ADMIN' || role === 'SUPER_ADMIN'));
 
-    if (requireMFA) {
+    const { email = '' } = user;
+    const isTestAccount = email.startsWith('shamu.hrs.selenium+') && email.endsWith('gmail.com');
+
+    if (requireMFA && !isTestAccount) {
       // https://auth0.com/docs/multifactor-authentication/custom
       context.multifactor = {
         // required
