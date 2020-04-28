@@ -361,108 +361,137 @@
       outline: 0;
     }
 
-
-    .step-component {
-      margin-bottom: 20px;
-      margin-top: 115px;
+    .page-steps {
+      display: flex;
+      width: fit-content;
+      margin: 95px auto 15px auto;
     }
 
-    .no-pointer {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      position: relative;
-      border: 2px solid var(--border-color);
-      margin-left: 70px;
-      display: inline-block;
-      padding: 5px;
-      background-color: var(--background-color);
+    .page-steps .page-step-component {
+      height: 30px;
     }
 
-    .point-center {
-      width: 10px;
-      height: 10px;
-      background-color: white;
-      border-radius: 50%;
-      position: relative;
-      padding: 7px;
-      border: 2px solid var(--border-color);
-      margin-left: 0;
-      display: inline-block;
-    }
-
-    .point-center:after {
-      position: absolute;
-      content: "";
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      left: 7px;
-      top: 7px;
-      background-color: var(--blue);
-      border-radius: 50%;
-    }
-
-    .bubble-active {
-      height: 52px;
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .04);
-      border: solid 1px var(--border-color);
-      background-color: white;
-      position: absolute;
+    .page-steps .page-step-component .item-title{
+      height: 14px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .3px;
       text-align: center;
-      width: 140px;
-      left: -60px;
-      display: inline-block;
-      padding-left: 5px;
-      padding-right: 5px;
-      bottom: 48px;
+      color: grey;
+      position: relative;
+      display: block;
+      margin-top: 6px;
+      padding-top: 3px;
     }
 
-    .no-pointer:before {
+    .page-steps .page-step-component .item-description {
+      width: 148px;
+      font-size: 12px;
+      letter-spacing: .3px;
+      text-align: center;
+      color: black;
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+
+    .page-steps .page-step-component .item-icon {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      position: relative;
+      padding: 9px;
+      background-color: white;
+      margin: 0 auto;
+      border: 2px solid #DFE2E9;
+    }
+
+    .page-steps .page-step-component:first-child .item-icon:before{
+      display: none;
+    }
+
+    .page-steps .page-step-component .item-icon:before {
       content: "";
-      width: 120px;
+      width: 150px;
       height: 3px;
       background-color: var(--border-color);
       position: absolute;
       display: inline-block;
       right: 0;
       z-index: -1;
-      top: 8px;
     }
 
-    .triangle {
-      width: 0;
-      height: 0;
-      border-right: 10px solid transparent;
-      border-left: 10px solid transparent;
-      border-top: 10px solid white;
-      display: block;
-      margin-left: 40%;
-      position: absolute;
-      top: 50px;
-    }
 
-    .step-details {
-      margin-top: 7px;
-      height: 14px;
-      width: auto;
-      font-size: 12px;
-      letter-spacing: .3px;
-      text-align: center;
-      color: black;
-      display: inline-block;
-    }
-
-    .step-count {
-      margin-top: 8px;
-      height: 14px;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .3px;
-      text-align: center;
-      color: var(--grey-font);
+    .page-steps .page-step-component .item-content {
+      width: 150px;
+      height: 52px;
+      background: white;
+      border: 1px solid #DFE2E9;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .04);
+      border-radius: 4px;
+      align-content: center;
+      justify-content: center;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: transform .3s ease, opacity .3s ease;
+      bottom: 90px;
       position: relative;
+      z-index: 1;
+    }
+
+    .page-steps .page-step-component .item-content:after {
+      content: "";
       display: block;
+      width: 14px;
+      height: 14px;
+      background: white;
+      border: 1px solid #DFE2E9;
+      transform: rotate(45deg);
+      border-top: 0;
+      border-left: 0;
+      box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, .02);
+      position: absolute;
+      margin-top: 3px;
+      margin-left: 68px;
+      z-index: -1;
+    }
+
+    .page-steps .page-step-component .item-icon{
+      background: var(--background-color);
+    }
+
+    .page-steps .page-step-component.step-in-progress .item-icon {
+      background: white;
+    }
+
+    .page-steps .page-step-component.step-in-progress .item-icon:after {
+      position: absolute;
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      left: 6px;
+      top: 6px;
+      background-color: var(--blue);
+      border-radius: 50%;
+    }
+
+    .page-steps .page-step-component.step-in-progress .item-content {
+      opacity: 1;
+      transition: transform .3s ease, opacity .3s ease;
+      transform: translateY(-5px);
+    }
+
+    .page-steps:hover .item-content {
+      transform: translateY(5px);
+      opacity: 0 !important;
+      transition: transform .3s ease, opacity .3s ease;
+    }
+
+    .page-steps .page-step-component:hover .item-content {
+      transform: translateY(-5px);
+      opacity: 1 !important;
+      transition: transform .3s ease, opacity .3s ease;
     }
 
     a {
@@ -583,15 +612,21 @@
       <div id="sign-up-container">
         <h1 class="form-title">Sign Up</h1>
 
-        <div class="step-component">
-          <div class="point-center">
-            <div class="bubble-active">
-              <div class="step-count">Step 1</div>
-              <div class="step-details">Create Account</div>
-              <div class="triangle"></div>
+        <div class="page-steps">
+          <div class="page-step-component step-in-progress">
+            <div class="item-icon"></div>
+            <div class="item-content">
+              <div class="item-title">Step 1</div>
+              <div class="item-description">Create Account</div>
             </div>
           </div>
-          <div class="no-pointer"></div>
+          <div class="page-step-component">
+            <div class="item-icon"></div>
+            <div class="item-content">
+              <div class="item-title">Step 2</div>
+              <div class="item-description">Additional Information</div>
+            </div>
+          </div>
         </div>
 
 
