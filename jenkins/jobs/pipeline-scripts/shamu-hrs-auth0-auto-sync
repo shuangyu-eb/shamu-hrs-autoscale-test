@@ -1,0 +1,14 @@
+pipeline {
+  agent { label '!master'}
+
+  stages {
+    stage('Test') {
+      steps{
+        withCredentials([string(credentialsId: "simplyhired-hrs-eastbay-dev-ansible-vault", variable: 'ANSIBLE_VAULT')]){
+          sh "echo $ANSIBLE_VAULT > ansible-vault-file"
+        }
+        sh "ansible-playbook --vault-password-file ansible-vault-file -e 'stack_prefix=simplyhired-hrs-eastbay env=dev' auto-deploy/ansible/build-auth0-config.yml"
+        sh "a0deploy import -c auto-deploy/ansible/auth0_config.json -i auth0"
+      }
+  }
+}

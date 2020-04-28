@@ -1,253 +1,240 @@
-def getBuildTarget
+def getTargetBranch
 def getEnvironment
 
-void checkoutBuildTarget(String branch, String url) {
-    checkout([
-        $class: 'GitSCM',
-        branches: [[name: branch]],
-        doGenerateSubmoduleConfigurations: false,
-        extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: false, reference: '', trackingSubmodules: false]],
-        userRemoteConfigs: [[credentialsId: "${credentialsId}", url: url]]
-    ])
+void pullRepoAndCheckoutTargetBranch(String branch, String url) {
+  checkout([
+    $class: 'GitSCM',
+    branches: [[name: branch]],
+    doGenerateSubmoduleConfigurations: false,
+    extensions: [
+        [$class: 'SubmoduleOption',
+         disableSubmodules: false,
+         parentCredentials: false,
+         recursiveSubmodules: false,
+         reference: '',
+         trackingSubmodules: false]
+    ],
+    userRemoteConfigs: [[credentialsId: "${credentialsId}", url: url]]
+  ])
 }
 
-String isMicroserviceSelected(String microserviceName) {
-    return sh(returnStdout: true,
-            script:
-                """
-                    case "$SERVICES" in
-                    *"$microserviceName"*) echo yes ;;
-                    *       ) echo no ;;
-                    esac
-                """
-            ).trim()
+String microserviceSelected(String microserviceName) {
+  return sh(
+      returnStdout: true,
+      script:
+        """
+          case "$SERVICES" in
+          *"$microserviceName"*) echo yes ;;
+          *       ) echo no ;;
+          esac
+        """
+      ).trim()
+}
+
+// build or deploy or deploy after building
+void performOperations(String targetMicroserviceDir) {
+  if ("$OPERATION" == "build") {
+    sh "cd ${targetMicroserviceDir} && CI/build -e ${ENV} -r ${RELEASE}"
+  } else if ("$OPERATION" == "deploy") {
+    sh "cd ${targetMicroserviceDir} && CI/deploy ${ENV} ${RELEASE}"
+  } else {
+    sh "cd ${targetMicroserviceDir} && CI/build -e ${ENV} -r ${RELEASE}"
+    sh "cd ${targetMicroserviceDir} && CI/deploy ${ENV} ${RELEASE}"
+  }
 }
 
 pipeline {
-    agent { label '!master' }
-    environment {
-        COMPANY_SERVICE_DIR = "shamu-hrs-company-service"
-        DOCUMENT_SERVICE_DIR = "shamu-hrs-document-service"
-        LOGGING_SERVICE_DIR = "shamu-hrs-logging-service"
-        SEARCH_SERVICE_DIR = "shamu-hrs-search-service"
-        GATEWAY_DIR = "shamu-hrs-gateway"
-        WEB_DIR = "shamu-hrs-web"
+  agent { label '!master' }
+  environment {
+    COMPANY_SERVICE_DIR = "shamu-hrs-company-service"
+    DOCUMENT_SERVICE_DIR = "shamu-hrs-document-service"
+    LOGGING_SERVICE_DIR = "shamu-hrs-logging-service"
+    SEARCH_SERVICE_DIR = "shamu-hrs-search-service"
+    GATEWAY_DIR = "shamu-hrs-gateway"
+    WEB_DIR = "shamu-hrs-web"
+    AUTH0_DIR = 'shamu-hrs-auth0'
+  }
+  stages {
+    stage('Add Up Selected Microservices') {
+      steps {
+        script {
+          companySelected = microserviceSelected('company')
+          documentSelected = microserviceSelected('document')
+          searchSelected = microserviceSelected('search')
+          loggingSelected = microserviceSelected('logging')
+          webSelected = microserviceSelected('web')
+          gatewaySelected = microserviceSelected('gateway')
+          syncAuth0Config = microserviceSelected('auth0')
+        }
+      }
     }
-    stages {
-        stage('Add up selected micro services') {
-            steps {
-                script {
-                    isCompanySelected = isMicroserviceSelected('company')
-                    isDocumentSelected = isMicroserviceSelected('document')
-                    isSearchSelected = isMicroserviceSelected('search')
-                    isLoggingSelected = isMicroserviceSelected('logging')
-                    isWebSelected = isMicroserviceSelected('web')
-                    isGatewaySelected = isMicroserviceSelected('gateway')
-                }
-            }
+    stage('Select Target Branch') {
+      when { expression { return "$TARGET_BRANCH_TYPE" != 'master' } }
+      steps {
+        script {
+          CURRENT_DIR = sh(returnStdout: true, script: 'pwd').trim()
+          if ("$TARGET_BRANCH_TYPE" == "tag") {
+            TARGET_BRANCHES = sh(returnStdout: true, script: 'git tag')
+          }
+          if ("$TARGET_BRANCH_TYPE" == "release_branch") {
+            TARGET_BRANCHES = sh(returnStdout: true, script: '''git branch -r | grep 'release' | sed 's/origin\\///' ''')
+          }
         }
-        stage('Select build target') {
-            steps {
-                script { 
-                    JOB_DIR = sh(returnStdout: true, script: 'pwd').trim()
-                    if ("$BUILD_TARGET_TYPE" == "tag") {
-                        BUILD_TARGETS = sh(returnStdout: true, script: 'git tag')
-                    } else {
-                        // "$BUILD_TARGET_TYPE" == "release_branch"
-                        BUILD_TARGETS = sh(returnStdout: true, script: '''git branch -r | grep 'release' | sed 's/origin\\///' ''')
-                    }
-                }
 
-                // select specific build target
-                timeout(5) {  // timeout waiting for input after 5 minutes
-                    script {
-                        getBuildTarget = input(
-                            id: 'build_target',
-                            message: 'Please select your release.',
-                            ok: 'Proceed',
-                            parameters: [
-                                choice(
-                                    choices: "${BUILD_TARGETS}",
-                                    description: "Select a ${BUILD_TARGET_TYPE} to deploy",
-                                    name: 'BUILD_TARGET')
-                            ],
-                            submitter: 'hrs',
-                            submitterParameter: 'submitterParameter'
-                        )
-                        BUILD_TARGET=getBuildTarget.BUILD_TARGET
-
-                        if ("$BUILD_TARGET_TYPE" == "tag") {
-                            BUILD_TARGET = "refs/tags/" + BUILD_TARGET
-                        }
-                        // release/0.1.x -> 0.1.x  refs/tags/v0.1.1 -> v0.1.1
-                        RELEASE = sh(returnStdout: true, script: """echo ${BUILD_TARGET} | sed 's/^.*\\///' """).trim()
-                    }
-                }
+        // select specific build target, for example release/0.1.x or v0.1.1
+        timeout(5) {
+          script {
+            getTargetBranch = input(
+              id: 'build_target',
+              message: 'Please select your release.',
+              ok: 'Proceed',
+              parameters: [
+                  choice(
+                      choices: "${TARGET_BRANCHES}",
+                      description: "Select a ${TARGET_BRANCH_TYPE} to deploy",
+                      name: 'TARGET_BRANCH')
+              ],
+              submitter: 'cobra-hrs',
+              submitterParameter: 'submitterParameter'
+            )
+            TARGET_BRANCH=getTargetBranch.TARGET_BRANCH
+            if ("$TARGET_BRANCH_TYPE" == "tag") {
+              TARGET_BRANCH = "refs/tags/" + TARGET_BRANCH
             }
+          }
         }
-        stage('Select environment') {
+      }
+    }
+    stage('Select Environment') {
+      steps {
+        dir("auto-deploy/ansible/include") {
+          // get all environments: shamu-hrs-eastbay-prod.yml -> shamu-hrs-eastbay-prod
+          script { ENVIRONMENTS = sh(returnStdout: true, script: '''ls | sed 's/\\.[^.]*$//' ''') }
+
+          // select environment you want to deploy
+          timeout(5) {  // timeout waiting for input after 5 minutes
+            script {
+              getEnvironment = input(
+                  id: 'environment',
+                  message: 'Please select your environment.',
+                  ok: 'Proceed',
+                  parameters: [
+                      choice(
+                          choices: ENVIRONMENTS,
+                          description: 'Select a environment to deploy.',
+                          name: 'ENVIRONMENT')
+                  ],
+                  submitter: 'cobra-hrs',
+                  submitterParameter: 'submitterParameter'
+              )
+              ENV=getEnvironment.ENVIRONMENT
+            }
+          }
+        }
+      }
+    }
+    stage('Generate Needed Variables') {
+      steps {
+        script {
+          env = sh(returnStdout: true, script: "echo ${ENV} | sed 's/^.*-//'").trim()
+          stack_prefix = sh(returnStdout: true, script: """ echo ${ENV} | sed 's/-[^-]*\$//' """).trim()
+          ansible_vault_credentialsId = ENV + "-ansible-vault"
+          if ("$TARGET_BRANCH_TYPE" == "master") {
+              TARGET_BRANCH = "origin/master"
+          }
+          // let shamu-hrs checkout TARGET_BRANCH
+          sh "git checkout $TARGET_BRANCH"
+
+          // release/0.1.x -> 0.1.x  refs/tags/v0.1.1 -> v0.1.1
+          RELEASE = sh(returnStdout: true, script: """echo ${TARGET_BRANCH} | sed 's/^.*\\///' """).trim()
+        }
+      }
+    }
+    stage('Perform Operations on Selected services') {
+      parallel {
+        stage('Sync Auth0 Config') {
+          when { expression { return syncAuth0Config == 'yes' } }
+          steps {
+            sh "mkdir -p ${AUTH0_DIR}"
+            dir("${AUTH0_DIR}") {
+              pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs.git")
+              withCredentials([string(credentialsId: "$ansible_vault_credentialsId", variable: 'ANSIBLE_VAULT')]){
+                sh "echo $ANSIBLE_VAULT > ansible-vault-file"
+              }
+            }
+            sh "cd ${AUTH0_DIR} && ansible-playbook --vault-password-file ansible-vault-file -e 'stack_prefix=${stack_prefix} env=${env}' auto-deploy/ansible/build-auth0-config.yml"
+            sh "cd ${AUTH0_DIR} && a0deploy import -c auto-deploy/ansible/auth0_config.json -i auth0"
+          }
+        }
+        stage('Company Service') {
+          when { expression { return companySelected == 'yes' } }
             steps {
-                dir("auto-deploy/ansible/include") {
-                    // get all environments: shamu-hrs-eastbay-prod.yml -> shamu-hrs-eastbay-prod
-                    script { ENVIRONMENTS = sh(returnStdout: true, script: '''ls | sed 's/\\.[^.]*$//' ''') }
-
-                    // select environment you want to deploy
-                    timeout(5) {  // timeout waiting for input after 5 minutes
-                        script {
-                            getEnvironment = input(
-                                id: 'environment',
-                                message: 'Please select your environment.',
-                                ok: 'Proceed',
-                                parameters: [
-                                    choice(
-                                        choices: ENVIRONMENTS,
-                                        description: 'Select a environment to deploy.',
-                                        name: 'ENVIRONMENT')
-                                ],
-                                submitter: 'hrs',
-                                submitterParameter: 'submitterParameter'
-                            )
-                            ENV=getEnvironment.ENVIRONMENT
-                        }
-                    }
-                }
-                // create ansible vault password file
-                script { env = sh(returnStdout: true, script: "echo ${ENV} | sed 's/^.*-//'").trim() }
-                script { stack_prefix = sh(returnStdout: true, script: """ echo ${ENV} | sed 's/-[^-]*\$//' """).trim() }
-                sh '''
-                    touch password
-                    echo $ANSIBLE_PASSWORD > password
-                    '''
+              sh "mkdir -p ${COMPANY_SERVICE_DIR}"
+              // pull repo and checkout build target
+              dir("${COMPANY_SERVICE_DIR}") {
+                pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs-company-service.git")
+              }
+              // generate config files
+              sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${COMPANY_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=company'"
+              performOperations("${COMPANY_SERVICE_DIR}")
             }
         }
-        stage('Build and deploy selected microservices') {
-            parallel {
-                stage('Build company service') {
-                    when { expression { return isCompanySelected == 'yes' } }
-                    steps {
-                        sh "mkdir -p ${COMPANY_SERVICE_DIR}"
-                        // pull repo and checkout build target
-                        dir("${COMPANY_SERVICE_DIR}") {
-                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-company-service.git")
-                        }
-                        // generate config files
-                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${COMPANY_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=company'"
-                        script {
-                            if ("$OPERATION" == "build") {
-                                sh "cd ${COMPANY_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                            } else if ("$OPERATION" == "deploy") {
-                                sh "cd ${COMPANY_SERVICE_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            } else {
-                                sh "cd ${COMPANY_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                                sh "cd ${COMPANY_SERVICE_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            }
-                        }
-                    }
-                }
-                stage('Build document service') {
-                    when { expression { return isDocumentSelected == 'yes' } }
-                    steps {
-                        sh "mkdir -p ${DOCUMENT_SERVICE_DIR}"
-                        dir("${DOCUMENT_SERVICE_DIR}") {
-                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-document-service.git")
-                        }
-                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${DOCUMENT_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=document'"
-                        script {
-                            if ("$OPERATION" == "build") {
-                                sh "cd ${DOCUMENT_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                            } else if ("$OPERATION" == "deploy") {
-                                sh "cd ${DOCUMENT_SERVICE_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            } else {
-                                sh "cd ${DOCUMENT_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                                sh "cd ${DOCUMENT_SERVICE_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            }
-                        }
-                    }
-                }
-                stage('Build search service') {
-                    when { expression { return isSearchSelected == 'yes' } }
-                    steps {
-                        sh "mkdir -p ${SEARCH_SERVICE_DIR}"
-                        dir("${SEARCH_SERVICE_DIR}") {
-                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-search-service.git")
-                        }
-                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${SEARCH_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=search'"
-                        script {
-                            if ("$OPERATION" == "build") {
-                                sh "cd ${SEARCH_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                            } else if ("$OPERATION" == "deploy") {
-                                sh "cd ${SEARCH_SERVICE_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            } else {
-                                sh "cd ${SEARCH_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                                sh "cd ${SEARCH_SERVICE_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            }
-                        }
-                    }
-                }
-                stage('Build logging service') {
-                    when { expression { return isLoggingSelected == 'yes' } }
-                    steps {
-                        sh "mkdir -p ${LOGGING_SERVICE_DIR}"
-                        dir("${LOGGING_SERVICE_DIR}") {
-                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-logging-service.git")
-                        }
-                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${LOGGING_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=logging'"
-                        script {
-                            if ("$OPERATION" == "build") {
-                                sh "cd ${LOGGING_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                            } else if ("$OPERATION" == "deploy") {
-                                sh "cd ${LOGGING_SERVICE_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            } else {
-                                sh "cd ${LOGGING_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                                sh "cd ${LOGGING_SERVICE_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            }
-                        }
-                    }
-                }
-                stage('Build gateway') {
-                    when { expression { return isGatewaySelected == 'yes' } }
-                    steps {
-                        sh "mkdir -p ${GATEWAY_DIR}"
-                        dir("${GATEWAY_DIR}") {
-                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-gateway.git")
-                        }
-                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${GATEWAY_DIR} stack_prefix=${stack_prefix} env=${env} service_name=gateway'"
-                        script {
-                            if ("$OPERATION" == "build") {
-                                sh "cd ${GATEWAY_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                            } else if ("$OPERATION" == "deploy") {
-                                sh "cd ${GATEWAY_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            } else {
-                                sh "cd ${GATEWAY_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                                sh "cd ${GATEWAY_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            }
-                        }
-                    }
-                }
-                stage('Build web') {
-                    when { expression { return isWebSelected == 'yes' } }
-                    steps {
-                        sh "mkdir -p ${WEB_DIR}"
-                        dir("${WEB_DIR}") {
-                            checkoutBuildTarget("$BUILD_TARGET", "https://github.com/tardisone/shamu-hrs-web.git")
-                        }
-                        sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${JOB_DIR}/${WEB_DIR} stack_prefix=${stack_prefix} env=${env} service_name=web' --vault-password-file password"
-                        script {
-                            if ("$OPERATION" == "build") {
-                                echo "$OPERATION == build"
-                                sh "cd ${WEB_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                            } else if ("$OPERATION" == "deploy") {
-                                echo "$OPERATION == deploy"
-                                sh "cd ${WEB_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            } else {
-                                echo "$OPERATION == build_and_deploy"
-                                sh "cd ${WEB_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
-                                sh "cd ${WEB_DIR} && CI/deploy ${ENV} ${RELEASE}"
-                            }
-                        }
-                    }
-                }
+        stage('Document Service') {
+          when { expression { return documentSelected == 'yes' } }
+          steps {
+            sh "mkdir -p ${DOCUMENT_SERVICE_DIR}"
+            dir("${DOCUMENT_SERVICE_DIR}") {
+                pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs-document-service.git")
             }
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${DOCUMENT_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=document'"
+            performOperations("${DOCUMENT_SERVICE_DIR}")
+          }
         }
-   }
+        stage('Search Service') {
+          when { expression { return searchSelected == 'yes' } }
+          steps {
+            sh "mkdir -p ${SEARCH_SERVICE_DIR}"
+            dir("${SEARCH_SERVICE_DIR}") {
+                pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs-search-service.git")
+            }
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${SEARCH_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=search'"
+            performOperations("${SEARCH_SERVICE_DIR}")
+          }
+        }
+        stage('Logging Service') {
+          when { expression { return loggingSelected == 'yes' } }
+          steps {
+            sh "mkdir -p ${LOGGING_SERVICE_DIR}"
+            dir("${LOGGING_SERVICE_DIR}") {
+                pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs-logging-service.git")
+            }
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${LOGGING_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=logging'"
+            performOperations("${LOGGING_SERVICE_DIR}")
+          }
+        }
+        stage('Gateway') {
+          when { expression { return gatewaySelected == 'yes' } }
+          steps {
+            sh "mkdir -p ${GATEWAY_DIR}"
+            dir("${GATEWAY_DIR}") {
+                pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs-gateway.git")
+            }
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${GATEWAY_DIR} stack_prefix=${stack_prefix} env=${env} service_name=gateway'"
+            performOperations("${GATEWAY_DIR}")
+          }
+        }
+        stage('Web') {
+          when { expression { return webSelected == 'yes' } }
+          steps {
+            sh "mkdir -p ${WEB_DIR}"
+            dir("${WEB_DIR}") {
+                pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs-web.git")
+            }
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${WEB_DIR} stack_prefix=${stack_prefix} env=${env} service_name=web' --vault-password-file ansible-vault-file"
+            performOperations("${WEB_DIR}")
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,0 +1,47 @@
+- job:
+    name: 'shamu-hrs-auth0-auto-sync'
+    project-type: pipeline
+    defaults: global
+    description: 'Sync auth0 config'
+    disabled: false
+    concurrent: false
+    github-project:
+      project-url: https://github.com/tardisone/shamu-hrs
+    block-downstream: false
+    block-upstream: false
+    retry-count: 3
+    node: '!master'
+    logrotate:
+      daysToKeep: 5
+      numToKeep: 10
+      artifactDaysToKeep: -1
+      artifactNumToKeep: -1
+    pipeline-scm:
+      scm:
+        - git:
+            url: https://github.com/tardisone/shamu-hrs
+            branches:
+              - ':origin/master'
+            credentials-id: 'derek-eb'
+            wipe-workspace: false
+      script-path: 'jenkins/jobs/pipeline-scripts/shamu-hrs-auth0-auto-sync'
+    triggers:
+      - generic-webhook-trigger:
+          post-content-params:
+            - type: 'JSONPath'
+              key: 'ref'
+              value: '$.ref'
+            - type: 'JSONPath'
+              key: 'changed_files'
+              value: "$.commits[*].['modified','added','removed'][*]"
+          regex-filter-text: '$ref $changed_files'
+          regex-filter-expression: 'refs/heads/master .*"auth0/[^"]+?".*'
+          print-post-content: true
+          print-contrib-var: true
+          cause: '$ref $changed_files'
+          token: 'shamu-hrs-auth0-auto-sync'
+          silent-response: true
+    wrappers:
+      - timestamps
+      - ansicolor:
+          colormap: "xterm"

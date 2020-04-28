@@ -1,24 +1,20 @@
 - job:
     name: 'shamu-hrs-manual-build-and-deploy'
     parameters:
-      - password:
-          name: ANSIBLE_PASSWORD
-          description: "It's ansible vault password. It will be used to decrypt variables in the YAML file simplyhired-hrs-eastbay-{env}.yml to generate config and
-          deploy files for the following build and deploy operations."
       - string:
           name: CREDENTIALSID
-          description: "The id of the credential declared in Jenkins Global Credentials. The content of the 
+          description: "The id of the credential declared in Jenkins Global Credentials(i.e. derek-eb). The content of the 
           credential is github personal access token and its kind is 'Username with passowrd'."
       - choice:
-          name: BUILD_TARGET_TYPE
-          description: 'Choose to build on tags(e.g. v0.0.1) or release branches(e.g. release/0.0.x).'
+          name: TARGET_BRANCH_TYPE
+          description: 'Choose to perform operations on tags(e.g. v0.0.1) or release branches(e.g. release/0.0.x) or master branch.'
           choices: 
             - tag
             - release_branch
       - choice:
           name: OPERATION
           description: "Choose which operation you want to perform. Build, deploy or both of them.
-          If you want to peform 'deploy' operation, please make sure you have corresponding artifacts in aws ecr and s3."
+          If you only want to perform 'deploy' operation, please make sure you have corresponding artifacts in aws ecr and s3."
           choices:
             - build
             - deploy
@@ -51,5 +47,3 @@
       - timestamps
       - ansicolor:
           colormap: "xterm"
-
-
