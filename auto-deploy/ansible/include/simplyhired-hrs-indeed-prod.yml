@@ -12,6 +12,7 @@ aws_deploy_security_token:
 s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.amazonaws.com/
 s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.amazonaws.com/
 hrs_domain: https://hr.simplyhired.com
+hrs_icon_domain: https://hr.simplyhired.com
 proxy_domain: https://hr-api.simplyhired.com
 website_end_point: https://hr.simplyhired.com
 # vars for rds

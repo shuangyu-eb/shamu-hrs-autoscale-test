@@ -10,7 +10,7 @@
     "enable_mgmt_api_v1": true
   },
   "friendly_name": "##FRIENDLY_NAME##",
-  "picture_url": "##ENVIRONMENT_URL##/image/logo.simplyhired.png",
+  "picture_url": "##ENVIRONMENT_ICON_DOMAIN##/image/logo.simplyhired.png",
   "support_email": "hris-help@simplyhired.com",
   "support_url": "https://www.simplyhired.com/hris"
 }

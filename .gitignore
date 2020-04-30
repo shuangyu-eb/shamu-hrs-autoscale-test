@@ -32,11 +32,8 @@
 ### AUTH0 ###
 /auto-deploy/ansible/auth0_config.json
 
-### AUTH0 LOCAL ###
-/auto-deploy/ansible/auth0_config_local.json
-
 ### LOCAL CONFIGURATION ###
-/auto-deploy/ansible/simplyhired-hrs-eastbay-local.yml
+/auto-deploy/ansible/include/simplyhired-hrs-eastbay-local.yml
 
 ### MAC ###
 **/.DS_Store

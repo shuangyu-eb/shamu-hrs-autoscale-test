@@ -6,6 +6,7 @@
     "AUTH0_TENANT_NAME": "{{auth0_tenant_name}}",
     "AUTH0_MANAGEMENT_IDENTIFIER": "{{auth0_managementIdentifier}}",
     "ENVIRONMENT_URL": "{{hrs_domain}}",
+    "ENVIRONMENT_ICON_DOMAIN": "{{hrs_icon_domain}}",
     "ENVIRONMENT_EMAIL": "{{system_email_address}}",
     "SENDGRID_API_KEY": "{{sendGrid_apiKey}}",
     "FRIENDLY_NAME": "{{auth0_friendly_name}}",
