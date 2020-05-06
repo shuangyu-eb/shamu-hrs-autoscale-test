@@ -15,6 +15,8 @@
       --font-color: #2E3033;
       --grey-font: #7b7e84;
       --error-font-color: #4a4a4a;
+      --light-periwinkle-two:#d8dadf;
+      --white:#ffffff;
     }
 
     body {
@@ -498,6 +500,59 @@
       text-decoration:none;
     }
 
+    button.redirect-to-market{
+      position: absolute;
+      right: 25px;
+      border-radius: 20px;
+      width: 260px;
+      height: 38px;
+      top: 16px;
+      border: solid 1px var(--light-periwinkle-two);
+      background-color: var(--white);
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .redirect-to-market>div{
+      float: left;
+    }
+
+    .redirect-to-market-content{
+      width: 90%;
+      height: 18px;
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 600;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.29;
+      letter-spacing: normal;
+      text-align: center;
+      color: var(--blue);
+      margin-left: 6px;
+    }
+
+    .redirect-to-market-right-angle{
+      width: 13px;
+      height: 13px;
+      position: absolute;
+      right: 18px;
+      top: 12px;
+    }
+
+    .redirect-to-market-right-angle-icon{
+      width: 7px;
+      height: 7px;
+      border-top: 2px solid var(--blue);
+      border-right: 2px solid var(--blue);
+      transform: rotate(45deg);
+      margin-top: 1px;
+    }
+
+    button.redirect-to-market-mobile{
+      display: none;
+    }
+
     @media only screen and (max-width: 767px) {
         .navbar {
             height: 59px;
@@ -547,6 +602,53 @@
             width: 100%;
             margin: 0;
         }
+
+      button.redirect-to-market{
+        display: none;
+      }
+
+      button.redirect-to-market-mobile{
+        position: absolute;
+        top: 18px;
+        right: 25px;
+        border-radius: 20px;
+        width: 117px;
+        height: 27px;
+        border: solid 1px var(--light-periwinkle-two);
+        background-color: var(--white);
+        cursor: pointer;
+        display: block;
+      }
+
+      .redirect-to-market-mobile > div{
+        float: left;
+      }
+
+      .redirect-to-market-content-mobile{
+        width: 70%;
+        height: 18px;
+        font-family: Roboto;
+        font-size: 12px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        letter-spacing: normal;
+        color: var(--blue);
+        text-align: left;
+        margin-left: 12px;
+        line-height: 18px;
+      }
+
+      .redirect-to-market-right-angle-icon-mobile{
+        width: 5px;
+        height: 5px;
+        border-top: 2px solid var(--blue);
+        border-right: 2px solid var(--blue);
+        transform: rotate(45deg);
+        position: absolute;
+        right: 10px;
+        top: 9px;
+      }
     }
   </style>
 </head>
@@ -555,6 +657,16 @@
   <div onclick="showSignIn()">
     <img src="##ENVIRONMENT_URL##/image/logo.simplyhired.png" alt="logo" />
   </div>
+  <button id="redirect-to-market" class="redirect-to-market" onclick="redirectToMarket()">
+    <div class="redirect-to-market-content">SimplyHired HR - Learn More</div>
+    <div class="redirect-to-market-right-angle">
+      <div class="redirect-to-market-right-angle-icon"/>
+    </div>
+  </button>
+  <button id="redirect-to-market-mobile" class="redirect-to-market-mobile" onclick="redirectToMarket()">
+    <div class="redirect-to-market-content-mobile">SimplyHired</div>
+    <div class="redirect-to-market-right-angle-icon-mobile"/>
+  </button>
 </div>
 <div class="form-container">
   <div class="auth-form">
@@ -975,13 +1087,13 @@
       var passwordValid = checkPassword(password, 1);
 
       if (emailValid && passwordValid) {
-        disableButton(0);
+        disableButton(2);
         webAuth.login({
           realm: databaseConnection,
           username: email,
           password: password,
         }, function (err) {
-          enableButton(0);
+          enableButton(2);
           if (err) {
             displayError(err);
           }
@@ -998,14 +1110,14 @@
       var passwordValid = checkPassword(password, 3);
 
       if (emailValid && passwordValid) {
-        disableButton(1);
+        disableButton(3);
         webAuth.signup({
           connection: databaseConnection,
           email: email,
           password: password,
         }, function (err) {
           if (err) {
-            enableButton(1);
+            enableButton(3);
             return displayError(err);
           }
 
@@ -1036,6 +1148,10 @@
     document.querySelector('#sign-in').addEventListener('keyup', onSignInKeyDown);
     document.querySelector('#sign-up').addEventListener('keyup', onSignUpKeyDown);
   });
+
+  function redirectToMarket() {
+    window.location.href='https://www.simplyhired.com/hris';
+  }
 </script>
 </body>
 </html>
