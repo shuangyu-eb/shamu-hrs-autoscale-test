@@ -72,7 +72,6 @@ pipeline {
       when { expression { return "$TARGET_BRANCH_TYPE" != 'master' } }
       steps {
         script {
-          CURRENT_DIR = sh(returnStdout: true, script: 'pwd').trim()
           if ("$TARGET_BRANCH_TYPE" == "tag") {
             TARGET_BRANCHES = sh(returnStdout: true, script: 'git tag')
           }
@@ -136,6 +135,7 @@ pipeline {
     stage('Generate Needed Variables') {
       steps {
         script {
+          CURRENT_DIR = sh(returnStdout: true, script: 'pwd').trim()
           env = sh(returnStdout: true, script: "echo ${ENV} | sed 's/^.*-//'").trim()
           stack_prefix = sh(returnStdout: true, script: """ echo ${ENV} | sed 's/-[^-]*\$//' """).trim()
           ansible_vault_credentialsId = ENV + "-ansible-vault"
