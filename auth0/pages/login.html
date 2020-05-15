@@ -17,6 +17,8 @@
       --error-font-color: #4a4a4a;
       --light-periwinkle-two:#d8dadf;
       --white:#ffffff;
+      --primary-button-hover-background: #158BF5;
+      --primary-button-active-background: #006DCF;
     }
 
     body {
@@ -165,30 +167,37 @@
     }
 
     .form-submit-button {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
+      padding: 10px 28px;
     }
 
     .form-submit-button button {
       width: 168px;
       height: 40px;
       border-radius: 20px;
-      box-shadow: 2px 2px 4px 0 rgba(72, 142, 255, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.12);
       background-color: var(--blue);
-      outline: none;
-      border: 0;
-      display: inline-block;
-      font-size: 14px;
-      color: white;
       cursor: pointer;
-      font-family: Roboto;
-      font-weight: 500;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 1.29;
-      letter-spacing: 0.24px;
+      border: 0;
+    }
+
+    .form-submit-button button:hover {
+      border: 0;
+      background-color: var(--primary-button-hover-background);
+    }
+
+    .form-submit-button button:focus {
+      border: 0;
+      background-color: var(--primary-button-active-background);
+      outline: none;
+    }
+
+    .form-submit-button button .button-text {
+      font-size: 14px;
       text-align: center;
+      color: white;
+      font-family: Roboto;
+      font-weight: 600;
+      line-height: 1.29;
+      letter-spacing: .24px;
     }
 
     .form-tip {
@@ -345,7 +354,7 @@
     }
 
     button[disabled] {
-      background-color: var(--border-color);
+      background-color: var(--border-color) !important;
       box-shadow: none;
     }
 
@@ -710,7 +719,8 @@
             </div>
           </div>
           <div class="form-submit-button">
-            <button class="is-primary is-rounded sign-up-button-text" id="sign-in-button">Sign In
+            <button class="is-primary is-rounded sign-up-button-text" id="sign-in-button">
+              <span class="button-text">Sign In</span>
             </button>
           </div>
           <span class="form-tip" onclick="forgotPassword()">Forgot your password?</span>
@@ -819,7 +829,7 @@
           </div>
           <div class="line"></div>
           <div class="form-submit-button">
-            <button id="sign-up-button">Create Account</button>
+            <button id="sign-up-button"><span class="button-text">Create Account</span></button>
           </div>
           <span class="form-tip" onclick="showSignIn()">Already have an employer account?</span>
         </div>
@@ -848,7 +858,7 @@
                 onclick="verifyToken()"
                 class="is-primary is-rounded sign-up-button-text"
             >
-              Verify
+              <span class="button-text">Verify</span>
             </button>
           </div>
         </div>
