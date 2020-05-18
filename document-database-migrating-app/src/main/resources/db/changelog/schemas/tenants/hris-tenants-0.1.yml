@@ -1,0 +1,621 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1586484411-1
+      author: max-eb
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: folders
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: BINARY(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+            tableName: folders
+      rollback:
+        - dropTable:
+            tableName: folders
+  - changeSet:
+      id: 1586484411-2
+      author: max-eb
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: documents
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: BINARY(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: VARCHAR(50)
+              - column:
+                  name: url
+                  type: VARCHAR(255)
+              - column:
+                  name: user_id
+                  type: BINARY(16)
+              - column:
+                  name: folder_id
+                  type: BINARY(16)
+              - column:
+                  name: size
+                  type: BIGINT
+              - column:
+                  name: type
+                  type: VARCHAR(64)
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+            tableName: documents
+      rollback:
+        - dropTable:
+            tableName: documents
+  - changeSet:
+      id: 1586484411-3
+      author: max-eb
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: contracts
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: BINARY(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: document_id
+                  type: BINARY(16)
+              - column:
+                  name: pactsafe_contract_id
+                  type: INT
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+            tableName: contracts
+      rollback:
+        - dropTable:
+            tableName: contracts
+  - changeSet:
+      id: 1586484411-4
+      author: max-eb
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: contract_fields
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: BINARY(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: contract_id
+                  type: BINARY(16)
+              - column:
+                  name: field_name
+                  type: VARCHAR(50)
+              - column:
+                  name: required
+                  type: TINYINT(1)
+              - column:
+                  name: type
+                  type: VARCHAR(50)
+              - column:
+                  name: page
+                  type: INT
+              - column:
+                  name: top
+                  type: DOUBLE
+              - column:
+                  name: left
+                  type: DOUBLE
+              - column:
+                  name: scale
+                  type: DOUBLE
+              - column:
+                  name: width
+                  type: DOUBLE
+              - column:
+                  name: height
+                  type: DOUBLE
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+            tableName: contract_fields
+      rollback:
+        - dropTable:
+            tableName: contract_fields
+  - changeSet:
+      id: 1586484411-5
+      author: max-eb
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: recipient_action_types
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: BINARY(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+            tableName: recipient_action_types
+      rollback:
+        - dropTable:
+            tableName: recipient_action_types
+  - changeSet:
+      id: 1586484411-6
+      author: max-eb
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: document_request_types
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: BINARY(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+            tableName: document_request_types
+      rollback:
+        - dropTable:
+            tableName: document_request_types
+  - changeSet:
+      id: 1586484411-7
+      author: max-eb
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: document_requests
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: BINARY(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: document_id
+                  type: BINARY(16)
+              - column:
+                  name: contract_id
+                  type: BINARY(16)
+              - column:
+                  name: message
+                  type: TEXT
+              - column:
+                  name: document_request_type_id
+                  type: BINARY(16)
+              - column:
+                  name: recipient_action_type_id
+                  type: BINARY(16)
+              - column:
+                  name: pactsafe_request_id
+                  type: VARCHAR(50)
+              - column:
+                  name: sender_user_id
+                  type: BINARY(16)
+              - column:
+                  name: expired_at
+                  type: DATETIME
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+            tableName: document_requests
+      rollback:
+        - dropTable:
+            tableName: document_requests
+  - changeSet:
+      id: 1586484411-8
+      author: max-eb
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: document_requests_users
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: BINARY(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: document_request_id
+                  type: BINARY(16)
+              - column:
+                  name: user_id
+                  type: BINARY(16)
+              - column:
+                  name: recipient_group_id
+                  type: BINARY(16)
+              - column:
+                  name: pactsafe_signer_id
+                  type: VARCHAR(50)
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+              - column:
+                  name: actioned_at
+                  type: DATETIME
+            tableName: document_requests_users
+      rollback:
+        - dropTable:
+            tableName: document_requests_users
+  - changeSet:
+      id: 1586484411-9
+      author: max-eb
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: document_recipient_groups
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: BINARY(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+            tableName: document_recipient_groups
+      rollback:
+        - dropTable:
+            tableName: document_recipient_groups
+
+  - changeSet:
+      id: 1586484411-10
+      author: max-eb
+      changes:
+        - sql:
+            sql: drop trigger if exists ins_document_request_types;
+
+  - changeSet:
+      id: 1586484411-11
+      author: max-eb
+      changes:
+        - sql:
+            sql: drop trigger if exists ins_recipient_action_types;
+
+  - changeSet:
+      id: 1586934810000-1
+      author: michael-eb
+      changes:
+        - sql:
+            sql: create trigger ins_document_request_types before insert on document_request_types for each row set new.id = unhex(replace(uuid(), '-', ''));
+  - changeSet:
+      id: 1586934810000-2
+      author: michael-eb
+      changes:
+        - sql:
+            sql: create trigger ins_recipient_action_types before insert on recipient_action_types for each row set new.id = unhex(replace(uuid(), '-', ''));
+  - changeSet:
+      id: 1586934810000-3
+      author: michael-eb
+      preConditions:
+        onFail: WARN
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: ref_id
+                  type: INT
+            tableName: document_request_types
+  - changeSet:
+      id: 1586934810000-4
+      author: michael-eb
+      preConditions:
+        onFail: WARN
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: ref_id
+                  type: INT
+            tableName: recipient_action_types
+
+  - changeSet:
+      id: 1586934810000-5
+      author: michael-eb
+      runOnChange: true
+      changes:
+        - loadUpdateData:
+            columns:
+              - column:
+                  name: name
+                  type: STRING
+            file: db/changelog/data/document-request-types.csv
+            primaryKey: id
+            tableName: document_request_types
+  - changeSet:
+      id: 1586934810000-6
+      author: michael-eb
+      runOnChange: true
+      changes:
+        - loadUpdateData:
+            columns:
+              - column:
+                  name: name
+                  type: STRING
+            file: db/changelog/data/recipient-action-types.csv
+            primaryKey: id
+            tableName: recipient_action_types
+  - changeSet:
+      id: 1587609371000-1
+      author: michael-eb
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: recipient_action_type_id
+                  type: BINARY(16)
+            tableName: document_requests_users
+  - changeSet:
+      id: 1587609371000-2
+      author: michael-eb
+      changes:
+        - dropColumn:
+            columnName: recipient_action_type_id
+            tableName: document_requests
+
+  - changeSet:
+      id: 1588818976-1
+      author: max-eb
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: folder_id
+            baseTableName: documents
+            constraintName: fk_docuemnts_folder_id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: folders
+
+  - changeSet:
+      id: 1588818976-2
+      author: max-eb
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: document_id
+            baseTableName: contracts
+            constraintName: fk_contracts_document_id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: documents
+
+  - changeSet:
+      id: 1588818976-3
+      author: max-eb
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: document_request_type_id
+            baseTableName: document_requests
+            constraintName: fk_document_requests_request_type_id
+            onDelete: SET NULL
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: document_request_types
+
+  - changeSet:
+      id: 1588818976-4
+      author: max-eb
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: document_id
+            baseTableName: document_requests
+            constraintName: fk_document_requests_document_id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: documents
+
+  - changeSet:
+      id: 1588818976-5
+      author: max-eb
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: contract_id
+            baseTableName: document_requests
+            constraintName: fk_document_requests_contract_id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: contracts
+
+  - changeSet:
+      id: 1588818976-6
+      author: max-eb
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: contract_id
+            baseTableName: contract_fields
+            constraintName: fk_contract_fields_contract_id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: contracts
+
+  - changeSet:
+      id: 1588818976-7
+      author: max-eb
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: document_request_id
+            baseTableName: document_requests_users
+            constraintName: fk_document_requests_users_document_request_id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: document_requests
+
+  - changeSet:
+      id: 1588818976-8
+      author: max-eb
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: recipient_action_type_id
+            baseTableName: document_requests_users
+            constraintName: fk_document_requests_users_recipient_action_type_id
+            onDelete: SET NULL
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: recipient_action_types
+
+  - changeSet:
+      id: 1588818976-9
+      author: max-eb
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: recipient_group_id
+            baseTableName: document_requests_users
+            constraintName: fk_document_requests_users_recipient_group_id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: document_recipient_groups
+
+  - changeSet:
+      id:  1588818976-10
+      author: max-eb
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table contract_fields convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1588818976-11
+      author: max-eb
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table contracts convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1588818976-12
+      author: max-eb
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table document_recipient_groups convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1588818976-13
+      author: max-eb
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table document_request_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1588818976-14
+      author: max-eb
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table document_requests convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1588818976-15
+      author: max-eb
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table document_requests_users convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1588818976-16
+      author: max-eb
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table documents convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1588818976-17
+      author: max-eb
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table folders convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1588818976-18
+      author: max-eb
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table recipient_action_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
