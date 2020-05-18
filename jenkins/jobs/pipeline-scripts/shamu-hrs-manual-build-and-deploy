@@ -139,6 +139,9 @@ pipeline {
           env = sh(returnStdout: true, script: "echo ${ENV} | sed 's/^.*-//'").trim()
           stack_prefix = sh(returnStdout: true, script: """ echo ${ENV} | sed 's/-[^-]*\$//' """).trim()
           ansible_vault_credentialsId = ENV + "-ansible-vault"
+	  withCredentials([string(credentialsId: "$ansible_vault_credentialsId", variable: 'ANSIBLE_VAULT')]){
+	    sh "echo $ANSIBLE_VAULT > ansible-vault-file"
+          }
           if ("$TARGET_BRANCH_TYPE" == "master") {
               TARGET_BRANCH = "origin/master"
           }
@@ -158,10 +161,7 @@ pipeline {
             sh "mkdir -p ${AUTH0_DIR}"
             dir("${AUTH0_DIR}") {
               pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs.git")
-              withCredentials([string(credentialsId: "$ansible_vault_credentialsId", variable: 'ANSIBLE_VAULT')]){
-                sh "echo $ANSIBLE_VAULT > ansible-vault-file"
-              }
-            }
+           }
             sh "cd ${AUTH0_DIR} && ansible-playbook --vault-password-file ansible-vault-file -e 'stack_prefix=${stack_prefix} env=${env}' auto-deploy/ansible/build-auth0-config.yml"
             sh "cd ${AUTH0_DIR} && a0deploy import -c auto-deploy/ansible/auth0_config.json -i auth0"
           }
@@ -236,5 +236,10 @@ pipeline {
         }
       }
     }
+  }
+  post { 
+    always { 
+      cleanWs()
+   }
   }
 }
