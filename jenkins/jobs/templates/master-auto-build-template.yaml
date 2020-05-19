@@ -39,7 +39,7 @@
     block-downstream: false
     block-upstream: false
     retry-count: 3
-    node: '!master'
+    node: 'shamu-hrs'
     logrotate:
       daysToKeep: 5
       numToKeep: 10

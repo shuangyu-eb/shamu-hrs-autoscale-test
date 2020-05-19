@@ -44,7 +44,7 @@ void performOperations(String targetMicroserviceDir) {
 }
 
 pipeline {
-  agent { label '!master' }
+  agent { label 'shamu-hrs' }
   environment {
     COMPANY_SERVICE_DIR = "shamu-hrs-company-service"
     DOCUMENT_SERVICE_DIR = "shamu-hrs-document-service"

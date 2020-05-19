@@ -1,8 +1,8 @@
 pipeline {
-  agent { label '!master'}
+  agent { label 'shamu-hrs'}
 
   stages {
-    stage('Test') {
+    stage('Sync Auth0 Config') {
       steps{
         withCredentials([string(credentialsId: "simplyhired-hrs-eastbay-dev-ansible-vault", variable: 'ANSIBLE_VAULT')]){
           sh "echo $ANSIBLE_VAULT > ansible-vault-file"
