@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+
+    - name: include variables from file
+      include_vars: "include/auth0-database-{{ env }}.yml"
+      tags:
+        - 'always'
+
+    - name: Create config file for auth0-roles-check-python
+      template:
+        src: "templates/auth0_database_config_template.j2"
+        dest: "auth0-database-config.yml"

@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+import os
+import math
+import requests
+import pymysql
+import yaml
+from auth0.v3.authentication import GetToken
+
+
+class RolesCheck(object):
+    def __init__(self):
+
+        # Load config file
+        path = os.path.dirname(os.path.realpath(__file__))
+        yaml_path = os.path.join(path, "ansible/auth0-database-config.yml")
+        file = open(yaml_path, 'r', encoding='utf-8')
+        self.config = yaml.load(file.read(), Loader=yaml.Loader)
+
+        # Connect to database
+        self.conn = pymysql.connect(host=self.config['DATABASE_HOST'],
+                                    user=self.config['DATABASE_USER'],
+                                    passwd=self.config['DATABASE_PASSWORD'],
+                                    db=self.config['DATABASE'],
+                                    port=self.config['DATABASE_PORT'],
+                                    charset='utf8')
+
+        # Auth0 access token
+        self.access_token = GetToken(self.config['AUTH0_DOMAIN']
+                                     ).client_credentials(
+            self.config['AUTH0_CLIENT_ID'],
+            self.config['AUTH0_CLIENT_SECRET'],
+            'https://{}/api/v2/'.format(
+                self.config['AUTH0_DOMAIN']))['access_token']
+
+        self.headers = {"Content-Typ": "application/json;charset=utf-8",
+                        "Authorization": "Bearer " + self.access_token}
+
+        self.roles_url = 'https://{}/api/v2/roles'.format(
+            self.config['AUTH0_DOMAIN'])
+        self.total_users_url = 'https://{}/api/v2/roles/{}/users' \
+                               '?per_page=100&page=0&include_totals=true'
+        self.role_users_url = 'https://{}/api/v2/roles/{}/users' \
+                              '?per_page=100&page={}'
+
+        self.admins = []
+        self.employees = []
+        self.managers = []
+        self.super_admins = []
+        self.inactivate = []
+        self.database_employees = []
+        self.error_employees = []
+
+    def check_all_roles(self):
+        roles = self._init_auth0_roles()
+        for role in roles.json():
+            self._init_role_employees(role)
+        self._init_database()
+        self._check_data()
+
+    def _get_auth0_employees(self, role):
+        result = []
+        employees_total = requests.get(self.total_users_url.format(
+            self.config['AUTH0_DOMAIN'], role),
+            headers=self.headers).json()['total']
+        for page in range(0, math.ceil(employees_total / 100), 1):
+            auth0employees = requests.get(self.role_users_url.format(
+                self.config['AUTH0_DOMAIN'], role, page),
+                headers=self.headers).json()
+            for auth0employee in auth0employees:
+                result.append(auth0employee['email'])
+        return result
+
+    def _init_auth0_roles(self):
+        return requests.get(self.roles_url, headers=self.headers)
+
+    def _init_role_employees(self, role):
+        if 'ADMIN' == role['name']:
+            self.admins = self._get_auth0_employees(role['id'])
+        if 'EMPLOYEE' == role['name']:
+            self.employees = self._get_auth0_employees(role['id'])
+        if 'INACTIVATE' == role['name']:
+            self.inactive = self._get_auth0_employees(role['id'])
+        if 'MANAGER' == role['name']:
+            self.managers = self._get_auth0_employees(role['id'])
+        if 'SUPER_ADMIN' == role['name']:
+            self.super_admins = self._get_auth0_employees(role['id'])
+
+    def _init_database(self):
+        cur = self.conn.cursor()
+        sql = 'SELECT lower(uci.email_work), ur.name ' \
+              'FROM users join user_contact_information uci ' \
+              'on hex(users.user_contact_information_id) = hex(uci.id) ' \
+              'join user_roles ur on hex(users.user_role_id) = hex(ur.id)'
+        cur.execute(sql)
+        self.database_employees = cur.fetchall()
+        cur.close()
+        self.conn.close()
+
+    def _check_data(self):
+        for employee in self.database_employees:
+            if 'ADMIN' == employee[1] and employee[0] not in self.admins:
+                self.error_employees.append(employee[0])
+                continue
+            if 'EMPLOYEE' == employee[1] and employee[0] not in self.employees:
+                self.error_employees.append(employee[0])
+                continue
+            if 'INACTIVATE' == employee[1] and employee[0] not in self.inactive:
+                self.error_employees.append(employee[0])
+                continue
+            if 'MANAGER' == employee[1] and employee[0] not in self.managers:
+                self.error_employees.append(employee[0])
+                continue
+            if 'SUPER_ADMIN' == employee[1] and employee[0] not in self.super_admins:
+                self.error_employees.append(employee[0])
+                continue
+        if self.error_employees:
+            print('\033[1;31;40m')
+            print('*' * 50)
+            print('Error employees:\n')
+            print(self.error_employees)
+            print('*' * 50)
+            print('\033[0m')
+            exit(1)
+        else:
+            print('No error employees')
+
+
+if __name__ == '__main__':
+    RolesCheck().check_all_roles()
