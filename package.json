@@ -10,6 +10,7 @@
   "license": "UNLICENSED",
   "devDependencies": {},
   "dependencies": {
+    "husky": "^4.2.5",
     "jest": "^24.8.0"
   }
 }
