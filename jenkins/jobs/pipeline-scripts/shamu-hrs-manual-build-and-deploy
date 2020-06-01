@@ -153,6 +153,12 @@ pipeline {
         }
       }
     }
+    stage('Check Roles Between Auth0 And Database') {
+      steps {
+        sh "ansible-playbook --vault-password-file ansible-vault-file -e 'env=${env}' auth0-database-roles-check/ansible/create-auth0-database-config.yml"
+        sh "auth0-database-roles-check/auth0_database_roles_check"
+      }
+    }
     stage('Perform Operations on Selected services') {
       parallel {
         stage('Sync Auth0 Config') {
