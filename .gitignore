@@ -46,3 +46,7 @@
 
 ### Python ###
 **/__pycache__/
+
+### Marketing Page Lambda ###
+lambda/marketing-page-api/Archive.zip
+lambda/marketing-page-api/credentials.json

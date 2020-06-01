@@ -1,0 +1,17 @@
+{
+    "name": "marketing-page-reports",
+    "version": "1.0.0",
+    "description": "Lambda function for processing incoming leads from simplyhired.com/hris",
+    "main": "index.js",
+    "author": "Indeed",
+    "license": "UNLICENSED",
+    "devDependencies": {},
+    "dependencies": {
+        "@sendgrid/mail": "^7.1.1",
+        "@slack/webhook": "^5.0.3",
+        "google-spreadsheet": "^3.0.11",
+        "moment": "^2.26.0",
+        "moment-timezone": "^0.5.31",
+        "querystring": "^0.2.0"
+    }
+}
