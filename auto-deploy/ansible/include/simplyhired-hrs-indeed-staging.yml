@@ -35,7 +35,6 @@ rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
 # vars for redis
 cache_node_type: cache.t2.micro
 redis_port: 6379
-redis_expiration: 36000
 # vars for eb
 eb_application_name: "{{stack_prefix}}-{{env}}"
 eb_environment_name: "{{stack_prefix}}-{{env}}"

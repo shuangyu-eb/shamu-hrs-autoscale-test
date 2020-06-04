@@ -114,7 +114,6 @@
       Auth0Issuer: '"auth0.issuer": "{{ auth0_auth_domain }}"'
       RedisHost: '"spring.redis.host": "{{ redis_cluster_stack.stack_outputs.RedisEndpoint }}"'
       RedisPort: '"spring.redis.port": "{{ redis_port }}"'
-      RedisExpiration: '"spring.redis.expiration": "{{ redis_expiration }}"'
       Auth0CustomNamespace: '"auth0.customNamespace": "{{ auth0_namespace }}"'
       CryptoAHash: '"crypto.hash": "{{ crypto_hash }}"'
       IndeedClipSecret: '"indeed.clip.secret": "{{ indeed_clip_secret }}"'
