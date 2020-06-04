@@ -13,8 +13,6 @@ Parameters:
     Type: String
   WebSiteEndPoint:
     Type: String
-  HelloSignApi:
-    Type: String
 Resources:
     WebBucket:
     # creates an Amazon S3 bucket for shamu-hrs-web
@@ -107,13 +105,6 @@ Resources:
             - PUT
             AllowedOrigins:
             - !Ref HrsDomain
-            MaxAge: 5000
-          - AllowedHeaders:
-            - '*'
-            AllowedMethods:
-            - GET
-            AllowedOrigins:
-            - !Ref HelloSignApi
             MaxAge: 5000
     CompanyBucket:
       # creates an Amazon S3 bucket for shamu-hrs-company
