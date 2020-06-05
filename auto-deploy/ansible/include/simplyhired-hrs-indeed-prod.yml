@@ -136,6 +136,7 @@ auth0_audience: hrs-backend   # HRS backend api
 auth0_managementIdentifier: https://simplyhired-dev.auth0.com/api/v2/   # Management api Identifier
 auth0_tenant_name: simplyhired-dev.auth0.com
 auth0_friendly_name: SimplyHired
+company_quartz_datasource_driver: com.mysql.jdbc.Driver
 registration_beta_token: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   61393564363963393837323530313332656236636630363133376230306637383139656666346636
