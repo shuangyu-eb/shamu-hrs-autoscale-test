@@ -5,9 +5,9 @@ public_subnet: subnet-3d7c6355 # used to create a private subnet
 private_subnet_cidr: 172.31.64.0/20 # used to create a private subnet
 key_pair: hrs-staging-deploy-server  # used to allow ssh connection
 region: us-east-2 # ohio
-aws_deploy_access_key: 
-aws_deploy_secret_key: 
-aws_deploy_security_token: 
+aws_deploy_access_key:
+aws_deploy_secret_key:
+aws_deploy_security_token:
 # vars for S3
 s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.amazonaws.com/
 s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.amazonaws.com/
@@ -143,9 +143,6 @@ registration_beta_token: !vault |
   36346236653865376631393630623834356132383035323637393135363266393062393339343236
   3234656333343435640a376230383761633238363239326134376239366534333562313237383138
   66386165323831633130366132363834386666333862666661316330313965396365
-hello_sign_api: https://api.hellosign.com
-hello_sign_clientId: VAULTTODO # VAULT TODO
-hello_sign_apiKey: VAULTTODO # VAULT TODO
 crypto_hash: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   66633834343838643931333766326466363263646432393365613066326366643034373632633531

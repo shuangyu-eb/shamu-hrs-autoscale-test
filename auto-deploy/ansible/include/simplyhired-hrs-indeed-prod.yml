@@ -5,9 +5,9 @@ public_subnet: subnet-81e6d7dd # used to create a private subnet
 private_subnet_cidr: 172.31.96.0/20 # used to create a private subnet
 key_pair: hrs-prod-deploy-server  # used to allow ssh connection
 region: us-east-1 # Virginia
-aws_deploy_access_key: 
-aws_deploy_secret_key: 
-aws_deploy_security_token: 
+aws_deploy_access_key:
+aws_deploy_secret_key:
+aws_deploy_security_token:
 # vars for S3
 s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.amazonaws.com/
 s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.amazonaws.com/
@@ -143,9 +143,6 @@ registration_beta_token: !vault |
   31393436613863313734303731626436373434666133623039356637303630636136643634616465
   6538643436653430630a306231303831643365326333313564393463326239313834373336623839
   3963
-hello_sign_api: https://api.hellosign.com
-hello_sign_clientId: VAULTTODO # VAULT TODO
-hello_sign_apiKey: VAULTTODO # VAULT TODO
 crypto_hash: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   30623234313664306236363061363263356634346662653339303633393964303664396362363530

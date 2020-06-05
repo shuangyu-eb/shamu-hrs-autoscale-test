@@ -25,7 +25,6 @@
       CompanyBucketName: "{{ stack_prefix }}-{{ env }}-company"
       HrsDomain: "{{ hrs_domain }}"
       WebSiteEndPoint: "{{ website_end_point }}"
-      HelloSignApi: "{{ hello_sign_api }}"
   register: s3_bucket_stack
 - debug:
     msg: "S3 stack outputs: {{s3_bucket_stack.stack_outputs}}"
