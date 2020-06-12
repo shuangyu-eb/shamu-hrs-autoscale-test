@@ -62,7 +62,9 @@ Resources:
     Type: AWS::RDS::DBCluster
     Properties:
       DBClusterIdentifier: !Ref DocumentDBClusterName
-      DatabaseName: !Ref DocumentDatabaseName
+      # Note: DatabaseName is hardcoded for the legacy `document` table.
+      # document is no longer in use, but is required here to remove cfn conflicts.
+      DatabaseName: document
       MasterUsername: !Ref MasterUsername
       MasterUserPassword: !Ref MasterUserPassword
       Engine: aurora
