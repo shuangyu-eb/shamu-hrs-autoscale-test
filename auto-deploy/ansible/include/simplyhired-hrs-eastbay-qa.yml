@@ -42,7 +42,7 @@ db_password: !vault |
   3363373536316537300a393265366661396332623066626364303037303938643638383635343135
   6661
 company_db_name: company
-document_db_name: document
+document_db_name: hris_pactsafe
 secret_db_name: secret
 rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
 # vars for redis
