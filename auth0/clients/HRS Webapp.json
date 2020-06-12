@@ -7,16 +7,10 @@
   "cross_origin_auth": false,
   "allowed_clients": [],
   "allowed_logout_urls": [
-    "##ENVIRONMENT_URL##",
-    "##ENVIRONMENT_URL##/parse",
-    "##ENVIRONMENT_URL##/account",
-    "##ENVIRONMENT_URL##/sign-in"
+    "##ENVIRONMENT_URL##"
   ],
   "callbacks": [
-    "##ENVIRONMENT_URL##",
-    "##ENVIRONMENT_URL##/parse",
-    "##ENVIRONMENT_URL##/account",
-    "##ENVIRONMENT_URL##/sign-in"
+    "##ENVIRONMENT_URL##/parse"
   ],
   "description": "HRS staging environment",
   "native_social_login": {
@@ -25,10 +19,7 @@
     }
   },
   "allowed_origins": [
-    "##ENVIRONMENT_URL##",
-    "##ENVIRONMENT_URL##/parse",
-    "##ENVIRONMENT_URL##/account",
-    "##ENVIRONMENT_URL##/sign-in"
+    "##ENVIRONMENT_URL##"
   ],
   "jwt_configuration": {
     "alg": "RS256",
@@ -44,10 +35,7 @@
     "refresh_token"
   ],
   "web_origins": [
-    "##ENVIRONMENT_URL##",
-    "##ENVIRONMENT_URL##/parse",
-    "##ENVIRONMENT_URL##/account",
-    "##ENVIRONMENT_URL##/sign-in"
+    "##ENVIRONMENT_URL##"
   ],
   "custom_login_page_on": true
 }
