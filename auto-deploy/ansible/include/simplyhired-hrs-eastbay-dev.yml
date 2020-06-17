@@ -262,7 +262,9 @@ document_datasource_driver_class: com.mysql.cj.jdbc.Driver
 document_datasource_name: hris_pactsafe
 document_front_end_address: https://hr.simplyhired-dev.com/
 execution_tole: arn:aws:iam::533423936407:role/ecsTaskExecutionRole-simplyhired-hrs-eastbay-dev
-
+systemEmailAddress: no-reply@simplyhired-dev.com
+systemEmailFirstName: simplyhired
+systemEmailLastName: dev
 
 h_captcha_site_key: !vault |
   $ANSIBLE_VAULT;1.1;AES256

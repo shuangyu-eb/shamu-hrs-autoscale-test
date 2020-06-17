@@ -14,6 +14,11 @@ aws:
   bucketName: {{stack_prefix}}-{{env}}-document
   folder: media
 
+application:
+  systemEmailAddress: {{systemEmailAddress}}
+  systemEmailFirstName: {{systemEmailFirstName}}
+  systemEmailLastName: {{systemEmailLastName}}
+
 sentry:
   enable: true
   env: {{env}}

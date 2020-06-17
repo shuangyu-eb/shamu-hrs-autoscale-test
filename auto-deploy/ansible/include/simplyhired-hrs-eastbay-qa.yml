@@ -271,7 +271,9 @@ document_datasource_driver_class: com.mysql.cj.jdbc.Driver
 document_datasource_name: hris_pactsafe
 document_front_end_address: https://hr.simplyhired-qa.com/
 execution_tole: rn:aws:iam::533423936407:role/ecsTaskExecutionRole-simplyhired-hrs-eastbay-qa
-
+systemEmailAddress: no-reply@simplyhired-qa.com
+systemEmailFirstName: simplyhired
+systemEmailLastName: qa
 # add for running script
 aws_deploy_security_token: # NO_USE
 web_sentry_release: mvp
