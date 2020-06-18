@@ -175,6 +175,9 @@ document_datasource_driver_class: com.mysql.cj.jdbc.Driver
 document_datasource_name: hris_pactsafe
 document_front_end_address: https://hr.simplyhired-staging.com/
 execution_tole: arn:aws:iam::809977608864:role/ecsTaskExecutionRole-simplyhired-hrs-indeed-staging
+systemEmailAddress: no-reply@hr.simplyhired-staging.com
+systemEmailFirstName: SimplyHired
+systemEmailLastName: Staging
 registration_beta_token: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   64333531653562306232303065373536303636323636313834646230356635656132646663643534
