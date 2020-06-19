@@ -44,6 +44,14 @@ Resources:
         - arn:aws:iam::aws:policy/SecretsManagerReadWrite
         - arn:aws:iam::aws:policy/AWSLambdaFullAccess
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      Policies: 
+        - PolicyName: KMSFullAccess
+          PolicyDocument: 
+            Version: 2012-10-17
+            Statement: 
+              - Action: 'kms:*'
+                Effect: Allow
+                Resource: '*'
   ApplicationAutoScalingRole:
     Type: AWS::IAM::Role
     Properties:
