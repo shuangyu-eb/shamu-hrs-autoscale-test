@@ -25,4 +25,11 @@ describe('HRS Backend Resource Server', () => {
         });
         expect(notMatching).toEqual([]);
     });
+
+    test('All values should be in alphabetical order (by permission name) from A to Z', () => {
+        const { scopes } = backend;
+        for(let i = 0, len = scopes.length; i < len - 1; i++) {
+            expect(scopes[i].value.localeCompare(scopes[i+1].value)).toBe(-1);
+        }
+    });
 });

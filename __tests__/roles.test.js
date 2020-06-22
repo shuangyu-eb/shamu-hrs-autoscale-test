@@ -30,6 +30,12 @@ describe('User roles', () => {
         test('Should not include super permission', () => {
             expect(permissions.some(p => p.permission_name === SUPER_PERMISSION)).toBe(false);
         });
+
+        test('Should be in alphabetical order (by permission name) from A to Z', () => {
+            for(let i = 0, len = permissions.length; i < len - 1; i++) {
+                expect(permissions[i].permission_name.localeCompare(permissions[i+1].permission_name)).toBe(-1);
+            }
+        });
     });
 
     describe('Employee Role', () => {
@@ -49,6 +55,12 @@ describe('User roles', () => {
         test('Should not include super permission', () => {
             expect(permissions.some(p => p.permission_name === SUPER_PERMISSION)).toBe(false);
         });
+
+        test('Should be in alphabetical order (by permission name) from A to Z', () => {
+            for(let i = 0, len = permissions.length; i < len - 1; i++) {
+                expect(permissions[i].permission_name.localeCompare(permissions[i+1].permission_name)).toBe(-1);
+            }
+        });
     });
 
     describe('Inactivated Role', () => {
@@ -63,6 +75,12 @@ describe('User roles', () => {
 
         test('Should not include super permission', () => {
             expect(permissions.some(p => p.permission_name === SUPER_PERMISSION)).toBe(false);
+        });
+
+        test('Should be in alphabetical order (by permission name) from A to Z', () => {
+            for(let i = 0, len = permissions.length; i < len - 1; i++) {
+                expect(permissions[i].permission_name.localeCompare(permissions[i+1].permission_name)).toBe(-1);
+            }
         });
     });
 
@@ -79,6 +97,12 @@ describe('User roles', () => {
         test('Should not include super permission', () => {
             expect(permissions.some(p => p.permission_name === SUPER_PERMISSION)).toBe(false);
         });
+
+        test('Should be in alphabetical order (by permission name) from A to Z', () => {
+            for(let i = 0, len = permissions.length; i < len - 1; i++) {
+                expect(permissions[i].permission_name.localeCompare(permissions[i+1].permission_name)).toBe(-1);
+            }
+        });
     });
 
     describe('Super Admin Role', () => {
@@ -93,6 +117,12 @@ describe('User roles', () => {
 
         test('Should have more permissions than admin role', () => {
             expect(permissions.length).toBeGreaterThan(adminRole.permissions.length);
+        });
+
+        test('Should be in alphabetical order (by permission name) from A to Z', () => {
+            for(let i = 0, len = permissions.length; i < len - 1; i++) {
+                expect(permissions[i].permission_name.localeCompare(permissions[i+1].permission_name)).toBe(-1);
+            }
         });
     });
 });

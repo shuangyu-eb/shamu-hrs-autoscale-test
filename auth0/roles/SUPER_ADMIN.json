@@ -123,6 +123,10 @@
       "resource_server_identifier": "hrs-backend"
     },
     {
+      "permission_name": "UPDATE_COMPANY_NAME",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
       "permission_name": "VIEW_CHANGING_WORK_EMAIL",
       "resource_server_identifier": "hrs-backend"
     },
@@ -196,10 +200,6 @@
     },
     {
       "permission_name": "VIEW_USER_TIME_OFF_BALANCE",
-      "resource_server_identifier": "hrs-backend"
-    },
-    {
-      "permission_name": "UPDATE_COMPANY_NAME",
       "resource_server_identifier": "hrs-backend"
     }
   ]
