@@ -258,6 +258,7 @@ pactsafe_access_token: !vault |
   64393938633465366163393938326239366366663465663962323631636332386533373031313865
   3463383835353134363931656533613738646266366165656639
 pactsafe_base_url: https://api.pactsafe.com/
+pactsafe_test_mode: true
 document_datasource_driver_class: com.mysql.cj.jdbc.Driver
 document_datasource_name: hris_pactsafe
 document_front_end_address: https://hr.simplyhired-dev.com/
