@@ -893,7 +893,9 @@
         result = atob(decodeURIComponent(theRequest["userToEmail"])).split('').reverse().join('');
       }
       if (result !== null) {
-        document.getElementById("sign-in-email").value = result
+        document.getElementById("sign-in-email").value = result;
+        document.getElementById("sign-in-email").setAttribute('disabled', 'disabled');
+        document.getElementById("sign-in-email").setAttribute('style', 'cursor: no-drop; border-color:#DFE2E9; color:#7b7e84; background-color:#F0F2F5;');
       }
     } catch (e) {
       return '';
