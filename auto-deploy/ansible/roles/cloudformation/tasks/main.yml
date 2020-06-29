@@ -94,7 +94,7 @@
     template: "roles/cloudformation/cfn/secrets-manager.yml"
     template_parameters:
       DeployEnv: "{{ env }}"
-      CompanyRdsUrl: '"spring.datasource.jdbc-url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{{company_db_name}}?zeroDateTimeBehavior=convertToNull&serverTimezone=UTC"'
+      CompanyRdsUrl: '"spring.datasource.jdbc-url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{{company_db_name}}?zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&jdbcCompliantTruncation=false"'
       SecretRdsUrl: '"spring.secret.datasource.jdbc-url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.SecretRdsEndpoint}}/{{secret_db_name}}?characterEncoding=utf-8"'
       DocumentRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{{document_db_name}}?zeroDateTimeBehavior=convertToNull&serverTimezone=UTC"'
       RdsUserName: '"spring.datasource.username": "{{ db_user }}"'
