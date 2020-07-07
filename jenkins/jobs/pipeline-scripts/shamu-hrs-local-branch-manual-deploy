@@ -1,0 +1,83 @@
+void pullRepoOnTargetBranch(String branch, String url) {
+  sh "mkdir -p ${MICRO_SERVICE_DIR}"
+  dir("${MICRO_SERVICE_DIR}") {
+    checkout([
+      $class: 'GitSCM',
+      branches: [[name: branch]],
+      doGenerateSubmoduleConfigurations: false,
+      extensions: [
+          [$class: 'SubmoduleOption',
+           disableSubmodules: false,
+           parentCredentials: false,
+           recursiveSubmodules: false,
+           reference: '',
+           trackingSubmodules: false]
+      ],
+      userRemoteConfigs: [[credentialsId: "${credentialsId}", url: url]]
+    ])
+  }
+}
+
+// build or deploy or deploy after building
+void deploy() {
+  sh "cd ${MICRO_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
+  sh "cd ${MICRO_SERVICE_DIR} && CI/deploy ${ENV} ${RELEASE}"
+}
+
+pipeline {
+  agent { label 'shamu-hrs' }
+  environment {
+    ENV = "simplyhired-hrs-eastbay-dev"
+    MICRO_SERVICE_DIR = "microservice"
+  }
+  stages {
+    stage('Generate Needed Variables') {
+      steps {
+        script {
+          CURRENT_DIR = sh(returnStdout: true, script: 'pwd').trim()
+          env = sh(returnStdout: true, script: "echo ${ENV} | sed 's/^.*-//'").trim()
+          stack_prefix = sh(returnStdout: true, script: """ echo ${ENV} | sed 's/-[^-]*\$//' """).trim()
+          ansible_vault_credentialsId = ENV + "-ansible-vault"
+          withCredentials([string(credentialsId: "$ansible_vault_credentialsId", variable: 'ANSIBLE_VAULT')]){
+            sh "echo $ANSIBLE_VAULT > ansible-vault-file"
+          }
+          RELEASE = sh(returnStdout: true, script: """echo ${BRANCH} | sed 's/.*SH-\\([0-9]*\\).*/\\1/'""").trim()
+        }
+      }
+    }
+    stage('Deploy') {
+      steps {
+        script {
+          if("$SERVICE" == "company") {
+            pullRepoOnTargetBranch("$BRANCH", "https://github.com/tardisone/shamu-hrs-company-service.git")
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${MICRO_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=company'"
+            deploy()
+          } else if ("$SERVICE" == "document") {
+            pullRepoOnTargetBranch("$BRANCH", "https://github.com/tardisone/shamu-hrs-document-service.git")
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${MICRO_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=document'"
+            deploy()
+          } else if ("$SERVICE" == "gateway") {
+            pullRepoOnTargetBranch("$BRANCH", "https://github.com/tardisone/shamu-hrs-gateway.git")
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${MICRO_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=gateway'"
+            deploy()
+          } else if ("$SERVICE" == "search") {
+            pullRepoOnTargetBranch("$BRANCH", "https://github.com/tardisone/shamu-hrs-search-service.git")
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${MICRO_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=search'"
+            deploy()
+          } else if("$SERVICE" == "web"){
+            pullRepoOnTargetBranch("$BRANCH", "https://github.com/tardisone/shamu-hrs-web.git")
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${MICRO_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=web' --vault-password-file ansible-vault-file"
+            deploy()
+          } else {
+            echo "Did not match the ${SERVICE} service. Quit ..."
+          }
+        }
+      }
+    }
+  }
+  post {
+    always {
+      cleanWs()
+    }
+  }
+}
