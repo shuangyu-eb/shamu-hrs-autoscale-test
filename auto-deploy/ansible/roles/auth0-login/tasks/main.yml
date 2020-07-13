@@ -1,0 +1,38 @@
+- name: create s3 bucket stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-s3-login-bucket"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/auth0-login/templates/s3-bucket-login.yml"
+    template_parameters:
+      LoginApplicationBucketName: "{{ stack_prefix }}-{{ env }}-login"
+  register: s3_bucket_stack
+- debug:
+    msg: "S3 stack outputs: {{ s3_bucket_stack.stack_outputs }}"
+
+- name: create cloudfront distribute stack
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-cloudfront-bucket"
+    region: "{{ region }}"
+    state: "present"
+    template: "roles/auth0-login/templates/cloudfront.yml"
+    template_parameters:
+      LoginS3Name: "{{ stack_prefix }}-{{ env }}-login"
+      LoginS3Domain: "{{ s3_bucket_stack.stack_outputs.LoginApplicationBucketDomain }}"
+  register: cloudfront_stack
+- debug:
+    msg: "CloudFront stack outputs: {{cloudfront_stack.stack_outputs}}"
+
+- name: Create config file for shamu-hrs-login
+  template:
+    src: config_file_login_template.j2
+    dest: "{{ workspace }}/shamu-hrs-login/config/{{ env }}.env"
+- debug:
+    msg: "shamu-hrs-login config file created"
+
+- name: Create deploy file for shamu-hrs-login
+  template:
+    src: deploy_file_login_template.j2
+    dest: "{{ workspace }}/shamu-hrs-login/config/{{ stack_prefix }}-{{ env }}"
+- debug:
+    msg: "shamu-hrs-login deploy file created"

@@ -282,3 +282,6 @@ web_sentry_env: dev
 web_sentry:
 indeed_clip_url:  # NO_USE
 indeed_clip_secret: # NO_USE
+
+# determine whether use SH login or Indeed login
+is_social_login: "false"

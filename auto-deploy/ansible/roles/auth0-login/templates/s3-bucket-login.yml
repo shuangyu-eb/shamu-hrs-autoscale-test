@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create S3 bucket for shamu-hrs-login
+Parameters:
+  LoginApplicationBucketName:
+    Type: String
+Resources:
+  LoginApplicationBucket:
+    # creates an Amazon S3 bucket for shamu-hrs-document
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: !Ref LoginApplicationBucketName
+Outputs:
+  LoginApplicationBucketDomain:
+    Value: !GetAtt LoginApplicationBucket.DomainName
