@@ -11,10 +11,6 @@
       "resource_server_identifier": "hrs-backend"
     },
     {
-      "permission_name": "MANAGE_SELF_TIME_OFF_REQUEST",
-      "resource_server_identifier": "hrs-backend"
-    },
-    {
       "permission_name": "VIEW_MY_DOCUMENTS",
       "resource_server_identifier": "hrs-backend"
     },
@@ -24,6 +20,10 @@
     },
     {
       "permission_name": "VIEW_SELF_BENEFITS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_SELF_TIME_OFF_REQUEST",
       "resource_server_identifier": "hrs-backend"
     },
     {

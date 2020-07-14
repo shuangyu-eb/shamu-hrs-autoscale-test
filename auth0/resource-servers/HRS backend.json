@@ -168,6 +168,10 @@
       "description": "VIEW_SELF_BENEFITS"
     },
     {
+      "value": "VIEW_SELF_TIME_OFF_REQUEST",
+      "description": "VIEW_SELF_TIME_OFF_REQUEST"
+    },
+    {
       "value": "VIEW_SETTING",
       "description": "VIEW_SETTING"
     },

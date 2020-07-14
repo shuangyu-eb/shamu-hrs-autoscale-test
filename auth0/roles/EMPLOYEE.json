@@ -59,6 +59,10 @@
       "resource_server_identifier": "hrs-backend"
     },
     {
+      "permission_name": "VIEW_SELF_TIME_OFF_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
       "permission_name": "VIEW_TEAM_CALENDAR",
       "resource_server_identifier": "hrs-backend"
     },
