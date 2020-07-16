@@ -1,6 +1,6 @@
 - name: Create config file for auth0
   template:
-    src: ../templates/auth0_config_template.json
+    src: auth0_config_template.json
     dest: "auth0_config.json"
 - debug:
     msg: "Auth0 config file created"
