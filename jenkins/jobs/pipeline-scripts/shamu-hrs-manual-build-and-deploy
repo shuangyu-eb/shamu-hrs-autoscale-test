@@ -52,6 +52,7 @@ pipeline {
     SEARCH_SERVICE_DIR = "shamu-hrs-search-service"
     GATEWAY_DIR = "shamu-hrs-gateway"
     WEB_DIR = "shamu-hrs-web"
+    LOGIN_SERVICE_DIR = "shamu-hrs-login"
     AUTH0_DIR = 'shamu-hrs-auth0'
   }
   stages {
@@ -65,6 +66,7 @@ pipeline {
           webSelected = microserviceSelected('web')
           gatewaySelected = microserviceSelected('gateway')
           syncAuth0Config = microserviceSelected('auth0')
+          loginSelected = microserviceSelected('login')
         }
       }
     }
@@ -238,6 +240,17 @@ pipeline {
             }
             sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${WEB_DIR} stack_prefix=${stack_prefix} env=${env} service_name=web' --vault-password-file ansible-vault-file"
             performOperations("${WEB_DIR}")
+          }
+        }
+        stage('Login') {
+          when { expression { return loginSelected == 'yes' }}
+          steps {
+            sh "mkdir -p ${LOGIN_SERVICE_DIR}"
+            dir("${LOGIN_SERVICE_DIR}") {
+                pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs-login.git")
+            }
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${LOGIN_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=login' --vault-password-file ansible-vault-file"
+            sh "cd ${LOGIN_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
           }
         }
       }
