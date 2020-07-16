@@ -21,6 +21,10 @@
             name: web
             generic-webhook-trigger-token: web
             project-url: 'https://github.com/tardisone/shamu-hrs-web/'
+        - 'shamu-{name}-master-auto-build':
+            name: login
+            generic-webhook-trigger-token: login
+            project-url: 'https://github.com/tardisone/shamu-hrs-login/'
 
 - job-template:
     name: 'shamu-{name}-master-auto-build'

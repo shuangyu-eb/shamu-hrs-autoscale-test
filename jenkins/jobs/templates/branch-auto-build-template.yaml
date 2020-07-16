@@ -49,6 +49,26 @@
               fi
             publishers:
               - github-notifier
+        - 'shamu-{name}-branch-auto-build':
+            name: login
+            generic-webhook-trigger-token: login
+            project-url: 'https://github.com/tardisone/shamu-hrs-login/'
+            shell: |
+              yarn install
+
+              yarn eslint | tee eslint_output.txt
+
+              yarn stylelint | tee stylelint_output.txt
+
+              if [ -z $(grep -E "[1-9]\d* error" ./eslint_output.txt) ] && [ -z $(grep -E "31m✖" ./stylelint_output.txt) ]; then
+                echo "No errors "
+                exit 0
+              else
+                echo "Please correct the errors."
+                exit 1
+              fi
+            publishers:
+              - github-notifier
     publishers:
       - jacoco:
           exec-pattern: '**/**.exec'
