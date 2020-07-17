@@ -68,6 +68,10 @@ pipeline {
             pullRepoOnTargetBranch("$BRANCH", "https://github.com/tardisone/shamu-hrs-web.git")
             sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${MICRO_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=web' --vault-password-file ansible-vault-file"
             deploy()
+          } else if("$SERVICE" == "login") {
+            pullRepoOnTargetBranch("$BRANCH", "https://github.com/tardisone/shamu-hrs-login.git")
+            sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${MICRO_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=login' --vault-password-file ansible-vault-file"
+            sh "cd ${MICRO_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
           } else {
             echo "Did not match the ${SERVICE} service. Quit ..."
           }

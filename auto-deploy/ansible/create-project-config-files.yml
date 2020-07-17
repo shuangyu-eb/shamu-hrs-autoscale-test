@@ -83,14 +83,10 @@
           template:
             src: roles/auth0-login/templates/config_file_login_template_for_jenkins.j2
             dest: "{{ workspace }}/config/{{ env }}.env"
-        - debug:
-            msg: "shamu-hrs-login config file created"
-          when: service_name == 'login' 
+          when: service_name == 'login'
 
         - name: Create deploy file for shamu-hrs-login
           template:
             src: roles/auth0-login/templates/deploy_file_login_template.j2
             dest: "{{ workspace }}/config/{{ stack_prefix }}-{{ env }}"
-        - debug:
-            msg: "shamu-hrs-login deploy file created"
           when: service_name == 'login'
