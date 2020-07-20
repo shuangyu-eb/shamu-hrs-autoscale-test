@@ -147,6 +147,7 @@ auth0_namespace: https://simplyhired.com/
 auth0_audience: hrs-backend   # HRS backend api
 auth0_managementIdentifier: https://simplyhired-hrs-eastbay-dev.auth0.com/api/v2/   # Management api Identifier
 auth0_tenant_name: simplyhired-hrs-eastbay-dev.auth0.com
+auth0_tenant: simplyhired-hrs-eastbay-dev
 auth0_friendly_name: SimplyHired-Dev
 registration_beta_token: !vault |
   $ANSIBLE_VAULT;1.1;AES256

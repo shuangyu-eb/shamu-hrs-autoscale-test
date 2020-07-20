@@ -135,6 +135,7 @@ auth0_namespace: https://simplyhired.com
 auth0_audience: hrs-backend   # HRS backend api
 auth0_managementIdentifier: https://simplyhired-dev.auth0.com/api/v2/   # Management api Identifier
 auth0_tenant_name: simplyhired-dev.auth0.com
+auth0_tenant: simplyhired-dev
 auth0_friendly_name: SimplyHired
 company_quartz_datasource_driver: com.mysql.jdbc.Driver
 document_datasource_max_connections: 20

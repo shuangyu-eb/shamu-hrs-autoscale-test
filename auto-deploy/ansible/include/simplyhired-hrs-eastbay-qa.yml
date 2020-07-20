@@ -139,15 +139,16 @@ auth0_client_secret_cli: !vault |
   34613663666439656261626132336535326666623938623266333432636331366163383633663930
   61646365643235613731343538366562636632326530303564383332663430313364353439333633
   64396338306634383332
-auth0_jwks: https://simplyhired-develop.auth0.com/.well-known/jwks.json
+auth0_jwks: https://account.simplyhired-qa.com/.well-known/jwks.json
 auth0_algorithm: RS256
-auth0_auth_domain: https://simplyhired-develop.auth0.com/
-auth0_domain: simplyhired-develop.auth0.com
+auth0_auth_domain: https://account.simplyhired-qa.com/
+auth0_domain: account.simplyhired-qa.com
 auth0_database: hrs-data-store
 auth0_namespace: https://interviewed.com/
 auth0_audience: hrs-backend   # HRS backend api
 auth0_managementIdentifier: https://simplyhired-develop.auth0.com/api/v2/   # Management api Identifier
 auth0_tenant_name: simplyhired-develop.auth0.com
+auth0_tenant: simplyhired-develop
 auth0_friendly_name: SimplyHired-QA
 registration_beta_token: !vault |
   $ANSIBLE_VAULT;1.1;AES256

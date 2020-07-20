@@ -135,6 +135,7 @@ auth0_namespace: https://simplyhired-staging.com
 auth0_audience: hrs-backend   # HRS backend api
 auth0_managementIdentifier: https://simplyhired-staging.auth0.com/api/v2/   # Management api Identifier
 auth0_tenant_name: simplyhired-staging.auth0.com
+auth0_tenant: simplyhired-staging
 auth0_friendly_name: SimplyHired-staging
 company_quartz_datasource_driver: com.mysql.jdbc.Driver
 document_datasource_max_connections: 20
