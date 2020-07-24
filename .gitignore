@@ -50,3 +50,6 @@
 ### Marketing Page Lambda ###
 lambda/marketing-page-api/Archive.zip
 lambda/marketing-page-api/credentials.json
+
+### CloudWatch Notification Lambda ###
+lambda/cloudwatch-alarm-notifications/Archive.zip

@@ -1,0 +1,12 @@
+{
+  "name": "cloudwatch-alarm-notifications",
+  "version": "1.0.0",
+  "description": "Lambda function for processing CloudWatch alarms and sending notifications to Slack",
+  "main": "index.js",
+  "author": "Indeed",
+  "license": "UNLICENSED",
+  "devDependencies": {},
+  "dependencies": {
+    "@slack/webhook": "^5.0.3"
+  }
+}
