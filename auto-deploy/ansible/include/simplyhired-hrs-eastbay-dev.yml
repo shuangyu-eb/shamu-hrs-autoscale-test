@@ -159,6 +159,7 @@ registration_beta_token: !vault |
 
 crypto_hash: system-hash
 system_email_address: no-reply@hr.simplyhired-dev.com
+system_email_from_name: SimplyHired-dev <no-reply@hr.simplyhired.com>
 
 company_sentry: !vault |
   $ANSIBLE_VAULT;1.1;AES256
@@ -265,7 +266,7 @@ document_datasource_name: hris_pactsafe
 document_front_end_address: https://hr.simplyhired-dev.com/
 execution_tole: arn:aws:iam::533423936407:role/ecsTaskExecutionRole-simplyhired-hrs-eastbay-dev
 systemEmailAddress: no-reply@simplyhired-dev.com
-systemEmailFirstName: simplyhired
+systemEmailFirstName: SimplyHired
 systemEmailLastName: dev
 
 h_captcha_site_key: !vault |

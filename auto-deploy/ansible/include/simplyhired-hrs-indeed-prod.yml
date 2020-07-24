@@ -196,6 +196,7 @@ crypto_hash: !vault |
   36356465633164633337316462393639386264623833386333643966393138383266383331346630
   3039636437366139393434633465303962343464303166386337
 system_email_address: no-reply@hr.simplyhired.com
+system_email_from_name: SimplyHired <no-reply@hr.simplyhired.com>
 web_sentry_release: mvp
 web_sentry_env: prod
 web_sentry: !vault |

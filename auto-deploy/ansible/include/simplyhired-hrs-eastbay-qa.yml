@@ -159,6 +159,7 @@ registration_beta_token: !vault |
   38306661636462626562383434306430376339386338656335326138393730633064
 crypto_hash: system-hash
 system_email_address: no-reply@hr.simplyhired-qa.com
+system_email_from_name: SimplyHired-qa <no-reply@hr.simplyhired-qa.com>
 
 company_sentry: !vault |
   $ANSIBLE_VAULT;1.1;AES256
@@ -274,7 +275,7 @@ document_datasource_name: hris_pactsafe
 document_front_end_address: https://hr.simplyhired-qa.com/
 execution_tole: rn:aws:iam::533423936407:role/ecsTaskExecutionRole-simplyhired-hrs-eastbay-qa
 systemEmailAddress: no-reply@simplyhired-qa.com
-systemEmailFirstName: simplyhired
+systemEmailFirstName: SimplyHired
 systemEmailLastName: qa
 # add for running script
 aws_deploy_security_token: # NO_USE
