@@ -6,8 +6,7 @@
   ],
   "flags": {
     "enable_public_signup_user_exists_error": true,
-    "disable_clickjack_protection_headers": false,
-    "enable_mgmt_api_v1": true
+    "disable_clickjack_protection_headers": false
   },
   "friendly_name": "##FRIENDLY_NAME##",
   "picture_url": "##ENVIRONMENT_ICON_DOMAIN##/image/logo.simplyhired.png",
