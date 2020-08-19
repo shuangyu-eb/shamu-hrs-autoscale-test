@@ -298,3 +298,6 @@ indeed_clip_secret: # NO_USE
 
 # determine whether use SH login or Indeed login
 is_social_login: "false"
+
+# determine the skin type
+skin: simplyhired
