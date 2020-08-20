@@ -12,11 +12,7 @@ SENTRY_ENV={{web_sentry_env}}
 SENTRY_RELEASE={{web_sentry_release}}
 SENTRY_DSN={{web_sentry}}
 GOOGLE_MAP_API_KEY={{google_map_api_key}}
-H_CAPTCHA_SITE_KEY={{h_captcha_site_key}}
 # please remove it for production
-{% if verify_token is defined and verify_token | string %}
-VERIFY_TOKEN={{verify_token}}
-{% endif %}
 {% if enable_logging is defined and enable_logging | bool %}
 ENABLE_LOGGING={{enable_logging}}
 {% endif %}
