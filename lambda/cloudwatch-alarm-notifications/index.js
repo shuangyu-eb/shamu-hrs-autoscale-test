@@ -1,27 +1,63 @@
 const { IncomingWebhook } = require('@slack/webhook');
+const CloudWatchClient = require('./cloudwatchClient');
+const AthenaClient = require('./athenaClient');
 
-exports.handler = async (event) => {
-    const webhook = new IncomingWebhook(process.env.SLACK_WEBHOOK);
+const QUERY_PROCESSING_TIME_IN_MILLISECONDS = 10000;
 
-    await Promise.all(event.Records.map((record) => {
-        const message = record.Sns.Message;
-        console.log('Received message:', message);
+exports.handler = (event, context, callback) => {
 
-        const {
-            NewStateValue, AlarmName, Region,
-            OldStateValue, StateChangeTime, NewStateReason
-        } = JSON.parse(message);
+    const message = event.Records[0].Sns.Message;
+    console.log('Received message:', message);
 
-        return webhook.send({
-            text: `*${NewStateValue}*: "${AlarmName}" in ${Region}`
-                + `\nState changed from ${OldStateValue} to ${NewStateValue} at ${StateChangeTime}`
-                + `\n_Reason_: ${NewStateReason}`,
-        });
-    }));
+    const {
+        NewStateValue, AlarmName, Region,
+        OldStateValue, StateChangeTime, NewStateReason
+    } = JSON.parse(message);
 
-    const numEvents = event.Records.length;
+    const alarmMessage = `*${NewStateValue}*: "${AlarmName}" in ${Region}`
+        + `\nState changed from ${OldStateValue} to ${NewStateValue} at ${StateChangeTime}`
+        + `\n_Reason_: ${NewStateReason}`;
 
-    const result = (`Successfully processed ${numEvents} record${numEvents === 1 ? '' : 's'}`);
-    console.log(result);
-    return result;
+    sendToSlack(alarmMessage)
+        .then(() => {
+            const name = AlarmName.toLowerCase();
+            if (name.includes('healthcheck')) {
+                const logClient = new CloudWatchClient(AlarmName);
+                queryLogs(logClient, callback);
+            } else if (name.includes('waf')) {
+                const logClient = new AthenaClient(AlarmName);
+                queryLogs(logClient, callback);
+            } else {
+                callback(null, 'Successfully processed event');
+            }
+        }).catch((err) => callback(err));
 };
+
+function queryLogs (logClient, callback) {
+    const params = logClient.getParams();
+
+    logClient.triggerQuery(params, (err, data) => {
+        if (err) {
+            callback(Error(err));
+        } else {
+            const params = logClient.getRetrievalParams(data);
+            setTimeout(() => {
+                logClient.retrieveResults(params, (err, data) => {
+                    if (err) {
+                        callback(Error(err));
+                    }
+                    const results = logClient.formatResults(data);
+
+                    sendToSlack(results)
+                        .then(() => callback(null, 'Successfully processed alarm and resulting logs'))
+                        .catch((err) => callback(Error(err)));
+                });
+            }, QUERY_PROCESSING_TIME_IN_MILLISECONDS);
+        }
+    });
+};
+
+function sendToSlack(message) {
+    const webhook = new IncomingWebhook(process.env.SLACK_WEBHOOK);
+    return webhook.send({ text: message });
+}
