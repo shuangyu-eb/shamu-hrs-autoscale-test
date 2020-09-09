@@ -2,6 +2,6 @@
   "enabled": true,
   "script": "./User Logins Count.js",
   "name": "User Logins Count",
-  "order": 4,
+  "order": 5,
   "stage": "login_success"
 }
