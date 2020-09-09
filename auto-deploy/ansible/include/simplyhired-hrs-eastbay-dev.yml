@@ -41,6 +41,8 @@ db_password: !vault |
   6530396637623361370a346331323163623830626164316366653030336261646234343231306364
   3231
 company_db_name: company
+company_default_schema: company_default
+company_tenant_prefix: tenant_
 document_db_name: hris_pactsafe
 secret_db_name: secret
 rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
