@@ -15,6 +15,10 @@
       "resource_server_identifier": "hrs-backend"
     },
     {
+      "permission_name": "MANAGE_ATTENDANCE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
       "permission_name": "MANAGE_MY_DOCUMENTS_REQUEST",
       "resource_server_identifier": "hrs-backend"
     },
