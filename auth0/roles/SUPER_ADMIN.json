@@ -127,6 +127,10 @@
       "resource_server_identifier": "hrs-backend"
     },
     {
+      "permission_name": "SELECT_PAID_HOLIDAY",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
       "permission_name": "SUPER_PERMISSION",
       "resource_server_identifier": "hrs-backend"
     },

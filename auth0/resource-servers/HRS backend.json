@@ -132,6 +132,10 @@
       "description": "MANAGE_USER_TIME_OFF_BALANCE"
     },
     {
+      "value": "SELECT_PAID_HOLIDAY",
+      "description": "SELECT_PAID_HOLIDAY"
+    },
+    {
       "value": "SUPER_PERMISSION",
       "description": "SUPER_PERMISSION"
     },
