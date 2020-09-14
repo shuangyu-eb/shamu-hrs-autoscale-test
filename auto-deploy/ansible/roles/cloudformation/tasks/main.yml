@@ -94,6 +94,7 @@
     template: "roles/cloudformation/cfn/secrets-manager.yml"
     template_parameters:
       DeployEnv: "{{ env }}"
+      SecretPrefix: "{{secrets_manager_prefix}}"
       CompanyRdsUrl: '"spring.datasource.template-url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.CompanyRdsEndpoint}}/{schema}?zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&jdbcCompliantTruncation=false&createDatabaseIfNotExist=true"'
       CompanyRdsDefaultSchema: '"spring.datasource.default-schema": "{{ company_default_schema }}"'
       CompanyRdsTenantPrefix: '"spring.datasource.tenant-prefix": "{{ company_tenant_prefix }}"'
@@ -136,7 +137,7 @@
       DocumentDatasourceTemplateUrl: '"spring.datasource.templateUrl": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{name}?zeroDateTimeBehavior=converttonull&characterEncoding=utf-8&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&jdbcCompliantTruncation=false"'
       DocumentDatasourceName: '"spring.datasource.name": "{{ document_datasource_name }}"'
       DocumentFrontEndAddress: '"application.frontEndAddress": "{{ document_front_end_address }}"'
-      ECSExecutionRole: '"aws.executionRole": "{{ execution_tole }}"'
+      ECSExecutionRole: '"aws.executionRole": "{{ iam_roles_stack.stack_outputs.EcsTaskExecutionRoleArn }}"'
   register: secrets_manager_stack
 - debug:
     msg: "Secret manager stack outputs: {{ secrets_manager_stack.stack_outputs }}"

@@ -12,6 +12,13 @@
 - debug:
     msg: "Company service deploy file created"
 
+- name: Create bootstrap file for company service
+  template:
+    src: bootstrap_file_company_template.j2
+    dest: "{{ workspace }}/shamu-hrs-company-service/config/bootstrap.yml"
+- debug:
+    msg: "Company service bootstrap file created"
+
 - name: Create config file for document service
   template:
     src: config_file_document_template.j2
@@ -25,6 +32,13 @@
     dest: "{{ workspace }}/shamu-hrs-document-service/config/{{ stack_prefix }}-{{ env }}"
 - debug:
     msg: "Document service deploy file created"
+
+- name: Create bootstrap file for document service
+  template:
+    src: bootstrap_file_document_template.j2
+    dest: "{{ workspace }}/shamu-hrs-document-service/config/bootstrap.yml"
+- debug:
+    msg: "Document service bootstrap file created"
 
 - name: Create config file for front-end
   template:
@@ -46,6 +60,13 @@
     dest: "{{ workspace }}/shamu-hrs-gateway/src/main/resources/application-{{ env }}.yml"
 - debug:
     msg: "Gateway service config file created"
+
+- name: Create bootstrap file for gateway service
+  template:
+    src: bootstrap_file_gateway_template.j2
+    dest: "{{ workspace }}/shamu-hrs-gateway/src/main/resources/bootstrap.yml"
+- debug:
+    msg: "Gateway service bootstrap file created"
 
 - name: Create eb extension config file directory
   file:
@@ -113,6 +134,13 @@
 - debug:
     msg: "Search service deploy file created"
 
+- name: Create bootstrap file for search service
+  template:
+    src: bootstrap_file_search_template.j2
+    dest: "{{ workspace }}/shamu-hrs-search-service/config/bootstrap.yml"
+- debug:
+    msg: "Search service bootstrap file created"
+
 - name: Create config file for logging service
   template:
     src: config_file_logging_template.j2
@@ -126,3 +154,10 @@
     dest: "{{ workspace }}/shamu-hrs-logging-service/config/{{ stack_prefix }}-{{ env }}"
 - debug:
     msg: "Logging service deploy file created"
+
+- name: Create bootstrap file for logging service
+  template:
+    src: bootstrap_file_logging_template.j2
+    dest: "{{ workspace }}/shamu-hrs-logging-service/config/bootstrap.yml"
+- debug:
+    msg: "Logging service bootstrap file created"

@@ -283,7 +283,6 @@ pactsafe_test_mode: true
 document_datasource_driver_class: com.mysql.cj.jdbc.Driver
 document_datasource_name: hris_pactsafe
 document_front_end_address: https://hr.simplyhired-qa.com/
-execution_tole: rn:aws:iam::533423936407:role/ecsTaskExecutionRole-simplyhired-hrs-eastbay-qa
 systemEmailAddress: no-reply@simplyhired-qa.com
 systemEmailFirstName: SimplyHired
 systemEmailLastName: qa
@@ -300,3 +299,5 @@ is_social_login: "false"
 
 # determine the skin type
 skin: simplyhired
+
+secrets_manager_prefix: /secret
