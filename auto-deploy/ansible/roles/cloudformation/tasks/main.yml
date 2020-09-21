@@ -114,6 +114,7 @@
       Auth0AuthDomain: '"auth0.authDomain": "{{ auth0_auth_domain }}"'
       Auth0ManagementIdentifier: '"auth0.managementIdentifier": "{{ auth0_managementIdentifier }}"'
       Auth0Issuer: '"auth0.issuer": "{{ auth0_auth_domain }}"'
+      Auth0Connection: '"auth0.connection": "{{ auth0_database }}"'
       RedisHost: '"spring.redis.host": "{{ redis_cluster_stack.stack_outputs.RedisEndpoint }}"'
       RedisPort: '"spring.redis.port": "{{ redis_port }}"'
       Auth0CustomNamespace: '"auth0.customNamespace": "{{ auth0_namespace }}"'
