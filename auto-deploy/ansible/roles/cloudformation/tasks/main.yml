@@ -99,7 +99,7 @@
       CompanyRdsDefaultSchema: '"spring.datasource.default-schema": "{{ company_default_schema }}"'
       CompanyRdsTenantPrefix: '"spring.datasource.tenant-prefix": "{{ company_tenant_prefix }}"'
       SecretRdsUrl: '"spring.secret.datasource.jdbc-url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.SecretRdsEndpoint}}/{{secret_db_name}}?characterEncoding=utf-8"'
-      DocumentRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{{document_db_name}}?zeroDateTimeBehavior=convertToNull&serverTimezone=UTC"'
+      DocumentRdsUrl: '"spring.datasource.url": "jdbc:mysql://{{rds_cluster_stack.stack_outputs.DocumentRdsEndpoint}}/{{document_db_name}}?zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&createDatabaseIfNotExist=true"'
       RdsUserName: '"spring.datasource.username": "{{ db_user }}"'
       RdsPassword: '"spring.datasource.password": "{{ db_password }}"'
       SecretUserName: '"spring.secret.datasource.username": "{{ db_user }}"'

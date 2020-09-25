@@ -25,7 +25,7 @@ s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.amazonaws.com/
 s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.amazonaws.com/
 hrs_domain: https://hr.interviewed-test.com
 hrs_icon_domain: https://hr.interviewed-test.com
-proxy_domain: http://{{stack_prefix}}-{{env}}.ap-northeast-1.elasticbeanstalk.com # gateway address
+proxy_domain: https://hr-api.interviewed-test.com # gateway address
 website_end_point: https://hr.interviewed-test.com
 # vars for rds
 db_cluster_name: "{{stack_prefix}}-{{env}}-cluster"
