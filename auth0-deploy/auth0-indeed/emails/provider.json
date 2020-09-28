@@ -1,0 +1,8 @@
+{
+  "enabled": false,
+  "credentials": {
+    "api_key": "##SENDGRID_API_KEY##"
+  },
+  "name": "sendgrid",
+  "default_from_address": "##ENVIRONMENT_EMAIL##"
+}

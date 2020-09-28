@@ -1,0 +1,14 @@
+{
+  "default_audience": "",
+  "enabled_locales": [
+    "en"
+  ],
+  "flags": {
+    "enable_public_signup_user_exists_error": true,
+    "disable_clickjack_protection_headers": false
+  },
+  "friendly_name": "##FRIENDLY_NAME##",
+  "picture_url": "##ENVIRONMENT_ICON_DOMAIN##/image/logoIndeed.png",
+  "support_email": "hris-help@indeed.com",
+  "support_url": "https://support.indeed.com/hc/en-us"
+}

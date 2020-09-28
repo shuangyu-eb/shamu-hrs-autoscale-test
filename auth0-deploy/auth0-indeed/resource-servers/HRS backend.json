@@ -12,10 +12,6 @@
       "description": "CREATE_AND_APPROVED_TIME_OFF_REQUEST"
     },
     {
-      "value": "CREATE_ATTENDANCE",
-      "description": "CREATE_ATTENDANCE"
-    },
-    {
       "value": "CREATE_DEPARTMENT",
       "description": "CREATE_DEPARTMENT"
     },
@@ -68,10 +64,6 @@
       "description": "EDIT_USER"
     },
     {
-      "value": "MANAGE_ATTENDANCE",
-      "description": "MANAGE_ATTENDANCE"
-    },
-    {
       "value": "MANAGE_BENEFIT",
       "description": "MANAGE_BENEFIT"
     },
@@ -90,6 +82,10 @@
     {
       "value": "MANAGE_COMPANY_USER",
       "description": "MANAGE_COMPANY_USER"
+    },
+    {
+      "value": "MANAGE_EMPLOYEES",
+      "description": "MANAGE_EMPLOYEES"
     },
     {
       "value": "MANAGE_MY_DOCUMENTS_REQUEST",
@@ -130,10 +126,6 @@
     {
       "value": "MANAGE_USER_TIME_OFF_BALANCE",
       "description": "MANAGE_USER_TIME_OFF_BALANCE"
-    },
-    {
-      "value": "SELECT_PAID_HOLIDAY",
-      "description": "SELECT_PAID_HOLIDAY"
     },
     {
       "value": "SUPER_PERMISSION",

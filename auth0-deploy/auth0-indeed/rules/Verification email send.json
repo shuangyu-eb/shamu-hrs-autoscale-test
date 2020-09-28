@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "script": "./Verification email send.js",
+  "name": "Verification email send",
+  "order": 4,
+  "stage": "login_success"
+}

@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "script": "./Add user id to app metadata and Token.js",
+  "name": "Add user id to app metadata and Token",
+  "order": 3,
+  "stage": "login_success"
+}

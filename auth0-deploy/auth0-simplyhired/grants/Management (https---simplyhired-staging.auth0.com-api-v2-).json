@@ -1,0 +1,23 @@
+{
+  "client_id": "Management",
+  "audience": "##AUTH0_MANAGEMENT_IDENTIFIER##",
+  "scope": [
+    "read:users",
+    "update:users",
+    "delete:users",
+    "create:users",
+    "read:users_app_metadata",
+    "update:users_app_metadata",
+    "delete:users_app_metadata",
+    "create:users_app_metadata",
+    "read:resource_servers",
+    "update:resource_servers",
+    "read:roles",
+    "create:roles",
+    "delete:roles",
+    "update:roles",
+    "read:rules",
+    "create:rules",
+    "update:rules"
+  ]
+}

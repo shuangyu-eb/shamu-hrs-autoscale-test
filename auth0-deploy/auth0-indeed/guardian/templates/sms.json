@@ -1,0 +1,5 @@
+{
+  "name": "sms",
+  "enrollment_message": "Your Indeed HRIS security code is {{ code }}",
+  "verification_message": "Your Indeed HRIS security code is {{ code }}"
+}

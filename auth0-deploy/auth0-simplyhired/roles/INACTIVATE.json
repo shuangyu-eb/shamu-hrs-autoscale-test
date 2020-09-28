@@ -1,0 +1,34 @@
+{
+  "name": "INACTIVATE",
+  "description": "INACTIVATE",
+  "permissions": [
+    {
+      "permission_name": "EDIT_SELF",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_SELF_TIME_OFF_BALANCE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_MY_DOCUMENTS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_SELF",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_SELF_BENEFITS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_SELF_TIME_OFF_REQUEST",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_ROLE_AND_STATUS",
+      "resource_server_identifier": "hrs-backend"
+    }
+  ]
+}

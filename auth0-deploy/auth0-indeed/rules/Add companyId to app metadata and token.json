@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "script": "./Add companyId to app metadata and token.js",
+  "name": "Add companyId to app metadata and token",
+  "order": 2,
+  "stage": "login_success"
+}

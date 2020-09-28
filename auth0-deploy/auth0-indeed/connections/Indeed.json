@@ -1,0 +1,20 @@
+{
+  "options": {
+    "scope": "",
+    "scripts": {
+      "fetchUserProfile": "function(accessToken, ctx, cb) {\n  // call oauth2 APIwith the accesstoken and create the profile\n  var request = require('request');\n  request.get('https://secure.indeed.com/v1/api/account?access_token=' + accessToken, function (error, response, body) {\n    var result = JSON.parse(body);\n    var randomString = Math.random().toString(36).substring(9, 15);\n\n    if (response.statusCode !== 200) {\n      return cb(new Error('message:' + result.message));\n    }\n    var profile = {\n      email: result.email,\n      email_verified: true,\n      user_id: result.accountKey,\n      companyName: 'Indeed' + randomString,\n\n    };\n    cb(null, profile);\n  });\n}\n"
+    },
+    "tokenURL": "https://secure.indeed.com/oauth/tokens",
+    "client_id": "82724a0fcff76610c11155c19e0de2516a5126563f034f0bfd32cf2ca205b1a4",
+    "client_secret": "NcDaWxGFSFkZEHM3wrCUclWA39g1QQo8k4b9h56WzsEwHekx6FZH1yJotjY9b6a7",
+    "authorizationURL": "https://secure.indeed.com/account/oauth"
+  },
+  "strategy": "oauth2",
+  "name": "Indeed",
+  "is_domain_connection": false,
+  "enabled_clients": [
+    "Management",
+    "auth0-deploy-cli-extension",
+    "HRS Webapp"
+  ]
+}
