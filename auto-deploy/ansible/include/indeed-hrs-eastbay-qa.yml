@@ -301,3 +301,5 @@ is_social_login: "true"
 skin: indeed
 
 secrets_manager_prefix: /secret/indeed-hris
+
+enable_logging: true
