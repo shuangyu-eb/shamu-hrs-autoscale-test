@@ -1,0 +1,907 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1598321529000-1
+      author: michael-eb
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+              - column:
+                  name: pay_frequency_type_id
+                  type: binary(16)
+              - column:
+                  name: last_payroll_payday
+                  type: datetime
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: updated_at
+                  type: datetime
+            tableName: payroll_details
+
+  - changeSet:
+      id: 1598321529000-2
+      author: michael-eb
+      preConditions:
+        onFail: WARN
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pay_frequency_type_id
+            baseTableName: payroll_details
+            constraintName: fk_payroll_details_frequency_type_id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: static_company_pay_frequency_types
+
+  - changeSet:
+      id: 1598321529000-3
+      author: michael-eb
+      preConditions:
+        onFail: WARN
+      changes:
+        - sql:
+            sql: insert into payroll_details select unhex(replace(uuid(), '-', '')), pay_frequency_type_id, last_payroll_payday, created_at, updated_at from company_ta_settings;
+
+  - changeSet:
+      id: 1598321529000-4
+      author: michael-eb
+      preConditions:
+        onFail: WARN
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: company_ta_settings
+            constraintName: fk_company_ta_settings_pay_frequency_type_id
+
+  - changeSet:
+      id: 1598321529000-5
+      author: michael-eb
+      changes:
+        - dropColumn:
+            columnName: pay_frequency_type_id
+            tableName: company_ta_settings
+        - dropColumn:
+            columnName: last_payroll_payday
+            tableName: company_ta_settings
+
+  - changeSet:
+      id: 1598493445000-1
+      author: michael-eb
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: removed_at
+                  type: datetime
+            tableName: timesheets
+
+  - changeSet:
+      id: 1598604559000-1
+      author: michael-eb
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: policy_name
+                  type: varchar(32)
+              - column:
+                  name: universal
+                  type: TINYINT
+              - column:
+                  name: default_policy
+                  type: TINYINT
+              - column:
+                  name: active
+                  type: TINYINT
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: updated_at
+                  type: datetime
+            tableName: overtime_policies
+
+  - changeSet:
+      id: 1598604559000-2
+      author: michael-eb
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: start
+                  type: int
+                  constraints:
+                    nullable:  false
+              - column:
+                  name: overtime_type_id
+                  type: binary(16)
+              - column:
+                  name: rate
+                  type: Decimal(3,2)
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: updated_at
+                  type: datetime
+            tableName: policy_details
+
+  - changeSet:
+      id: 1598604559000-3
+      author: michael-eb
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: ref_id
+                  type: INT
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: updated_at
+                  type: datetime
+            tableName: static_overtime_types
+
+  - changeSet:
+      id: 1598604559000-4
+      author: michael-eb
+      preConditions:
+        onFail: WARN
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: overtime_policy_id
+                  type: binary(16)
+            tableName: user_compensations
+
+  - changeSet:
+      id: 1598604559000-5
+      author: michael-eb
+      changes:
+        - sql:
+            sql: create trigger ins_static_overtime_type before insert on static_overtime_types for each row set new.id = unhex(replace(uuid(), '-', ''));
+
+  - changeSet:
+      id: 1598604559000-6
+      author: michael-eb
+      runOnChange: true
+      changes:
+        - loadUpdateData:
+            columns:
+              - column:
+                  name: name
+                  type: STRING
+            file: db/changelog/data/static-overtime-type.csv
+            primaryKey: id
+            tableName: static_overtime_types
+
+
+  - changeSet:
+      id: 1598604559000-7
+      author: michael-eb
+      preConditions:
+        onFail: WARN
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: overtime_type_id
+            baseTableName: policy_details
+            constraintName: fk_policy_details_overtime_type_id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: static_overtime_types
+        - addForeignKeyConstraint:
+            baseColumnNames: overtime_policy_id
+            baseTableName: user_compensations
+            constraintName: fk_user_compensations_overtime_policy_id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: overtime_policies
+        - dropForeignKeyConstraint:
+            baseTableName: user_compensations
+            constraintName: fk_user_compensations_overtime_status
+
+  - changeSet:
+      id: 1598945440000-1
+      author: michael-eb
+      changes:
+        - dropColumn:
+            columnName: universal
+            tableName: overtime_policies
+
+  - changeSet:
+      id: 1599012561845-0
+      author: jiansheng-eb
+      preConditions:
+        onFail: WARN
+      changes:
+        - renameColumn:
+            columnDataType: datetime
+            newColumnName: updated_at
+            oldColumnName: update_at
+            tableName: time_off_adjustments
+
+  - changeSet:
+      id: 1598604559000-8
+      author: mshumaker
+      preConditions:
+        onFail: WARN
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: overtime_policy_id
+                  type: binary(16)
+            tableName: policy_details
+        - addForeignKeyConstraint:
+            baseColumnNames: overtime_policy_id
+            baseTableName: policy_details
+            constraintName: fk_overime_policy_details_overtime_policy_id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: overtime_policies
+
+  - changeSet:
+      id:  1600726601-1
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_coverages convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-2
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_life_event_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-3
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_plan_coverages convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-4
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_plan_dependent_relationships convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-5
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_plan_dependents convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-6
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_plan_documents convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-7
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_plan_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-8
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_plans convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-9
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_plans_users convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-10
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefit_request_status convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-11
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefits_request_comments convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-12
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefits_request_documents convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-13
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefits_requests convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-14
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table benefits_setting convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-15
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table citizenship_statuses convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-16
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table company convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-17
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table company_sizes convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-18
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table company_ta_settings convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-19
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table compensation_change_reasons convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-20
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table compensation_frequency convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-21
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table compensation_overtime_statuses convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-22
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table compensation_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-23
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table countries convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-24
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table currencies convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-25
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table deactivation_reasons convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-26
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table departments convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-27
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table dismissed_at convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-28
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table emails convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-29
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table employee_benefit_plans convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-30
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table employee_time_entries convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-31
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table employee_time_logs convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-32
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table employee_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-33
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table employees_ta_settings convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-34
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table employment_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-35
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table ethnicities convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-36
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table genders convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-37
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table jobs convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-38
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table jobs_users convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-39
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table marital_status convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-40
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table office_addresses convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-41
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table offices convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-42
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table overtime_policies convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-43
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table paid_holidays convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-44
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table paid_holidays_users convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-45
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table payroll_details convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-46
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table policy_details convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-47
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table retirement_plans_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-48
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table retirement_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-49
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table states_provinces convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-50
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table static_company_pay_frequency_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-51
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table static_employees_ta_time_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-52
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table static_overtime_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-53
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table static_timesheet_status convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-54
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table static_timezones convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-55
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_accrual_frequencies convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-56
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_adjustments convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-57
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_policies convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-58
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_policies_users convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-59
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_policy_accrual_schedule_milestones convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-60
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_policy_accrual_schedules convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-61
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_request_approval_statuses convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-62
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_request_comments convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-63
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_request_dates convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-64
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_off_requests convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-65
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table time_period convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-66
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table timesheets convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-67
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_access_level_events convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-68
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_addresses convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-69
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_benefits_setting convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-70
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_compensations convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-71
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_contact_information convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-72
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_dependents convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-73
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_educations convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-74
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_emergency_contacts convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-75
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_employment_status_types convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-76
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_employment_statuses convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-77
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_personal_information convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-78
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_roles convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-79
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table user_statuses convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+
+  - changeSet:
+      id:  1600726601-80
+      author: jordanc-indeed
+      changes:
+        - sql:
+            comment:  Update character set
+            sql: alter table users convert to character set utf8mb4 collate utf8mb4_unicode_ci;

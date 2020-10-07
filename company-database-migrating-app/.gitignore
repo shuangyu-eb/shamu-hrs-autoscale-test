@@ -1,0 +1,45 @@
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea/*
+!.idea/saveactions_settings.xml
+!.idea/codeStyles
+!.idea/google-java-format.xml
+!.idea/externalDependencies.xml
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+
+### deploy
+/config/deploy.env
+/config/application-qa.yml
+
+## local
+/config/application-database.yml
+
+## deploy
+.aws
+
+### MAC ###
+**/.DS_Store
+
+dump/
+execute-log/
