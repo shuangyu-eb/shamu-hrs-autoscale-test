@@ -161,7 +161,7 @@ registration_beta_token: !vault |
 
 crypto_hash: system-hash
 system_email_address: no-reply@hr.simplyhired-dev.com
-system_email_from_name: SimplyHired-dev <no-reply@hr.simplyhired.com>
+system_email_from_name: SimplyHired-dev <no-reply@hr.simplyhired-dev.com>
 
 company_sentry: !vault |
   $ANSIBLE_VAULT;1.1;AES256
