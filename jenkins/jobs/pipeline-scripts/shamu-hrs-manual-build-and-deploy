@@ -166,8 +166,7 @@ pipeline {
                 pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs.git")
               }
               sh "cd ${AUTH0_DIR} && ansible-playbook --vault-password-file ../ansible-vault-file -e 'stack_prefix=${stack_prefix} env=${env}' auto-deploy/ansible/build-auth0-config.yml"
-              isIndeed = sh(returnStdout: true, script:"echo ${stack_prefix} | grep 'indeed'")
-              if ("$isIndeed" == "") {
+              if("$stack_prefix".contains('simplyhired')) {
                 sh "cd ${AUTH0_DIR} && a0deploy import -c auto-deploy/ansible/auth0_config.json -i auth0-deploy/auth0-simplyhired"
               } else {
                 sh "cd ${AUTH0_DIR} && a0deploy import -c auto-deploy/ansible/auth0_config.json -i auth0-deploy/auth0-indeed"
