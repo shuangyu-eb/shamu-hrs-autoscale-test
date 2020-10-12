@@ -15,14 +15,31 @@ public abstract class TenantManager {
   private TenantManager() {}
 
 
-  public static void addNaOtPolicyifDoesNotExist(String companyId, OvertimePolicy overtimePolicy) throws Exception {
+  public static Boolean checkPolicyExists(String companyId, OvertimePolicy overtimePolicy) throws Exception{
+      final String schema = DataSourceConfig.getTenantPrefix() + companyId;
+      final String sql = "SELECT id  " +
+              "FROM " + schema + ".overtime_policies " +
+              "WHERE policy_name = ? AND active = 1";
+      try (final Connection connection = DataSource.getTargetConnection();
+           final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+          preparedStatement.setString(1, overtimePolicy.getPolicyName());
+          ResultSet rs = preparedStatement.executeQuery();
+          if(rs.next()){
+              return true;
+          }
+          return false;
+      } catch (SQLException e) {
+          log.warn("", e);
+          throw e;
+      }
+
+  }
+
+  public static void addNaOtPolicy(String companyId, OvertimePolicy overtimePolicy) throws Exception {
       final String schema = DataSourceConfig.getTenantPrefix() + companyId;
       final String sql = "INSERT INTO " + schema + ".overtime_policies " +
-              "(id, policy_name, default_policy, active, created_at, updated_at)" +
-              "SELECT UNHEX(?), ?, ?, ?, ?, ? " +
-              "WHERE NOT EXISTS " +
-              "(SELECT id FROM "+ schema  +".overtime_policies WHERE active = 1 AND policy_name = ?)";
-
+              "(id, policy_name, default_policy, active, created_at, updated_at) " +
+              "VALUES (UNHEX(?), ?, ?, ?, ?, ?)";
       try (final Connection connection = DataSource.getTargetConnection();
            final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
           preparedStatement.setString(1, overtimePolicy.getId());
@@ -31,8 +48,6 @@ public abstract class TenantManager {
           preparedStatement.setInt(4, overtimePolicy.getActive());
           preparedStatement.setTimestamp(5, overtimePolicy.getCreatedAt());
           preparedStatement.setTimestamp(6, overtimePolicy.getUpdatedAt());
-          preparedStatement.setString(7, overtimePolicy.getPolicyName());
-          System.out.println(preparedStatement.toString());
           preparedStatement.execute();
       } catch (SQLException e) {
           log.warn("", e);

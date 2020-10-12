@@ -20,7 +20,9 @@ public class Main {
       }
       log.info(String.valueOf(companyId));
       OvertimePolicy overtimePolicy = OvertimePolicyCreator.createOvertimePolicy();
-      TenantManager.addNaOtPolicyifDoesNotExist(companyId, overtimePolicy);
+      if(!TenantManager.checkPolicyExists(companyId,overtimePolicy)){
+        TenantManager.addNaOtPolicy(companyId, overtimePolicy);
+      }
     }
     log.info("============== COMPLETE ===============");
   }
