@@ -1,0 +1,10 @@
+{
+  "name": "unsupported-browser",
+  "version": "1.0.0",
+  "description": "Lambda function for redirecting users who are using unsupported browsers",
+  "main": "index.js",
+  "author": "Indeed",
+  "license": "UNLICENSED",
+  "devDependencies": {},
+  "dependencies": {}
+}

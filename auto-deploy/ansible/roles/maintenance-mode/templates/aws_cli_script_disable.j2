@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -x
+TEMPDIR=$(mktemp -d)
+CONFIG=$(aws cloudfront get-distribution-config --id {{web_cloudfront_id}})
+ETAG=$(echo "${CONFIG}" | jq -r '.ETag')
+echo "${CONFIG}" | jq '.DistributionConfig' > ${TEMPDIR}/orig.json
+echo "${CONFIG}" | jq '.DistributionConfig | .DefaultCacheBehavior.LambdaFunctionAssociations.Items[0].LambdaFunctionARN= "{{unsupported_browser_lambda_arn}}" | .DefaultRootObject = "index.html"' > ${TEMPDIR}/updated.json
+aws cloudfront update-distribution --id {{web_cloudfront_id}} --distribution-config file://${TEMPDIR}/updated.json --if-match "${ETAG}"

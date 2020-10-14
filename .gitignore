@@ -53,3 +53,6 @@ lambda/marketing-page-api/credentials.json
 
 ### CloudWatch Notification Lambda ###
 lambda/cloudwatch-alarm-notifications/Archive.zip
+
+### CLI Scripts produced from maintenance mode playbook ###
+auto-deploy/ansible/aws_cli_script_*

@@ -1,0 +1,37 @@
+# Tasks to enable maintenance mode
+- name: (Enable) Create script template
+  template:
+    src: aws_cli_script_enable.j2
+    dest: "./aws_cli_script_enable.sh"
+  when: maintenance == "enable"
+- debug:
+    msg: "Enable maintenance script created for AWS CLI"
+  when: maintenance == "enable"
+
+- name: (Enable) Execute script with AWS CLI
+  script: "./aws_cli_script_enable.sh"
+  when: maintenance == "enable"
+- debug:
+    msg: "Maintenance mode enabled"
+  when: maintenance == "enable"
+
+
+# Tasks to disable maintenance mode
+- name: (Disable) Create script template
+  template:
+    src: aws_cli_script_disable.j2
+    dest: "./aws_cli_script_disable.sh"
+  when: maintenance == "disable"
+- debug:
+    msg: "Disable maintenance script created for AWS CLI"
+  when: maintenance == "disable"
+
+
+- name: (Disable) Execute script with AWS CLI
+  script: "./aws_cli_script_disable.sh"
+  when: maintenance == "disable"
+- debug:
+    msg: "Maintenance mode disabled"
+  when: maintenance == "disable"
+
+

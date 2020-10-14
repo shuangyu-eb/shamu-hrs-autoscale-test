@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+
+    - name: include variables from file
+      include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
+      tags:
+        - 'always'
+
+    - name: Simulates AWS configure on the deploy server
+      include_role:
+        name: 'aws-cli'
+
+    - name: Toggle maintenance mode through the AWS CLI
+      include_role:
+        name: 'maintenance-mode'

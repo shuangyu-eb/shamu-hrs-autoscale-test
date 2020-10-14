@@ -14,6 +14,21 @@ do
         FUNC_NAME="getSignedURL"
         shift
         ;;
+    -m)
+        FOLDER="maintenance-page"
+        FUNC_NAME="maintenance-page"
+        shift
+        ;;
+    -u)
+        FOLDER="unsupported-browser"
+        FUNC_NAME="unsupported-browser"
+        shift
+        ;;
+    -c)
+        FOLDER="cloudwatch-alarm-notifications"
+        FUNC_NAME="cloudwatch-alarm-notifications"
+        shift
+        ;;
     *)
         echo "$1 is not an option"
         echo "---------------------"
@@ -21,6 +36,9 @@ do
         echo "option | function "
         echo "  -s   | saveToRDS "
         echo "  -g   | getSignedURL "
+        echo "  -m   | maintenance-page "
+        echo "  -u   | unsupported-browser "
+        echo "  -c   | cloudwatch-alarm-notifications "
         echo "---------------------"
         echo "please input a correct option"
         exit 0
@@ -29,7 +47,7 @@ do
   shift
 done
 
-cd ${FOLDER}/
+cd lambda/${FOLDER}/
 
 yarn install
 
