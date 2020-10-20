@@ -1,0 +1,47 @@
+{
+  "Comment": "Call lambda to set up a tenant.",
+  "StartAt": "InsertRecordToDB",
+  "States": {
+    "InsertRecordToDB": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:putItem",
+      "Next": "sendTenantSetupRequest",
+      "ResultPath": "$.result",
+      "Parameters": {
+        "TableName": "${TenantDynamoDBTableName}",
+        "Item": {
+          "id.$": "$.id",
+          "status": "EXECUTING"
+        }
+      }
+    },
+    "sendTenantSetupRequest": {
+      "Type": "Task",
+      "Resource": "${TenantRequestSenderFunctionArn}",
+      "Parameters": {
+        "id.$": "$.id"
+      },
+      "Catch": [{
+        "ErrorEquals": [ "States.TaskFailed" ],
+        "ResultPath": "$.errorMessage",
+        "Next": "deleteRecordToDB"
+      }],
+      "End": true
+    },
+    "deleteRecordToDB": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:deleteItem",
+      "Parameters": {
+        "TableName": "${TenantDynamoDBTableName}",
+        "Key": {
+          "id": {"S.$": "$.id"}
+        }
+      },
+      "Next": "MarkAsFailed"
+    },
+    "MarkAsFailed": {
+      "Type": "Fail",
+      "Cause": "Execute failed."
+    }
+  }
+}
