@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  StackPrefix:
+    Type: String
+  Env:
+    Type: String
+  RoleArn:
+    Type: String
+  CodeS3Bucket:
+    Type: String
+  TenantStateMachineArn:
+    Type: String
+  TenantLambdaTriggerQueueArn:
+    Type: String
+
+Resources:
+  TenantStepFunctionTrigger:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${StackPrefix}-${Env}-tenant-step-function-trigger-function
+      Code:
+        S3Bucket: !Ref CodeS3Bucket
+        S3Key: invoke-tenant-setup-step-function/index.zip
+      Handler: "index.handler"
+      Role: !Ref RoleArn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          stateMachineArn: !Ref TenantStateMachineArn
+      Description: Invoke a step function to create a new unassigned tenant
+
+  TenantLambdaQueueEvent:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      FunctionName: !Sub ${StackPrefix}-${Env}-tenant-step-function-trigger-function
+      EventSourceArn: !Ref TenantLambdaTriggerQueueArn
+      Enabled: true
+      BatchSize: 1
+    DependsOn:
+      - TenantStepFunctionTrigger

@@ -138,6 +138,8 @@
       DocumentDatasourceName: '"spring.datasource.name": "{{ document_datasource_name }}"'
       DocumentFrontEndAddress: '"application.frontEndAddress": "{{ document_front_end_address }}"'
       ECSExecutionRole: '"aws.executionRole": "{{ iam_roles_stack.stack_outputs.EcsTaskExecutionRoleArn }}"'
+      TenantLambdaInvokeToken: '"aws.lambda.tenant-endpoint-token": "{{ tenant_lambda_invoke_token }}"'
+      TenantProvisionThreshold: '"aws.dynamodb.threshold": "{{ tenant_provision_threshold }}"'
   register: secrets_manager_stack
 - debug:
     msg: "Secret manager stack outputs: {{ secrets_manager_stack.stack_outputs }}"

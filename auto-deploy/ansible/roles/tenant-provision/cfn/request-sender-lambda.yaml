@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  StackPrefix:
+    Type: String
+  Env:
+    Type: String
+  GateWayApiDomain:
+    Type: String
+  TenantRequestSenderLambdaToken:
+    Type: String
+  CodeS3Bucket:
+    Type: String
+  RoleArn:
+    Type: String
+
+Resources:
+  TenantRequestSenderFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${StackPrefix}-${Env}-tenant-request-sender-function
+      Code:
+        S3Bucket: !Ref CodeS3Bucket
+        S3Key: tenant-endpoint-invoke-api/index.zip
+      Handler: "index.handler"
+      Role: !Ref RoleArn
+      Runtime: nodejs12.x
+      Timeout: 900
+      Environment:
+        Variables:
+          host: !Ref GateWayApiDomain
+          lambdaToken: !Ref TenantRequestSenderLambdaToken
+          pathPrefix: "/company/tenant/"
+      Description: Send a http request to invoke the endpoint of company-service
+
+Outputs:
+  TenantRequestSenderFunctionArn:
+    Value: !GetAtt TenantRequestSenderFunction.Arn

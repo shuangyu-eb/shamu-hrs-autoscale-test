@@ -1,0 +1,111 @@
+- name: create s3 bucket to store lambda and state machine code
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-tenant-code-bucket"
+    state: "present"
+    template: "roles/tenant-provision/cfn/s3-bucket.yml"
+    template_parameters:
+      StackPrefix: "{{ stack_prefix }}"
+      Env: "{{ env }}"
+  register: tenant_code_bucket_stack
+- debug:
+    msg: "bucket resources stack outputs: {{ tenant_code_bucket_stack.stack_outputs }}"
+
+- name: upload lambda and state machine code to bucket
+  shell: |
+    mkdir tenant-endpoint-invoke-api
+    mkdir invoke-tenant-setup-step-function
+    zip -r -j ./tenant-endpoint-invoke-api/index.zip ../../lambda/tenant-endpoint-invoke-api
+    zip -r -j ./invoke-tenant-setup-step-function/index.zip ../../lambda/invoke-tenant-setup-step-function
+    aws s3 sync ./tenant-endpoint-invoke-api s3://{{ tenant_code_bucket_stack.stack_outputs.TenantBucketName }}/tenant-endpoint-invoke-api --acl public-read
+    aws s3 sync ./invoke-tenant-setup-step-function s3://{{ tenant_code_bucket_stack.stack_outputs.TenantBucketName }}/invoke-tenant-setup-step-function --acl public-read
+    aws s3 sync ../../step-function s3://{{ tenant_code_bucket_stack.stack_outputs.TenantBucketName }}/step-function --acl public-read
+    rm -rf tenant-endpoint-invoke-api
+    rm -rf invoke-tenant-setup-step-function
+  register: upload_result
+- debug:
+    msg: "code has been uploaded"
+
+- name: create IAM Role
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-tenant-resources-role-stack"
+    state: "present"
+    template: "roles/tenant-provision/cfn/iam-role.yaml"
+    template_parameters:
+      StackPrefix: "{{ stack_prefix }}"
+      Env: "{{ env }}"
+  register: tenant_role_stack
+- debug:
+    msg: "tenant resources stack outputs: {{ tenant_role_stack.stack_outputs }}"
+
+- name: create dynamodb
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-tenant-resources-dynamodb-stack"
+    state: "present"
+    template: "roles/tenant-provision/cfn/dynamodb.yaml"
+    template_parameters:
+      StackPrefix: "{{ stack_prefix }}"
+      Env: "{{ env }}"
+  register: tenant_dynamodb_stack
+- debug:
+    msg: "tenant resources stack outputs: {{ tenant_dynamodb_stack.stack_outputs }}"
+
+- name: create sqs queue
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-tenant-resources-sqs-stack"
+    state: "present"
+    template: "roles/tenant-provision/cfn/sqs.yml"
+    template_parameters:
+      StackPrefix: "{{ stack_prefix }}"
+      Env: "{{ env }}"
+  register: tenant_sqs_stack
+- debug:
+    msg: "tenant resources stack outputs: {{ tenant_sqs_stack.stack_outputs }}"
+
+- name: create request sender lambda
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-tenant-resources-request-sender-lambda-stack"
+    state: "present"
+    template: "roles/tenant-provision/cfn/request-sender-lambda.yaml"
+    template_parameters:
+      StackPrefix: "{{ stack_prefix }}"
+      Env: "{{ env }}"
+      GateWayApiDomain: "{{ proxy_domain }}"
+      TenantRequestSenderLambdaToken: "{{ tenant_lambda_invoke_token }}"
+      CodeS3Bucket: "{{ tenant_code_bucket_stack.stack_outputs.TenantBucketName }}"
+      RoleArn: "{{ tenant_role_stack.stack_outputs.TenantIAMRoleArn }}"
+  register: tenant_request_sender_lambda_stack
+- debug:
+    msg: "tenant resources stack outputs: {{ tenant_request_sender_lambda_stack.stack_outputs }}"
+
+- name: create state machine
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-tenant-resources-state-machine-stack"
+    state: "present"
+    template: "roles/tenant-provision/cfn/state-machine.yaml"
+    template_parameters:
+      StackPrefix: "{{ stack_prefix }}"
+      Env: "{{ env }}"
+      CodeS3Bucket: "{{ tenant_code_bucket_stack.stack_outputs.TenantBucketName }}"
+      RoleArn: "{{ tenant_role_stack.stack_outputs.TenantIAMRoleArn }}"
+      TenantRequestSenderFunctionArn: "{{ tenant_request_sender_lambda_stack.stack_outputs.TenantRequestSenderFunctionArn }}"
+      TenantDynamoDBTableName: "{{ tenant_dynamodb_stack.stack_outputs.TenantDynamoDBTableName }}"
+  register: tenant_request_state_machine_stack
+- debug:
+    msg: "tenant resources stack outputs: {{ tenant_request_state_machine_stack.stack_outputs }}"
+
+- name: create trigger lambda
+  cloudformation:
+    stack_name: "{{ stack_prefix }}-{{ env }}-tenant-resources-trigger-lambda-stack"
+    state: "present"
+    template: "roles/tenant-provision/cfn/trigger-lambda.yaml"
+    template_parameters:
+      StackPrefix: "{{ stack_prefix }}"
+      Env: "{{ env }}"
+      CodeS3Bucket: "{{ tenant_code_bucket_stack.stack_outputs.TenantBucketName }}"
+      RoleArn: "{{ tenant_role_stack.stack_outputs.TenantIAMRoleArn }}"
+      TenantStateMachineArn: "{{ tenant_request_state_machine_stack.stack_outputs.TenantStateMachineArn }}"
+      TenantLambdaTriggerQueueArn: "{{ tenant_sqs_stack.stack_outputs.TenantLambdaTriggerQueueArn }}"
+  register: tenant_trigger_lambda_stack
+- debug:
+    msg: "tenant resources stack outputs: {{ tenant_trigger_lambda_stack.stack_outputs }}"
+

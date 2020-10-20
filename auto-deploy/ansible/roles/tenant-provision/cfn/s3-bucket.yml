@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  StackPrefix:
+    Type: String
+  Env:
+    Type: String
+
+Resources:
+  TenantS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${StackPrefix}-${Env}-tenant-code-bucket
+
+Outputs:
+  TenantBucketName:
+    Value: !Sub ${StackPrefix}-${Env}-tenant-code-bucket

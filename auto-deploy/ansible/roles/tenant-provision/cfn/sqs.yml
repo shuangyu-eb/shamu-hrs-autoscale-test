@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  StackPrefix:
+    Type: String
+  Env:
+    Type: String
+
+Resources:
+  TenantLambdaTriggerQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${StackPrefix}-${Env}-tenant-lambda-trigger-queue
+
+Outputs:
+  TenantLambdaTriggerQueueArn:
+    Value: !GetAtt TenantLambdaTriggerQueue.Arn

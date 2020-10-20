@@ -341,3 +341,5 @@ is_social_login: "false"
 skin: simplyhired
 
 secrets_manager_prefix: /secret
+
+tenant_provision_threshold: 10

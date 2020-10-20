@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+
+  - name: include variables from file
+    include_vars: "include/{{ stack_prefix }}-{{ env }}.yml"
+    tags:
+      - 'always'
+
+  - name: create tenant provision resources
+    include_role:
+      name: 'tenant-provision'

@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  StackPrefix:
+    Type: String
+  Env:
+    Type: String
+  RoleArn:
+    Type: String
+  TenantRequestSenderFunctionArn:
+    Type: String
+  CodeS3Bucket:
+    Type: String
+  TenantDynamoDBTableName:
+    Type: String
+
+Resources:
+  TenantStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: !Sub ${StackPrefix}-${Env}-tenant-state-machine
+      RoleArn: !Ref RoleArn
+      DefinitionSubstitutions:
+        TenantDynamoDBTableName: !Ref TenantDynamoDBTableName
+        TenantRequestSenderFunctionArn: !Ref TenantRequestSenderFunctionArn
+      DefinitionS3Location:
+        Bucket: !Ref CodeS3Bucket
+        Key: step-function/ProvisionTenant.json
+
+Outputs:
+  TenantStateMachineArn:
+    Value: !GetAtt TenantStateMachine.Arn

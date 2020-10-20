@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  StackPrefix:
+    Type: String
+  Env:
+    Type: String
+
+Resources:
+  TenantDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${StackPrefix}-${Env}-unassigned-tenants
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "15"
+        WriteCapacityUnits: "15"
+
+Outputs:
+  TenantDynamoDBTableArn:
+    Value: !GetAtt TenantDynamoDBTable.Arn
+  TenantDynamoDBTableName:
+    Value: !Sub ${StackPrefix}-${Env}-unassigned-tenants
