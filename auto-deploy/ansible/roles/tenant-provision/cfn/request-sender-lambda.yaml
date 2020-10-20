@@ -29,7 +29,7 @@ Resources:
         Variables:
           host: !Ref GateWayApiDomain
           lambdaToken: !Ref TenantRequestSenderLambdaToken
-          pathPrefix: "/company/tenant/"
+          pathPrefix: "/company/tenants/"
       Description: Send a http request to invoke the endpoint of company-service
 
 Outputs:

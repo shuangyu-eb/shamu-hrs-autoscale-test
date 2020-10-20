@@ -69,7 +69,7 @@
     template_parameters:
       StackPrefix: "{{ stack_prefix }}"
       Env: "{{ env }}"
-      GateWayApiDomain: "{{ proxy_domain }}"
+      GateWayApiDomain: "{{ proxy_domain.split('https://')[1] }}"
       TenantRequestSenderLambdaToken: "{{ tenant_lambda_invoke_token }}"
       CodeS3Bucket: "{{ tenant_code_bucket_stack.stack_outputs.TenantBucketName }}"
       RoleArn: "{{ tenant_role_stack.stack_outputs.TenantIAMRoleArn }}"
