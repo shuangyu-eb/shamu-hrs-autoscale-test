@@ -238,6 +238,7 @@ pipeline {
             dir("${WEB_DIR}") {
                 pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs-web.git")
             }
+            sh "nvm use 10.15.3"
             sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${WEB_DIR} stack_prefix=${stack_prefix} env=${env} service_name=web' --vault-password-file ansible-vault-file"
             performOperations("${WEB_DIR}")
           }
@@ -249,6 +250,7 @@ pipeline {
             dir("${LOGIN_SERVICE_DIR}") {
                 pullRepoAndCheckoutTargetBranch("$TARGET_BRANCH", "https://github.com/tardisone/shamu-hrs-login.git")
             }
+            sh "nvm use 10.15.3"
             sh "ansible-playbook auto-deploy/ansible/create-project-config-files.yml -e 'workspace=${CURRENT_DIR}/${LOGIN_SERVICE_DIR} stack_prefix=${stack_prefix} env=${env} service_name=login' --vault-password-file ansible-vault-file"
             sh "cd ${LOGIN_SERVICE_DIR} && CI/build -e ${ENV} -r ${RELEASE}"
           }
