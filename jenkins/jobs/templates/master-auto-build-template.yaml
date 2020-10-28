@@ -28,11 +28,6 @@
 
 - job-template:
     name: 'shamu-{name}-master-auto-build'
-    parameters:
-      - string:
-        name: credentialsId
-        description: 'Github Personal Access Token'
-        default: 'derek-eb'
     project-type: pipeline
     defaults: global
     description: 'shamu {name} master build'
@@ -44,11 +39,6 @@
     block-upstream: false
     retry-count: 3
     node: 'shamu-hrs'
-    logrotate:
-      daysToKeep: 5
-      numToKeep: 10
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
     pipeline-scm:
       scm:
         - git:

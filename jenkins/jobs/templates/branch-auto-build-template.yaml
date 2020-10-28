@@ -127,11 +127,6 @@
     block-upstream: false
     retry-count: 3
     node: 'shamu-hrs'
-    logrotate:
-      daysToKeep: 5
-      numToKeep: 10
-      artifactDaysToKeep: -1
-      artifactNumToKeep: -1
     scm:
       - git:
           url: '{project-url}'
@@ -158,5 +153,5 @@
           colormap: "xterm"
     builders:
       - github-notifier
-      - shell: '{shell}'
+#      - shell: '{shell}'
     publishers: '{publishers}'
