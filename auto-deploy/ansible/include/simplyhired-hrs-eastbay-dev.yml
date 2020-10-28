@@ -1,10 +1,10 @@
 # vars for aws
-vpc_id: vpc-14933873
+vpc_id: vpc-b4a34ddd
 vpc_cidr: 172.31.0.0/16 # used for security group
-public_subnet: subnet-86df65dd # used to create a private subnet
-private_subnet_cidr: 172.31.64.0/20 # used to create a private subnet
-key_pair: eastbay-aws-eb  # used to allow ssh connection
-region: ap-northeast-1
+public_subnet: subnet-00faf378 # used to create a private subnet
+private_subnet_cidr: 172.31.131.0/24 # used to create a private subnet
+key_pair: eastbay-aws-eb-east  # used to allow ssh connection
+region: ap-east-1
 aws_deploy_access_key: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   37373733333166616432366166373038303363393463613266303366306666313830613736376666
@@ -30,8 +30,8 @@ website_end_point: https://hr.simplyhired-dev.com
 # vars for rds
 db_cluster_name: "{{stack_prefix}}-{{env}}-cluster"
 db_instance_name: "{{stack_prefix}}-{{env}}"
-rds_availability_zone: ap-northeast-1a
-db_instance_class: db.t2.small
+rds_availability_zone: ap-east-1a
+db_instance_class: db.t3.small
 db_user: simplyhired_hrs
 db_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
@@ -47,18 +47,18 @@ document_db_name: hris_pactsafe
 secret_db_name: secret
 rds_security_group_name: "{{stack_prefix}}-{{env}}-rds"
 # vars for redis
-cache_node_type: cache.t2.micro
+cache_node_type: cache.t3.micro
 redis_port: 6379
 # vars for eb
 eb_application_name: "{{stack_prefix}}-{{env}}"
 eb_environment_name: "{{stack_prefix}}-{{env}}"
-eb_java_platform: "64bit Amazon Linux 2018.03 v2.10.1 running Java 8"
-eb_instance_class: t2.micro
+eb_java_platform: "64bit Amazon Linux 2018.03 v2.11.0 running Java 8"
+eb_instance_class: t3.micro
 eb_deploy_branch: master
 hrs_environment: dev
 # vars for consul cluster
-bastion_security_groupId: sg-6588de1c # security group used for consul ssh connect source
-consul_instance_type: t2.micro
+bastion_security_groupId: sg-973e90fb  # security group used for consul ssh connect source
+consul_instance_type: t3.micro
 consul_server_nodes: 3
 installed_consul_version: 1.6.0
 # vars for ecr
@@ -71,7 +71,7 @@ company_cluster_name: "{{stack_prefix}}-{{env}}-company"
 document_cluster_name: "{{stack_prefix}}-{{env}}-document"
 search_cluster_name: "{{stack_prefix}}-{{env}}-search"
 logging_cluster_name: "{{stack_prefix}}-{{env}}-logging"
-ecs_instance_type: t2.small
+ecs_instance_type: t3.small
 ecs_ami: /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id
 cluster_size: 2
 company_service_name: "{{stack_prefix}}-{{env}}-company-service"
@@ -264,12 +264,12 @@ pactsafe_account_id: !vault |
   3933
 pactsafe_access_token: !vault |
   $ANSIBLE_VAULT;1.1;AES256
-  64653130663337393566303862353232663437663966363638346463393936343532663136376263
-  3537656238613162306430373562303866633530373035320a346634303564383566363864633862
-  32376539303137343935663636306366666133333065343931356230366331393936336131613065
-  3330316162613633390a323363363736316635373530343130393133663835336438346135663035
-  64393938633465366163393938326239366366663465663962323631636332386533373031313865
-  3463383835353134363931656533613738646266366165656639
+  35346238353239323262336465626435323936363231306561396535386336323639646137353637
+  3039366136346330353130326532363465353865333732320a653036306161363865633438356165
+  32326238616533363364373965393435656336313461313634613737313561373762303964643533
+  6164303437316634360a393861316430386362346566623433653233643438363034356437343332
+  64303034323061363633643061633263336238333962323030343137666137333162663634393466
+  6365636163646337663337366266626633666361386661383439
 pactsafe_base_url: https://api.pactsafe.com/
 pactsafe_test_mode: true
 document_datasource_driver_class: com.mysql.cj.jdbc.Driver

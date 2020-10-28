@@ -17,7 +17,7 @@ Resources:
   TenantStepFunctionTrigger:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub ${StackPrefix}-${Env}-tenant-step-function-trigger-function
+      FunctionName: !Sub ${StackPrefix}-${Env}-tenant-step-function-trigger
       Code:
         S3Bucket: !Ref CodeS3Bucket
         S3Key: invoke-tenant-setup-step-function/index.zip
@@ -32,7 +32,7 @@ Resources:
   TenantLambdaQueueEvent:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
-      FunctionName: !Sub ${StackPrefix}-${Env}-tenant-step-function-trigger-function
+      FunctionName: !Sub ${StackPrefix}-${Env}-tenant-step-function-trigger
       EventSourceArn: !Ref TenantLambdaTriggerQueueArn
       Enabled: true
       BatchSize: 1

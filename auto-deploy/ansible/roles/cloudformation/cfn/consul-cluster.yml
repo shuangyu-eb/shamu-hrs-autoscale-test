@@ -9,41 +9,7 @@ Parameters:
   ConsulInstanceType:
     Type: String
     Description: Consul node instance type
-    AllowedValues:
-      - t2.micro
-      - t2.small
-      - t2.medium
-      - t2.large
-      - m5.large
-      - m5.xlarge
-      - m5.2xlarge
-      - m4.large
-      - m4.xlarge
-      - m3.medium
-      - m3.large
-      - m3.xlarge
-      - m3.2xlarge
-      - c4.large
-      - c4.xlarge
-      - c4.2xlarge
-      - c4.4xlarge
-      - c4.8xlarge
-      - c3.large
-      - c3.xlarge
-      - c3.2xlarge
-      - c3.4xlarge
-      - c3.8xlarge
-      - r3.large
-      - r3.xlarge
-      - r3.2xlarge
-      - r3.4xlarge
-      - r3.8xlarge
-      - i2.xlarge
-      - i2.2xlarge
-      - i2.4xlarge
-      - i2.8xlarge
     ConstraintDescription: Choose an instance type.
-    Default: m5.large
   ConsulEc2RetryTagKey:
     Description: The Amazon EC2 instance tag key to filter on when joining to other Consul
       nodes.
@@ -108,6 +74,8 @@ Mappings:
   AWSAMIRegionMap:
     ap-northeast-1:
       US1604HVM: ami-0e4860a8c5c621447
+    ap-east-1:
+      US1604HVM: ami-e5256594
     ap-northeast-2:
       US1604HVM: ami-028187f7f1b856b9e
     ap-south-1:

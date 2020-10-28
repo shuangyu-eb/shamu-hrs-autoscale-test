@@ -13,13 +13,6 @@ Parameters:
     Type: String
   InstanceType:
     Type: String
-    Default: t2.micro
-    AllowedValues:
-      - t2.medium
-      - t2.large
-      - t2.micro
-      - m1.small
-      - m1.large
     Description: Elastic Beanstalk ec2 instance type
 
 Resources:
