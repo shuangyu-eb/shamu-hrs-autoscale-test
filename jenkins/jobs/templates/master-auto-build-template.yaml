@@ -28,6 +28,11 @@
 
 - job-template:
     name: 'shamu-{name}-master-auto-build'
+    parameters:
+        - string:
+              name: credentialsId
+              description: "The id of the credential declared in Jenkins Global Credentials(i.e. hris-github-api-token). The content of the
+              credential is github personal access token and its kind is 'Username with passowrd'."
     project-type: pipeline
     defaults: global
     description: 'shamu {name} master build'

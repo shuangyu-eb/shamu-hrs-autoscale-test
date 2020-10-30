@@ -86,7 +86,7 @@
       echo '----------------------UNIT TEST----------------------'
 
       current_commit_id=`git rev-parse --short HEAD`
-      current_branch_name=`git branch -r --contains $current_commit_id`
+      current_branch_name=`git branch -r --contains $current_commit_id | sed 's/^[ ]*//g'`
       echo $current_branch_name
 
       mvn clean test sonar:sonar \
@@ -98,14 +98,11 @@
         -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco-output/coverage-report-unit-tests/jacoco.xml \
         -Dsonar.tests=target/test-classes \
         -Dsonar.branch.name="$current_branch_name" \
-        -Dsonar.branch.target=master \
-        &> unittest.txt
+        -Dsonar.branch.target=master | tee unittest.txt
+
       grep -E '4mINFO|1mERROR|3mWARNING' unittest.txt
 
-      unit_test_error=`grep FAILURE unittest.txt`
-      check_style_error=`grep FAILURE javalint.txt`
-
-      if [ -z "$unit_test_error" ] && [ -z "$check_style_error" ]
+      if [ -z $(grep FAILURE unittest.txt) ] && [ -z $(grep FAILURE javalint.txt) ]
       then
         echo 'BRANCH BUILD SUCCESS'
         exit 0
@@ -153,5 +150,5 @@
           colormap: "xterm"
     builders:
       - github-notifier
-#      - shell: '{shell}'
+      - shell: '{shell}'
     publishers: '{publishers}'
