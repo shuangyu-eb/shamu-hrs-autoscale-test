@@ -10,7 +10,6 @@ aws_deploy_secret_key:
 aws_deploy_security_token:
 # vars for S3
 s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.amazonaws.com/
-s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.amazonaws.com/
 hrs_domain: https://hr.simplyhired-{{env}}.com
 hrs_icon_domain: https://hr.simplyhired-{{env}}.com
 proxy_domain: https://hr-api.simplyhired-{{env}}.com

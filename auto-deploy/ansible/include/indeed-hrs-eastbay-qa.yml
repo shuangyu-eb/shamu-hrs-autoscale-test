@@ -22,7 +22,6 @@ aws_deploy_secret_key: !vault |
   6332393430326435323531336333663434343761633137636239
 # vars for S3
 s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.ap-east-1.amazonaws.com/
-s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.ap-east-1.amazonaws.com/
 hrs_domain: https://hr.interviewed-qa.com
 hrs_icon_domain: https://hr.interviewed-qa.com
 proxy_domain: https://hr-api.interviewed-qa.com # gateway address
