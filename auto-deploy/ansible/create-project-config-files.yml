@@ -79,9 +79,18 @@
             dest: "{{ workspace }}/.elasticbeanstalk/config.yml"
           when: service_name == 'gateway'   
 
+        - name: Get the target env cloudfront address
+          shell: aws cloudformation describe-stacks --stack-name {{stack_prefix}}-{{env}}-cloudfront-bucket | jq -r '.Stacks[0].Outputs[0].OutputValue'
+          register: result
+          when: service_name == 'login'
+
+        - set_fact:
+            cloudfront_address: "{{result.stdout}}"
+          when: service_name == 'login'
+
         - name: Create config file for shamu-hrs-login
           template:
-            src: roles/auth0-login/templates/config_file_login_template_for_jenkins.j2
+            src: roles/auth0-login/templates/config_file_login_template.j2
             dest: "{{ workspace }}/config/{{ env }}.env"
           when: service_name == 'login'
 

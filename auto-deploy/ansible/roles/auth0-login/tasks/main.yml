@@ -23,6 +23,9 @@
 - debug:
     msg: "CloudFront stack outputs: {{cloudfront_stack.stack_outputs}}"
 
+- set_fact:
+    cloudfront_address: "{{cloudfront_stack.stack_outputs.LoginCloudFrontDomain}}"
+
 - name: Create config file for shamu-hrs-login
   template:
     src: config_file_login_template.j2

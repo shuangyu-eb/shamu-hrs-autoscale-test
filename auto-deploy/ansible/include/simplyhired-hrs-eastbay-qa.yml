@@ -21,8 +21,8 @@ aws_deploy_secret_key: !vault |
   66626431633062663936363334663462653861613335353935633831316430366666306537613334
   6332393430326435323531336333663434343761633137636239
 # vars for S3
-s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.amazonaws.com/
-s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.amazonaws.com/
+s3_company_address: https://{{stack_prefix}}-{{env}}-company.s3.ap-east-1.amazonaws.com/
+s3_document_address: https://{{stack_prefix}}-{{env}}-document.s3.ap-east-1.amazonaws.com/
 hrs_domain: https://hr.simplyhired-qa.com
 hrs_icon_domain: https://hr.simplyhired-qa.com
 proxy_domain: https://hr-api.simplyhired-qa.com # gateway address
