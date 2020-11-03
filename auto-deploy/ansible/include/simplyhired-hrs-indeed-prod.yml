@@ -343,3 +343,5 @@ x_tenant_secret: REPLACE_WHEN_AVAILABLE
 financial_engine_base_url: REPLACE_WHEN_AVAILABLE
 
 tenant_provision_threshold: 10
+
+enable_mfa_rule: "true"

@@ -1,5 +1,5 @@
 {
-  "enabled": true,
+  "enabled": ##ENABLE_MFA_RULE##,
   "script": "./Multifactor with Auth0 Guardian.js",
   "name": "Multifactor with Auth0 Guardian",
   "order": 7,

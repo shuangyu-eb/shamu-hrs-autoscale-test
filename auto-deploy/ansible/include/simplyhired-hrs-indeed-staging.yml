@@ -360,3 +360,5 @@ x_tenant_secret: !vault |
 financial_engine_base_url: https://api.indeedfinancial-staging.com
 
 tenant_provision_threshold: 10
+
+enable_mfa_rule: "true"

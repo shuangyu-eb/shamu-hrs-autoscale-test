@@ -13,7 +13,8 @@
     "BETA_TOKEN": "{{registration_beta_token}}",
     "TWILIO_AUTH_TOKEN": "{{twilio_auth_token}}",
     "TWILIO_SID": "{{twilio_sid}}",
-    "TWILIO_PHONE_NUMBER": "{{twilio_phone_number}}"
+    "TWILIO_PHONE_NUMBER": "{{twilio_phone_number}}",
+    "ENABLE_MFA_RULE": "{{enable_mfa_rule}}"
   },
   "AUTH0_ALLOW_DELETE": false,
   "AUTH0_EXCLUDED_RULES": []

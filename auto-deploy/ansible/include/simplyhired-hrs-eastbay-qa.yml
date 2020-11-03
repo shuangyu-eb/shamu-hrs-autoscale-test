@@ -331,3 +331,5 @@ tenant_lambda_invoke_token: !vault |
   3666373936323161343432353762663735353433373934616365
 
 tenant_provision_threshold: 10
+
+enable_mfa_rule: "true"
