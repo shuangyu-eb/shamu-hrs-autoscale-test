@@ -14,7 +14,7 @@
             dest: "{{ workspace }}/config/application-{{ env }}.yml"
           when: service_name in ['company', 'document', 'logging', 'search']
         
-        - name: "Create config file for {{ service_name }} service"
+        - name: "Create config file for web service"
           template:
             src: "roles/config-builder/templates/config_file_{{ service_name }}_template.j2"
             dest: "{{ workspace }}/config/{{ env }}.env"
@@ -27,7 +27,7 @@
           when: service_name in ['company', 'document', 'web', 'logging', 'search']
 
         
-        - name: "Create config file for {{ service_name }} service"
+        - name: "Create config file for gateway service"
           template:
             src: "roles/config-builder/templates/config_file_{{ service_name }}_template.j2"
             dest: "{{ workspace }}/src/main/resources/application-{{ env }}.yml"
@@ -99,3 +99,9 @@
             src: roles/auth0-login/templates/deploy_file_login_template.j2
             dest: "{{ workspace }}/config/{{ stack_prefix }}-{{ env }}"
           when: service_name == 'login'
+
+        - name: "Create bootstrap file for {{ service_name }} service"
+          template:
+            src: "roles/config-builder/templates/bootstrap_file_{{ service_name }}_template.j2"
+            dest: "{{ workspace }}/config/bootstrap.yml"
+          when: service_name in ['company', 'document', 'gateway', 'logging', 'search']
