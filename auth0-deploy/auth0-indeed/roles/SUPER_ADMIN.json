@@ -7,6 +7,10 @@
       "resource_server_identifier": "hrs-backend"
     },
     {
+      "permission_name": "CREATE_ATTENDANCE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
       "permission_name": "CREATE_DEPARTMENT",
       "resource_server_identifier": "hrs-backend"
     },
@@ -56,6 +60,10 @@
     },
     {
       "permission_name": "EDIT_USER",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "MANAGE_ATTENDANCE",
       "resource_server_identifier": "hrs-backend"
     },
     {
@@ -120,6 +128,10 @@
     },
     {
       "permission_name": "MANAGE_USER_TIME_OFF_BALANCE",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "SELECT_PAID_HOLIDAY",
       "resource_server_identifier": "hrs-backend"
     },
     {
@@ -204,6 +216,10 @@
     },
     {
       "permission_name": "VIEW_USER_ROLE_AND_STATUS",
+      "resource_server_identifier": "hrs-backend"
+    },
+    {
+      "permission_name": "VIEW_USER_TIME_OFF_BALANCE",
       "resource_server_identifier": "hrs-backend"
     }
   ]
