@@ -104,4 +104,10 @@
           template:
             src: "roles/config-builder/templates/bootstrap_file_{{ service_name }}_template.j2"
             dest: "{{ workspace }}/config/bootstrap.yml"
-          when: service_name in ['company', 'document', 'gateway', 'logging', 'search']
+          when: service_name in ['company', 'document', 'logging', 'search']
+
+        - name: "Create bootstrap file for gateway service"
+          template:
+            src: "roles/config-builder/templates/bootstrap_file_{{ service_name }}_template.j2"
+            dest: "{{ workspace }}/src/main/resources/bootstrap.yml"
+          when: service_name == 'gateway'
